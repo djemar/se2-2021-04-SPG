@@ -13,6 +13,9 @@ const session = require("express-session"); // enable sessions
 const app = express();
 const port = 3001;
 
+// Disable x-powered-by to not disclose technologies used on a website
+app.disable("x-powered-by");
+
 // Set-up logging
 app.use(morgan("tiny"));
 
