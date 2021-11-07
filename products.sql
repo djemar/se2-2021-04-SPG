@@ -4,6 +4,7 @@ insert into user (name, surname, email, password, Type) values
     ("Mario", "Biondi", "farmer@polito.it", "farmer", "Farmer");
 
 insert into product (name, description, category, ref_user, price, availability, unit_of_measure) values
+insert into product (name, description, category, ref_user, price, availability, unit_of_measure) values
                                                                                                       ("Apples", "Amazing taste", "Fruit & vegetable", 1, 1, 10, "100 g"),
                                                                                                       ("Lemons", "Powerful flavour", "Fruit & vegetable", 1, 2, 11, "80 g"),
                                                                                                       ("Avocados", "Best way to integrate fats in your diet", "Fruit & vegetable", 1, 3, 12, "120 g"),

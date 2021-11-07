@@ -31,3 +31,18 @@ Solidarity Purchasing Group project developed for the Software Engineering II co
             - `price`: price (per unit of measure,
             - `availability`: number of products of that type available,
             - `unit_of_measure`: unit of measure of the product}, {...}]; 
+- POST `/api/new-client`
+    - Insert a new client (user Type = "Client").
+    - request parameters and request body content:
+        -  {`name`: first name of the client to be inserted,
+            `surname`: surname of the client to be inserted,
+            `email`: email of the client to be inserted,
+            `hash`: hash of the password selected by the client}.
+    - response body content:
+        - client = {
+            - `user_id`: id of the new client,
+            - `name`: name of the new client,
+            - `surname`: surname of the new client,
+            - `email`: email of the new client,
+            - `hash`: hash of the password selected by the new client,
+            - `Type`: "Client" type;
