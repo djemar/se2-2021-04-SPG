@@ -1,8 +1,15 @@
 import { Route, Switch } from 'react-router-dom';
 import CategoryCard from '../CategoryCard/CategoryCard';
-import ProductCard from '../Product/ProductCard';
+import { categories } from '../../fakedata.js';
+import Category from '../Category/Category';
 
 export const Main = ({ ...props }) => {
+  const { user, basketProducts, setBasketProducts } = props;
+
+  const categoriesMapped = categories.map(cat => {
+    return <CategoryCard title={cat.name} key={cat.name} />;
+  });
+
   return (
     <div className="col" style={{ height: '100%' }}>
       <Switch>
@@ -11,26 +18,17 @@ export const Main = ({ ...props }) => {
         <Route path="/product/:id"></Route>
         <Route path="/category/:id">
           <>
-            <div className="row p-10">
-              <ProductCard title="product 1" />
-              <ProductCard title="product 2" />
-              <ProductCard title="product 3" />
-              <ProductCard title="product 4" />
-              <ProductCard title="product 5" />
-              <ProductCard title="product 6" />
-            </div>
+            <Category
+              categories={categories}
+              basketProducts={basketProducts}
+              setBasketProducts={setBasketProducts}
+            />
+            ;
           </>
         </Route>
         <Route path="/">
           <>
-            <div className="row">
-              <CategoryCard title="Category 1" />
-              <CategoryCard title="Category 2" />
-              <CategoryCard title="Category 3" />
-              <CategoryCard title="Category 4" />
-              <CategoryCard title="Category 5" />
-              <CategoryCard title="Category 6" />
-            </div>
+            <div className="row">{categoriesMapped}</div>
           </>
         </Route>
       </Switch>

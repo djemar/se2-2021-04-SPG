@@ -32,3 +32,8 @@
   font-size: 0.8rem;
   text-transform: uppercase !important;
 }
+
+.btn-trash {
+  cursor: pointer;
+  color: red;
+}

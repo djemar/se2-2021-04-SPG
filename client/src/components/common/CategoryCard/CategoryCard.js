@@ -2,6 +2,7 @@ import { Button } from '../../misc';
 
 export const CategoryCard = ({ ...props }) => {
   const { title, availability } = props;
+
   return (
     <div className="col-md-3 mb-4 p-5 pb-0">
       <div className="card border-left-primary shadow h-100 py-0">
@@ -16,7 +17,9 @@ export const CategoryCard = ({ ...props }) => {
               <Button
                 type="primary"
                 text="Explore"
+                ariaLabel={'explore-' + title}
                 disabled={availability === 0}
+                url={'/category/' + title.replaceAll(' ', '-')}
               />
             </div>
           </div>

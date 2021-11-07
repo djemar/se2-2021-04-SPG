@@ -134,10 +134,36 @@ exports.removeClient = function (clientID) {
   });
 };
 
-exports.insertOrder = function (order, id_array, quantity_array) {
+
+async function retrieveNextId() {
+  return new Promise((resolve, reject) => {
+    const sql = "SELECT max(order_id) as order_index from ORDERS ";
+    db.all(sql, [], (err, rows) => {
+      if (err) {
+        reject(err);
+        console.log("Errore in retrieveNextId");
+      }
+      else {
+        const index = rows.map((e) => { return e.order_index });
+        if (rows[0].order_index == null) {
+          console.log("Non ci sono righe presenti")
+          resolve(1);
+        } else {
+          console.log(index);
+          resolve(parseInt(index[0] + 1));
+        }
+      }
+    })
+  })
+}
+
+exports.insertOrder = async function (order, id_array, quantity_array) {
   //Need to iterate over different products in list
   var i = 0;
   const promiseList = [];
+  const tmp = await retrieveNextId();
+  //console.log("Ecco l'id ritornato dalla query", tmp)
+  order.order_id = tmp;
   for (const id of id_array) {
     promiseList.push(createInsertOrderPromise(order, id, quantity_array[i++]));
   }
@@ -185,3 +211,4 @@ exports.deleteTestOrder = function (id) {
     });
   });
 }
+
