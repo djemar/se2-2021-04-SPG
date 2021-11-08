@@ -23,7 +23,7 @@
   "scripts": {
     "start": "craco start",
     "build": "craco build",
-    "test": "craco test",
+    "test": "craco test --coverage",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -77,6 +77,12 @@
     "singleQuote": true,
     "arrowParens": "avoid",
     "endOfLine": "auto"
+  },
+  "jest": {
+    "coverageReporters": [
+      "lcov",
+      "text"
+    ]
   },
   "devDependencies": {
     "autoprefixer": "^9.8.8",
