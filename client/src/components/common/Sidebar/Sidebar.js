@@ -1,7 +1,34 @@
+import { useState } from 'react';
 import { Button } from '../../misc/';
 import SidebarItem from './SidebarItem/SidebarItem';
 
+const productList = [
+  {
+    title: 'Product 1',
+    description:
+      'text text text text text text text text text text text text text text',
+    quantity: 2,
+    unit: 'KG',
+  },
+  {
+    title: 'Product 2',
+    description:
+      'text text text text text text text text text text text text text text',
+    quantity: 2,
+    unit: 'KG',
+  },
+  {
+    title: 'Product 3',
+    description:
+      'text text text text text text text text text text text text text text',
+    quantity: 2,
+    unit: 'KG',
+  },
+];
+
 export const Sidebar = ({ ...props }) => {
+  const [basketProducts, setBasketProducts] = useState(productList);
+
   return (
     <ul className="navbar-nav bg-gradient-primary sidebar sidebar-dark vh-100">
       <a
@@ -13,33 +40,11 @@ export const Sidebar = ({ ...props }) => {
 
       <hr className="sidebar-divider my-0" />
 
-      <SidebarItem
-        product={{
-          title: 'Product 1',
-          description:
-            'text text text text text text text text text text text text text text',
-          quantity: 2,
-          unit: 'KG',
-        }}
-      />
-      <SidebarItem
-        product={{
-          title: 'Product 1',
-          description:
-            'text text text text text text text text text text text text text text',
-          quantity: 2,
-          unit: 'KG',
-        }}
-      />
-      <SidebarItem
-        product={{
-          title: 'Product 1',
-          description:
-            'text text text text text text text text text text text text text text',
-          quantity: 2,
-          unit: 'g',
-        }}
-      />
+      {basketProducts.length > 0 ? (
+        basketProducts.map(p => <SidebarItem key={p.title} product={p} />)
+      ) : (
+        <></>
+      )}
 
       {/* <li className="nav-item">
         <a
