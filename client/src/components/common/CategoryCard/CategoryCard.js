@@ -16,6 +16,7 @@ export const CategoryCard = ({ ...props }) => {
               <Button
                 type="primary"
                 text="Explore"
+                url={'/category/' + title.replaceAll(' ', '')}
                 disabled={availability === 0}
               />
             </div>
