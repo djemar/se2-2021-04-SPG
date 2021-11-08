@@ -23,7 +23,8 @@
   "scripts": {
     "start": "craco start",
     "build": "craco build",
-    "test": "craco test --coverage",
+    "test": "craco test",
+    "testCov": "craco test --coverage --watchAll",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -82,6 +83,13 @@
     "coverageReporters": [
       "lcov",
       "text"
+    ],
+    "collectCoverageFrom": [
+      "**/*.{js,jsx}",
+      "!**/node_modules/**",
+      "!**/vendor/**",
+      "!**/reportWebVitals.js"
+
     ]
   },
   "devDependencies": {
