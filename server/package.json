@@ -9,7 +9,16 @@
     "jest": {
         "verbose": true,
         "collectCoverage": true,
-        "testResultsProcessor": "jest-sonar-reporter"
+        "coverageReporters": [
+            "lcov",
+            "text"
+        ],
+        "collectiveCoverageFrom": [
+            "**/*.{js,jsx}",
+            "!**/node_modules/**",
+            "!**/vendor/**",
+            "!**/reportWebVitals.js"
+        ]
     },
     "author": "P04 Group",
     "license": "ISC",
@@ -25,7 +34,7 @@
         "morgan": "^1.10.0",
         "passport": "^0.5.0",
         "passport-local": "^1.0.0",
-        "sqlite3": "^5.0.2"
+        "sqlite3": "^4.2.0"
     },
     "devDependencies": {
         "jest": "^27.3.1",

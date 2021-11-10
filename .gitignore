@@ -3,3 +3,13 @@
 server/node_modules/
 
 server/coverage/lcov-report
+server/test-report.xml
+server/coverage/lcov-report/sorter.js
+server/coverage/lcov-report/sort-arrow-sprite.png
+server/coverage/lcov-report/prettify.js
+server/coverage/lcov-report/prettify.css
+server/coverage/lcov-report/index.html
+server/coverage/lcov-report/favicon.png
+server/coverage/lcov-report/dao.js.html
+server/coverage/lcov-report/block-navigation.js
+server/coverage/lcov-report/base.css
