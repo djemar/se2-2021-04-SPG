@@ -51,37 +51,42 @@ describe("API getProducts", () => {
 });
 
 /*======= ORDER API TEST ==========*/
-test("orderMissingData", async () => {
-  const body = {
-    "ref_user": 1,
-    "productList":
-      [{ "ref_product": 1, "quantity": 1 },
-      { "ref_product": 3, "quantity": 3 },
-      { "ref_product": 5, "quantity": 1 }],
-    "date_order": "222"
-  };
-  let productsIdList = body.productList;
-  var id_array = [], quantity_array = [];
-  productsIdList.forEach((obj) => { id_array.push(obj.ref_product); quantity_array.push(obj.quantity); return; });
-  const res = await dao.insertOrder(body, id_array, quantity_array);
-  expect(res).toBeUndefined();
-});
+describe("API insertOrder", () => {
+  test("orderMissingData", async () => {
+    const body = {
+      "ref_user": 1,
+      "productList": [
+        { "ref_product": 1, "quantity": 1 },
+        { "ref_product": 3, "quantity": 3 },
+        { "ref_product": 5, "quantity": 1 }
+      ],
+      "date_order": "222"
+    };
+    let productsIdList = body.productList;
+    var id_array = [], quantity_array = [];
+    productsIdList.forEach((obj) => { id_array.push(obj.ref_product); quantity_array.push(obj.quantity); });
+    const res = await dao.insertOrder(body, id_array, quantity_array);
+    expect(res).toBeUndefined();
+  });
 
-// This should be the last one since it adds order in DB
-// Remember that it will fail if the data are already in the DB 
-test("orderSuccess", async () => {
-  const body = {
-    "order_id": 0,
-    "ref_user": 1,
-    "productList":
-      [{ "ref_product": 1, "quantity": 1 },
-      { "ref_product": 3, "quantity": 3 },
-      { "ref_product": 5, "quantity": 1 }],
-    "date_order": "222"
-  };
-  let productsIdList = body.productList;
-  var id_array = [], quantity_array = [];
-  productsIdList.forEach((obj) => { id_array.push(obj.ref_product); quantity_array.push(obj.quantity); return; });
-  const res = await dao.insertOrder(body, id_array, quantity_array);
-  expect(res).toBeTruthy();
+  // This should be the last one since it adds order in DB
+  // Remember that it will fail if the data are already in the DB 
+  test("orderSuccess", async () => {
+    await dao.deleteTestOrder(); //call for clean the DB, removing testing order (id_order = 0)
+    const body = {
+      "order_id": 0,
+      "ref_user": 1,
+      "productList":
+        [{ "ref_product": 1, "quantity": 1 },
+        { "ref_product": 3, "quantity": 3 },
+        { "ref_product": 5, "quantity": 1 }],
+      "date_order": "222"
+    };
+    let productsIdList = body.productList;
+    var id_array = [], quantity_array = [];
+    productsIdList.forEach((obj) => { id_array.push(obj.ref_product); quantity_array.push(obj.quantity); });
+    const res = await dao.insertOrder(body, id_array, quantity_array);
+    expect(res).toBeTruthy();
+  });
+
 });

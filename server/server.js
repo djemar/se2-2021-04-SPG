@@ -99,7 +99,7 @@ app.post("/api/order",
     const order = req.body;
     let productsIdList = order.productList;
     var id_array = [], quantity_array = [];
-    productsIdList.forEach((obj) => { id_array.push(obj.ref_product); quantity_array.push(obj.quantity); return; });
+    productsIdList.forEach((obj) => { id_array.push(obj.ref_product); quantity_array.push(obj.quantity); });
     await dao
       .insertOrder(order, id_array, quantity_array)
       .then((result) => res.end())

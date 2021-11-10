@@ -9,8 +9,6 @@ const moment = require("moment");
 // DAO module for accessing courses and exams
 
 // Password are made with bcrypt
-// officer email: s286329@studenti.polito.it
-// current officer has password: teamSE04
 // https://www.browserling.com/tools/bcrypt
 const sqlite = require("sqlite3");
 const db = new sqlite.Database("SPG.sqlite", (err) => {
@@ -171,4 +169,18 @@ function createPromise(order, id, quantity) {
       }
     );
   })
+}
+
+exports.deleteTestOrder = function () {
+  return new Promise((resolve, reject) => {
+    const sql = "DELETE from ORDERS where order_id = 0";
+    db.run(sql, [], (err) => {
+      if (err) {
+        reject(err);
+        console.log('Errore');
+      }
+      else
+        resolve(null);
+    });
+  });
 }
