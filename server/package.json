@@ -7,16 +7,9 @@
         "test": "jest --coverage --watchAll"
     },
     "jest": {
-        "coverageReporters": [
-            "lcov",
-            "text"
-        ],
-        "collectCoverageFrom": [
-            "**/*.{js,jsx}",
-            "!**/node_modules/**",
-            "!**/vendor/**",
-            "!**/reportWebVitals.js"
-        ]
+        "verbose": true,
+        "collectCoverage": true,
+        "testResultsProcessor": "jest-sonar-reporter"
     },
     "author": "P04 Group",
     "license": "ISC",
@@ -35,6 +28,7 @@
         "sqlite3": "^5.0.2"
     },
     "devDependencies": {
-        "jest": "^27.3.1"
+        "jest": "^27.3.1",
+        "jest-sonar-reporter": "^2.0.0"
     }
 }
