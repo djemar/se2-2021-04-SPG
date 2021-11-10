@@ -7,8 +7,6 @@
         "test": "jest --coverage --watchAll"
     },
     "jest": {
-        "verbose": true,
-        "collectCoverage": true,
         "coverageReporters": [
             "lcov",
             "text"
