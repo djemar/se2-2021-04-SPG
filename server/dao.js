@@ -138,14 +138,14 @@ exports.insertOrder = function (order, id_array, quantity_array) {
   var i = 0;
   const promiseList = [];
   for (const id of id_array) {
-    promiseList.push(createPromise(order, id, quantity_array[i++]));
+    promiseList.push(createInsertOrderPromise(order, id, quantity_array[i++]));
   }
   return Promise.all(promiseList)
     .then()
     .catch((err) => console.log(err));
 };
 
-function createPromise(order, id, quantity) {
+function createInsertOrderPromise(order, id, quantity) {
   return new Promise((resolve, reject) => {
     const sql =
       "INSERT INTO ORDERS (order_id, ref_product, ref_user, date_order, quantity, status) VALUES (?, ?, ?,?,?,?)";

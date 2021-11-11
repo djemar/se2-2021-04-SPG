@@ -52,6 +52,12 @@ describe("API getProducts", () => {
 
 /*======= ORDER API TEST ==========*/
 describe("API insertOrder", () => {
+
+  beforeAll(async () => {
+    //call for clean the DB, removing testing order (id_order = 0)
+    return await dao.deleteTestOrder();
+  });
+
   test("orderMissingData", async () => {
     const body = {
       "ref_user": 1,
@@ -72,7 +78,6 @@ describe("API insertOrder", () => {
   // This should be the last one since it adds order in DB
   // Remember that it will fail if the data are already in the DB 
   test("orderSuccess", async () => {
-    await dao.deleteTestOrder(); //call for clean the DB, removing testing order (id_order = 0)
     const body = {
       "order_id": 0,
       "ref_user": 1,
