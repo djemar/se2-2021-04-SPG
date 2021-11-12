@@ -171,10 +171,10 @@ function createInsertOrderPromise(order, id, quantity) {
   })
 }
 
-exports.deleteTestOrder = function () {
+exports.deleteTestOrder = function (id) {
   return new Promise((resolve, reject) => {
-    const sql = "DELETE from ORDERS where order_id = 0";
-    db.run(sql, [], (err) => {
+    const sql = "DELETE from ORDERS where order_id = ?";
+    db.run(sql, [id], (err) => {
       if (err) {
         reject(err);
         console.log('Errore');

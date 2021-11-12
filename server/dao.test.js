@@ -55,7 +55,7 @@ describe("API insertOrder", () => {
 
   beforeAll(async () => {
     //call for clean the DB, removing testing order (id_order = 0)
-    return dao.deleteTestOrder();
+    return dao.deleteTestOrder(0);
   });
 
   test("orderMissingData", async () => {
