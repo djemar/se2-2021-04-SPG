@@ -71,8 +71,8 @@ describe("API insertOrder", () => {
     let productsIdList = body.productList;
     var id_array = [], quantity_array = [];
     productsIdList.forEach((obj) => { id_array.push(obj.ref_product); quantity_array.push(obj.quantity); });
-    const res = await dao.insertOrder(body, id_array, quantity_array);
-    expect(res).toBeUndefined();
+    const res = await dao.insertOrder(body, id_array, quantity_array).catch((res) => res);
+    res.forEach((tmp) => { expect(tmp).toBeFalsy() })
   });
 
   // This should be the last one since it adds order in DB

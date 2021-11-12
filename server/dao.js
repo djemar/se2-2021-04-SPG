@@ -161,7 +161,7 @@ function createInsertOrderPromise(order, id, quantity) {
       ],
       function (err) {
         if (err) {
-          reject(err);
+          resolve(false);
         } else {
           console.log("Succesfully added product " + id + " in order n°" + order.order_id);
           resolve(true);
