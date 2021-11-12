@@ -55,7 +55,7 @@ describe("API insertOrder", () => {
 
   beforeAll(async () => {
     //call for clean the DB, removing testing order (id_order = 0)
-    return await dao.deleteTestOrder();
+    return dao.deleteTestOrder();
   });
 
   test("orderMissingData", async () => {
@@ -71,7 +71,7 @@ describe("API insertOrder", () => {
     let productsIdList = body.productList;
     var id_array = [], quantity_array = [];
     productsIdList.forEach((obj) => { id_array.push(obj.ref_product); quantity_array.push(obj.quantity); });
-    const res = await dao.insertOrder(body, id_array, quantity_array).catch((res) => res);
+    const res = await dao.insertOrder(body, id_array, quantity_array).catch((val) => val);
     res.forEach((tmp) => { expect(tmp).toBeFalsy() })
   });
 
