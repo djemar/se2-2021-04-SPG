@@ -3,8 +3,10 @@ const morgan = require("morgan"); // logging middleware
 const jwt = require("express-jwt");
 const jsonwebtoken = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
-const { check, validationResult } = require("express-validator"); // validation library
+const { body, param, check, validationResult,
+  sanitizeBody, sanitizeParam } = require("express-validator"); // validation library
 const dao = require("./dao.js");
+const bcrypt = require("bcrypt");
 
 const passport = require("passport"); // auth middleware
 const LocalStrategy = require("passport-local").Strategy; // username and password for login
@@ -48,6 +50,31 @@ app.post("/api/products", [check("category").isString()], async (req, res) => {
     .getProductsByCategory(req.body.category)
     .then((products) => res.json(products))
     .catch((err) => res.status(503).json(dbErrorObj));
+});
+
+// POST /new-client
+// Request body: json containing all the needed client data (name, surname, email, hash)
+// Response body: json containing the new client just inserted
+app.post("/api/new-client",
+    body('name').exists({checkNull: true}).bail().notEmpty().bail().isString().bail(),
+    body('surname').exists({checkNull: true}).bail().notEmpty().bail().isString().bail(),
+    body('email').exists({checkNull: true}).bail().notEmpty().bail().isEmail().bail(),
+    body('hash').exists({checkNull: true}).bail().notEmpty().bail().isString().bail(),
+    async (req, res) => {
+      console.log(req.body);
+      const result = validationResult(req);
+      if (!result.isEmpty())
+        res.status(400).json({
+          info: "The server cannot process the request",
+          error: result.array()[0].msg,
+          valueReceived: result.array()[0].value
+        });
+      else {
+        await dao
+            .insertClient(req.body)
+            .then((client) => res.json(client))
+            .catch((err) => res.status(503).json(dbErrorObj));
+      }
 });
 
 const expireTime = 300; //seconds
