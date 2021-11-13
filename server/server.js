@@ -77,7 +77,7 @@ app.post("/api/new-client",
     }
   });
 
-const expireTime = 300; //seconds
+
 // POST /order
 // Request body: object describing an Order (order_id,ref_user,productList[{ref_product,quantity}],date_order,status(optional))
 // Response body: empty

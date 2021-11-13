@@ -133,6 +133,7 @@ exports.removeClient = function (clientID) {
     }
   });
 };
+
 exports.insertOrder = function (order, id_array, quantity_array) {
   //Need to iterate over different products in list
   var i = 0;
