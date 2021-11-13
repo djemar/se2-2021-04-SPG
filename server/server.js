@@ -56,28 +56,55 @@ app.post("/api/products", [check("category").isString()], async (req, res) => {
 // Request body: json containing all the needed client data (name, surname, email, hash)
 // Response body: json containing the new client just inserted
 app.post("/api/new-client",
-    body('name').exists({checkNull: true}).bail().notEmpty().bail().isString().bail(),
-    body('surname').exists({checkNull: true}).bail().notEmpty().bail().isString().bail(),
-    body('email').exists({checkNull: true}).bail().notEmpty().bail().isEmail().bail(),
-    body('hash').exists({checkNull: true}).bail().notEmpty().bail().isString().bail(),
-    async (req, res) => {
-      console.log(req.body);
-      const result = validationResult(req);
-      if (!result.isEmpty())
-        res.status(400).json({
-          info: "The server cannot process the request",
-          error: result.array()[0].msg,
-          valueReceived: result.array()[0].value
-        });
-      else {
-        await dao
-            .insertClient(req.body)
-            .then((client) => res.json(client))
-            .catch((err) => res.status(503).json(dbErrorObj));
-      }
-});
+  body('name').exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
+  body('surname').exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
+  body('email').exists({ checkNull: true }).bail().notEmpty().bail().isEmail().bail(),
+  body('hash').exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
+  async (req, res) => {
+    console.log(req.body);
+    const result = validationResult(req);
+    if (!result.isEmpty())
+      res.status(400).json({
+        info: "The server cannot process the request",
+        error: result.array()[0].msg,
+        valueReceived: result.array()[0].value
+      });
+    else {
+      await dao
+        .insertClient(req.body)
+        .then((client) => res.json(client))
+        .catch((err) => res.status(503).json(dbErrorObj));
+    }
+  });
 
-const expireTime = 300; //seconds
+
+// POST /order
+// Request body: object describing an Order (order_id,ref_user,productList[{ref_product,quantity}],date_order,status(optional))
+// Response body: empty
+// Example of Request's Body: {"order_id": 1,"ref_user": 1,"productList": [{"ref_product":1,"quantity":1},{"ref_product": 3,"quantity": 3},{"ref_product": 5,"quantity": 1}], "date_order": "222"}
+app.post("/api/order",
+  body('order_id').exists({ checkNull: true }).bail().notEmpty().bail(),
+  body('ref_user').exists({ checkNull: true }).bail().notEmpty().bail(),
+  body('date_order').exists({ checkNull: true }).bail().notEmpty().bail(),
+  body('productList').exists({ checkNull: true }).bail().notEmpty().bail(),
+  async (req, res) => {
+    const validation = validationResult(req);
+    if (!validation.isEmpty()) {
+      res.status(400).json({
+        info: "The server cannot process the request",
+        error: validation.array()[0].msg,
+        valueReceived: validation.array()[0].value
+      });
+    }
+    const order = req.body;
+    let productsIdList = order.productList;
+    var id_array = [], quantity_array = [];
+    productsIdList.forEach((obj) => { id_array.push(obj.ref_product); quantity_array.push(obj.quantity); });
+    await dao
+      .insertOrder(order, id_array, quantity_array)
+      .then((result) => res.end())
+      .catch((err) => res.status(503).json(dbErrorObj));
+  });
 
 app.listen(port, () =>
   console.log(`Server app listening at http://localhost:${port}`)
