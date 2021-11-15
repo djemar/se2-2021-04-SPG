@@ -4,7 +4,7 @@ import API from '../../../API';
 import { useEffect, useState } from 'react';
 
 export const Category = ({ ...props }) => {
-  const { basketProducts, setBasketProducts } = props;
+  const { basketProducts, setBasketProducts, show } = props;
 
   const [products, setProducts] = useState([]);
   const id = useRouteMatch().params.id;
@@ -35,7 +35,7 @@ export const Category = ({ ...props }) => {
         setLoading(false);
       });
     }
-  }, []);
+  }, [show]);
 
   function mapProducts() {
     if (products && products.length > 0) {

@@ -4,7 +4,7 @@ import { categories } from '../../fakedata.js';
 import Category from '../Category/Category';
 
 export const Main = ({ ...props }) => {
-  const { user, basketProducts, setBasketProducts } = props;
+  const { user, basketProducts, setBasketProducts, show, setShow } = props;
 
   const categoriesMapped = categories.map(cat => {
     return <CategoryCard title={cat.name} key={cat.name} />;
@@ -22,6 +22,8 @@ export const Main = ({ ...props }) => {
               categories={categories}
               basketProducts={basketProducts}
               setBasketProducts={setBasketProducts}
+              show={show}
+              setShow={setShow}
             />
             ;
           </>
