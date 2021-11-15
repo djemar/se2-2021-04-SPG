@@ -6,17 +6,12 @@ const User = require("./user");
 describe("API getProducts", () => {
   test("products", async () => {
     const p = await dao.getProducts();
+    console.log("ECCOLO", p[0])
     expect(p).toBeDefined();
-    expect(p[0]).toEqual({
-      product_id: 62,
-      name: "Apples",
-      description: "Amazing taste",
-      category: "Fruit & vegetable",
-      ref_user: 1,
-      price: 1,
-      availability: 10,
-      unit_of_measure: "100 g",
-    });
+    expect(p[0]).toHaveProperty('product_id', 62)
+    expect(p[0]).toHaveProperty('name', "Apples")
+    expect(p[0]).toHaveProperty('description', "Amazing taste")
+    expect(p[0]).toHaveProperty('category', "Fruit & vegetable")
   });
 
   test("productsCategoryError", async () => {
