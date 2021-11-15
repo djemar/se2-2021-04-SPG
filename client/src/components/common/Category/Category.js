@@ -4,7 +4,7 @@ import API from '../../../API';
 import { useEffect, useState } from 'react';
 
 export const Category = ({ ...props }) => {
-  const { basketProducts, setBasketProducts, show, setShow } = props;
+  const { basketProducts, setBasketProducts, show } = props;
 
   const [products, setProducts] = useState([]);
   const id = useRouteMatch().params.id;
