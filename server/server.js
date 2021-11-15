@@ -3,14 +3,7 @@ const morgan = require("morgan"); // logging middleware
 const jwt = require("express-jwt");
 const jsonwebtoken = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
-const {
-  body,
-  param,
-  check,
-  validationResult,
-  sanitizeBody,
-  sanitizeParam,
-} = require("express-validator"); // validation library
+const { body, param, check, validationResult, sanitizeBody, sanitizeParam } = require("express-validator"); // validation library
 const dao = require("./dao.js");
 const bcrypt = require("bcrypt");
 
@@ -63,34 +56,10 @@ app.post("/api/products", [check("category").isString()], async (req, res) => {
 // Response body: json containing the new client just inserted
 app.post(
   "/api/new-client",
-  body("name")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isString()
-    .bail(),
-  body("surname")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isString()
-    .bail(),
-  body("email")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isEmail()
-    .bail(),
-  body("hash")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isString()
-    .bail(),
+  body("name").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
+  body("surname").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
+  body("email").exists({ checkNull: true }).bail().notEmpty().bail().isEmail().bail(),
+  body("hash").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
   async (req, res) => {
     console.log(req.body);
     const result = validationResult(req);
@@ -116,7 +85,7 @@ app.post(
 // Example of Request's Body: {"order_id": 1,"ref_user": 1,"productList": [{"ref_product":1,"quantity":1},{"ref_product": 3,"quantity": 3},{"ref_product": 5,"quantity": 1}], "date_order": "222"}
 app.post(
   "/api/order",
-  body("ref_user").exists({ checkNull: true }).bail().notEmpty().bail(),
+  body("ref_user").exists({ checkNull: true }).bail().notEmpty().bail().isNumeric(),
   body("date_order").exists({ checkNull: true }).bail().notEmpty().bail(),
   body("productList").exists({ checkNull: true }).bail().notEmpty().bail(),
   async (req, res) => {
@@ -144,6 +113,4 @@ app.post(
   }
 );
 
-app.listen(port, () =>
-  console.log(`Server app listening at http://localhost:${port}`)
-);
+app.listen(port, () => console.log(`Server app listening at http://localhost:${port}`));
