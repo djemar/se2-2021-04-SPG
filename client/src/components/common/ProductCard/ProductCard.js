@@ -28,6 +28,13 @@ export const ProductCard = ({ ...props }) => {
     }
   }, []);
 
+  useEffect(() => {
+    const i = basketProducts.findIndex(item => item.pid === pid);
+    if (i === -1) {
+      setAvailableQuantity(availability);
+    }
+  }, [basketProducts]);
+
   const handleAddToBasket = () => {
     const i = basketProducts.findIndex(item => item.pid === pid);
     if (orderQuantity >= 1) {
@@ -77,6 +84,14 @@ export const ProductCard = ({ ...props }) => {
             <div className="flex flex-none">
               <div className="flex flex-column justify-between">
                 <div className="flex justify-end">
+                  <div className="mr-9 flex flex-column justify-start pb-4">
+                    <div className="text-xs text-uppercase mb-1 text-right">
+                      Availability
+                    </div>
+                    <div className="h8 mb-0 text-right">
+                      {availableQuantity}
+                    </div>
+                  </div>
                   <div className="mr-2 flex flex-column justify-start pb-4">
                     <div className="text-xs font-weight-bold text-success text-uppercase mb-1 text-right">
                       Price
@@ -87,7 +102,6 @@ export const ProductCard = ({ ...props }) => {
                   </div>
                 </div>
                 <div className="flex justify-between">
-                  <span className="my-auto mr-4">{availableQuantity}</span>
                   <span className="product-unit my-auto mr-4">{unit}</span>
                   <div className="mr-2 flex flex-column justify-end">
                     <div className="h5 mb-0 font-weight-bold text-gray-800 text-center">
