@@ -129,7 +129,7 @@ describe("API insertOrder", () => {
 
   beforeAll(async () => {
     //call for clean the DB, removing testing order (id_order = 0)
-    return dao.deleteTestOrder(0);
+    return dao.deleteTestOrder(1);
   });
 
   test("orderMissingData", async () => {
@@ -140,7 +140,6 @@ describe("API insertOrder", () => {
         { "ref_product": 3, "quantity": 3 },
         { "ref_product": 5, "quantity": 1 }
       ],
-      "date_order": "222"
     };
     let productsIdList = body.productList;
     var id_array = [], quantity_array = [];
@@ -153,7 +152,6 @@ describe("API insertOrder", () => {
   // Remember that it will fail if the data are already in the DB 
   test("orderSuccess", async () => {
     const body = {
-      "order_id": 0,
       "ref_user": 1,
       "productList":
         [{ "ref_product": 1, "quantity": 1 },

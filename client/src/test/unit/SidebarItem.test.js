@@ -9,7 +9,7 @@ describe('SidebarItem', () => {
       <Router>
         <SidebarItem
           product={{
-            title: 'test product',
+            name: 'test product',
             description:
               'text text text text text text text text text text text text text text',
             quantity: 2,
@@ -18,6 +18,8 @@ describe('SidebarItem', () => {
         />
       </Router>
     );
+
+    screen.debug();
 
     expect(screen.getByText(/test product/i)).toBeInTheDocument();
   });

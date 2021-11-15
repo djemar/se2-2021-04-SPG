@@ -8,7 +8,7 @@ describe('Sidebar', () => {
   test('renders Sidebar component', () => {
     render(
       <Router>
-        <Sidebar />
+        <Sidebar basketProducts={[{}]} />
       </Router>
     );
 
