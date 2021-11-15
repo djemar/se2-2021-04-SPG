@@ -51,7 +51,7 @@ describe('Order', () => {
 
     await userEvent.type(screen.getByLabelText(/client-input/i), '23');
 
-    screen.debug();
+    //screen.debug();
     await userEvent.click(
       screen.getByRole('button', {
         name: /btn-confirm-order/i,

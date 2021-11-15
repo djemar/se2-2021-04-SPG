@@ -37,3 +37,12 @@
   cursor: pointer;
   color: red;
 }
+
+.navbar-item-spg {
+  margin: 0 0.75rem 0 0.75rem;
+  --tw-text-opacity: 1 !important;
+  color: rgba(107, 114, 128, var(--tw-text-opacity)) !important;
+  font-weight: 700 !important;
+  text-decoration: none !important;
+  font-size: 80%;
+}
