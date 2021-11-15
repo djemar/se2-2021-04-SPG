@@ -3,7 +3,14 @@ const morgan = require("morgan"); // logging middleware
 const jwt = require("express-jwt");
 const jsonwebtoken = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
-const { body, param, check, validationResult, sanitizeBody, sanitizeParam } = require("express-validator"); // validation library
+const {
+  body,
+  param,
+  check,
+  validationResult,
+  sanitizeBody,
+  sanitizeParam,
+} = require("express-validator"); // validation library
 const dao = require("./dao.js");
 const bcrypt = require("bcrypt");
 
@@ -56,13 +63,38 @@ app.post("/api/products", [check("category").isString()], async (req, res) => {
 // Response body: json containing the new client just inserted
 app.post(
   "/api/new-client",
-  body("name").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
-  body("surname").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
-  body("email").exists({ checkNull: true }).bail().notEmpty().bail().isEmail().bail(),
-  body("hash").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
+  body("name")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isString()
+    .bail(),
+  body("surname")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isString()
+    .bail(),
+  body("email")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isEmail()
+    .bail(),
+  body("hash")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isString()
+    .bail(),
   async (req, res) => {
     console.log(req.body);
     const result = validationResult(req);
+    console.log(result);
     if (!result.isEmpty())
       res.status(400).json({
         info: "The server cannot process the request",
@@ -112,4 +144,6 @@ app.post(
   }
 );
 
-app.listen(port, () => console.log(`Server app listening at http://localhost:${port}`));
+app.listen(port, () =>
+  console.log(`Server app listening at http://localhost:${port}`)
+);

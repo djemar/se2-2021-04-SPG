@@ -1,4 +1,14 @@
 import axios from 'axios';
+const bcrypt = require('bcryptjs');
+
+// UTILS
+
+const getHashedPWD = pwd => {
+  const saltRounds = 10;
+  const salt = bcrypt.genSaltSync(saltRounds);
+  const hash = bcrypt.hashSync(pwd, salt);
+  return hash;
+};
 
 /*
 	API.js contains all the API calls and the methods that communicate with the backend.
@@ -20,7 +30,7 @@ async function getAllProductsByCategory(categoryProduct) {
   let url = BASEURL + '/products';
   console.log('CATEGORY: ', categoryProduct);
   let categoryWithSpaces;
-  if (categoryProduct != undefined && categoryProduct != '')
+  if (categoryProduct !== undefined && categoryProduct !== '')
     categoryWithSpaces = categoryProduct.replaceAll('-', ' ');
 
   console.log('catePro', categoryWithSpaces);
@@ -85,7 +95,20 @@ async function getProductsByCategory(category) {
   });
 }
  */
+
 async function addClient(name, surname, email, hash) {
+  let url = BASEURL + '/new-client';
+  let client = { name, surname, email, hash };
+
+  try {
+    const res = await axios.post(url, client);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+/* async function addClient(name, surname, email, hash) {
   return new Promise((resolve, reject) => {
     let client = { name, surname, email, hash };
     fetch(BASEURL + '/new-client', {
@@ -121,7 +144,7 @@ async function addClient(name, surname, email, hash) {
         reject({ errors: [{ param: 'Server', msg: 'Cannot communicate' }] });
       });
   });
-}
+} */
 
 /* async function addOrder(ref_user, productList, date_order) {
   return new Promise((resolve, reject) => {
@@ -178,5 +201,6 @@ const API = {
   getAllProductsByCategory,
   addClient,
   addOrder,
+  getHashedPWD,
 };
 export default API;

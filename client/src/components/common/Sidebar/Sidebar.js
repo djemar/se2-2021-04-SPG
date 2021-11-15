@@ -37,6 +37,19 @@ export const Sidebar = ({ ...props }) => {
     }
   };
 
+  const resetBasket = () => {
+    setBasketProducts([]);
+  };
+
+  const basket = basketProducts.map((p, index) => (
+    <SidebarItem
+      key={p.pid + index}
+      product={p}
+      basketProducts={basketProducts}
+      setBasketProducts={setBasketProducts}
+    />
+  ));
+
   return (
     <ul className="navbar-nav bg-gradient-primary sidebar sidebar-dark vh-100 overflow-y-scroll">
       <div className="sidebar-brand d-flex align-items-center justify-between">
@@ -66,18 +79,7 @@ export const Sidebar = ({ ...props }) => {
         Order confirmed!
       </Alert>
 
-      {basketProducts.length > 0 ? (
-        basketProducts.map((p, index) => (
-          <SidebarItem
-            key={p.pid + index}
-            product={p}
-            basketProducts={basketProducts}
-            setBasketProducts={setBasketProducts}
-          />
-        ))
-      ) : (
-        <></>
-      )}
+      {basket}
       <div className="h-100 d-flex flex-column justify-content-end mb-5">
         <hr className="sidebar-divider my-0" />
         <div className="d-flex justify-between mx-5 my-5 text-light font-weight-bold">
@@ -85,6 +87,12 @@ export const Sidebar = ({ ...props }) => {
           <div className="priceTotLabel">{'€ ' + somma}</div>
         </div>
         <div className="d-flex justify-content-center mx-5 my-5">
+          <Button
+            text={'Reset'}
+            type={'danger'}
+            onClick={resetBasket}
+            disabled={basketProducts.length === 0}
+          />
           <Button
             text={'Confirm'}
             type={'success'}

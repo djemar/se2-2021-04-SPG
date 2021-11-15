@@ -40,7 +40,7 @@ describe('Category', () => {
     expect(
       screen.getByText(/Solidarity Purchasing Group/i)
     ).toBeInTheDocument();
-    expect(screen.getByText(/Login/i)).toBeInTheDocument();
+    //expect(screen.getByText(/Login/i)).toBeInTheDocument();
     expect(screen.getByText(/product0/i)).toBeInTheDocument();
     expect(screen.getByText(/Your basket/i)).toBeInTheDocument();
     expect(screen.getByText(/TOT/i)).toBeInTheDocument();
