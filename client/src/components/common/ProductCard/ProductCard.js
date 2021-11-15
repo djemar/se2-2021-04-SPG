@@ -117,8 +117,9 @@ export const ProductCard = ({ ...props }) => {
                           min={1}
                           max={availableQuantity}
                           isInvalid={
-                            orderQuantity < 1 ||
-                            orderQuantity > availableQuantity
+                            (orderQuantity < 1 ||
+                              orderQuantity > availableQuantity) &&
+                            availableQuantity > 0
                           }
                           value={orderQuantity}
                           onChange={handleQuantityChange}
