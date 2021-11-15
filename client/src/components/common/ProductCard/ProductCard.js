@@ -60,15 +60,21 @@ export const ProductCard = ({ ...props }) => {
         ]);
       }
     }
+    setOrderQuantity(1);
   };
 
   const handleQuantityChange = e => {
-    setOrderQuantity(parseInt(e.target.value));
+    const value = e.target.value;
+    if (!isNaN(value) && value != '') {
+      setOrderQuantity(parseInt(value, 10));
+    } else {
+      setOrderQuantity(1);
+    }
   };
 
   return (
     <div className="col-12 pb-4">
-      <div className="card border-left-primary shadow h-100 py-0">
+      <div className="card border-left-light shadow h-100 py-0">
         <div className="card-body flex justify-between">
           <div className="flex flex-column justify-between w-100">
             <div className="no-gutters d-flex align-items-center mb-3 flex flex-none">
@@ -110,8 +116,11 @@ export const ProductCard = ({ ...props }) => {
                           type="number"
                           min={1}
                           max={availableQuantity}
-                          isInvalid={orderQuantity < 1}
-                          defaultValue={1}
+                          isInvalid={
+                            orderQuantity < 1 ||
+                            orderQuantity > availableQuantity
+                          }
+                          value={orderQuantity}
                           onChange={handleQuantityChange}
                         />
                       </InputGroup>
@@ -123,7 +132,11 @@ export const ProductCard = ({ ...props }) => {
                       text="Add"
                       ariaLabel={'add-basket-' + pid}
                       onClick={handleAddToBasket}
-                      disabled={availableQuantity === 0}
+                      disabled={
+                        availableQuantity === 0 ||
+                        orderQuantity < 1 ||
+                        orderQuantity > availableQuantity
+                      }
                     />
                   </div>
                 </div>
