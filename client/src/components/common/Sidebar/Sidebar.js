@@ -6,9 +6,9 @@ import API from '../../../API';
 import '../../../App.css';
 
 export const Sidebar = ({ ...props }) => {
-  const { basketProducts, setBasketProducts } = props;
+  const { basketProducts, setBasketProducts, show, setShow } = props;
   const [clientId, setClientId] = useState('');
-  const [show, setShow] = useState(false);
+  //const [show, setShow] = useState(false);
   const [somma, setSomma] = useState(0);
 
   useEffect(() => {

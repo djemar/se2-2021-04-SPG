@@ -7,6 +7,7 @@ import { useState } from 'react';
 
 function App() {
   const [basketProducts, setBasketProducts] = useState([]);
+  const [show, setShow] = useState(false);
 
   return (
     <Router>
@@ -18,12 +19,16 @@ function App() {
               user={{}}
               basketProducts={basketProducts}
               setBasketProducts={setBasketProducts}
+              show={show}
+              setShow={setShow}
             />
           </div>
         </div>
         <Sidebar
           basketProducts={basketProducts}
           setBasketProducts={setBasketProducts}
+          show={show}
+          setShow={setShow}
         />
       </div>
     </Router>
