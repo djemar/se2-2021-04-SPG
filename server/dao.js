@@ -18,6 +18,8 @@ const db = new sqlite.Database("SPG.sqlite", (err) => {
 /// Functions: /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function mappingProducts(rows) {
+  console.log("MAP");
+  console.log("rows", rows);
   return rows.map((e) => ({
     product_id: e.product_id,
     name: e.name,
@@ -74,6 +76,7 @@ exports.getProducts = () => {
         console.log("0 ROWS!");
       } else {
         const products = mappingProducts(rows);
+        console.log("ROWS", rows);
         resolve(products);
       }
     });
