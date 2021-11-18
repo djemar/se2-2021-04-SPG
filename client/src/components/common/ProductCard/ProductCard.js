@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Card, Button as BSButton } from 'react-bootstrap';
+import {
+  Button as BSButton,
+  Card,
+  OverlayTrigger,
+  Tooltip,
+} from 'react-bootstrap';
 import QuantitySelector from '../../misc/QuantitySelector';
 import './productCard.css';
 
@@ -16,6 +21,7 @@ export const ProductCard = ({ ...props }) => {
     img,
     basketProducts,
     setBasketProducts,
+    setAnimateBasket,
   } = props;
   const [orderQuantity, setOrderQuantity] = useState(1);
   const [availableQuantity, setAvailableQuantity] = useState(availability);
@@ -53,28 +59,17 @@ export const ProductCard = ({ ...props }) => {
             description: description,
             category: category,
             quantity: orderQuantity,
+            availability: availableQuantity,
             price: price,
             unit: unit,
+            setAvailableQuantity: setAvailableQuantity,
           },
         ]);
       }
     }
+    setAnimateBasket(true);
     setOrderQuantity(1);
   };
-
-  const handleQuantityChange = e => {
-    const value = e.target.value;
-    if (!isNaN(value) && value != '') {
-      setOrderQuantity(parseInt(value, 10));
-    } else {
-      setOrderQuantity(1);
-    }
-  };
-
-  const trimmedDesc =
-    description.length > 30
-      ? `${description.substring(0, 30)}...`
-      : description;
 
   return (
     <Card className="product-card shadow py-0">
@@ -85,12 +80,18 @@ export const ProductCard = ({ ...props }) => {
       />
       <Card.Body className="p-3 w-100">
         <Card.Title className="font-medium text-black">{name}</Card.Title>
-        <Card.Text className="text-sm">{trimmedDesc}</Card.Text>
+        <OverlayTrigger
+          placement={'top'}
+          overlay={<Tooltip id={`tooltip-top`}>{description}</Tooltip>}
+        >
+          <Card.Text className="text-sm product-desc">{description}</Card.Text>
+        </OverlayTrigger>
         <div className="noselect pt-4 d-flex flex-row justify-between align-items-center text-black">
           <QuantitySelector
             orderQuantity={orderQuantity}
             setOrderQuantity={setOrderQuantity}
             max={availableQuantity}
+            location={'ProductCard'}
           />
           <div className="text-xs">
             {availableQuantity} piece{availableQuantity > 1 ? 's' : ''}{' '}

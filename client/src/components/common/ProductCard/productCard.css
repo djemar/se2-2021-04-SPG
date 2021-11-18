@@ -63,3 +63,9 @@
   background-color: rgb(156, 58, 16) !important;
   box-shadow: 0 0 0 0.2rem rgba(156, 58, 16, 0.5);
 }
+
+.product-desc {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}

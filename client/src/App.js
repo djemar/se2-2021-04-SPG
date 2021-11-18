@@ -19,6 +19,7 @@ function App() {
   });
   const [loading, setLoading] = useState(false);
   const [isLogged, setIsLogged] = useState(true);
+  const [animateBasket, setAnimateBasket] = useState(false);
 
   /*const login = async user => {
     setUser(user);
@@ -61,6 +62,8 @@ function App() {
           <div id="content">
             <Navbar
               user={user}
+              animateBasket={animateBasket}
+              setAnimateBasket={setAnimateBasket}
               basketProducts={basketProducts}
               setBasketProducts={setBasketProducts} /* logout={logout} */
             />
@@ -70,6 +73,7 @@ function App() {
               isLogged={isLogged}
               basketProducts={basketProducts}
               setBasketProducts={setBasketProducts}
+              setAnimateBasket={setAnimateBasket}
               show={show}
               setShow={setShow}
             />

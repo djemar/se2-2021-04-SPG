@@ -30,12 +30,10 @@ async function getAllProducts() {
 
 async function getAllProductsByCategory(categoryProduct) {
   let url = BASEURL + '/products';
-  console.log('CATEGORY: ', categoryProduct);
   let categoryWithSpaces;
   if (categoryProduct !== undefined && categoryProduct !== '')
     categoryWithSpaces = categoryProduct.replaceAll('-', ' ');
 
-  console.log('catePro', categoryWithSpaces);
   try {
     const res = await axios.post(url, {
       category: categoryProduct, //name of the category

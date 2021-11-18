@@ -7,9 +7,11 @@ import QuantitySelector from '../../../misc/QuantitySelector';
 import './basketItem.css';
 
 const BasketItem = ({ ...props }) => {
-  const { product, basketProducts, setBasketProducts } = props;
-  const { name, description, quantity, unit, price } = product;
+  const { product, basketProducts, setBasketProducts, addSinglePrice } = props;
+  const { pid, name, description, quantity, unit, price, availability, setAv } =
+    product;
   const [totUnitPrice, setTotUnitPrice] = useState(price * quantity);
+  const [qnt, setQnt] = useState(quantity);
 
   const handleRemoveItem = (pid, fid) => {
     let newBasket = [...basketProducts];
@@ -20,7 +22,14 @@ const BasketItem = ({ ...props }) => {
   };
 
   useEffect(() => {
-    setTotUnitPrice(price * quantity);
+    setTotUnitPrice(price * qnt);
+  }, [basketProducts, qnt]);
+
+  useEffect(() => {
+    let p = basketProducts.find(x => x.pid == pid);
+    console.log(p);
+    if (p.orderQuantity === undefined) setQnt(quantity);
+    else setQnt(p.orderQuantity);
   }, [basketProducts]);
 
   return (
@@ -46,7 +55,16 @@ const BasketItem = ({ ...props }) => {
             <div className="ml-9 d-flex items-center">
               <IoStorefrontOutline className="mr-2 text-lg" /> Farmer
             </div>
-            <QuantitySelector orderQuantity={quantity} />
+            <QuantitySelector
+              orderQuantity={qnt}
+              setOrderQuantity={setQnt}
+              max={availability}
+              pid={product.pid}
+              setBasketProducts={setBasketProducts}
+              basketProducts={basketProducts}
+              location={'Basket'}
+              setAvailability={product.setAvailableQuantity}
+            />
           </Card.Text>
         </Card.Body>
       </Card>

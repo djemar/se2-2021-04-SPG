@@ -27,7 +27,7 @@ function mappingProducts(rows) {
     price: e.price,
     availability: e.availability,
     unit_of_measure: e.unit_of_measure,
-    image_path: e.image_path
+    image_path: e.image_path,
   }));
 }
 
@@ -38,7 +38,7 @@ function mappingOrders(rows) {
     ref_user: e.ref_user,
     date_order: e.date_order,
     quantity: e.quantity,
-    status: e.status
+    status: e.status,
   }));
 }
 
@@ -55,12 +55,11 @@ function mappingUsers(rows) {
     phone: e.phone,
     country: e.country,
     city: e.city,
-    zip_code: e.zip_code
+    zip_code: e.zip_code,
   }));
 }
 
 /// Queries: ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 /************** Products **************/
 
@@ -91,7 +90,6 @@ exports.getProductsByCategory = (category) => {
         reject(err);
         console.log("0 ROWS!");
       } else {
-        console.log(rows);
         const products = mappingProducts(rows);
         resolve(products);
       }
@@ -99,29 +97,31 @@ exports.getProductsByCategory = (category) => {
   });
 };
 
-
 /************** Users **************/
 
 // Insert a new client:
 exports.insertUser = function (user) {
   return new Promise((resolve, reject) => {
-
-    if ((typeof (user.name) !== 'string') ||
-      (typeof (user.surname) !== 'string') ||
-      (typeof (user.email) !== 'string') ||
-      (typeof (user.hash) !== 'string') ||
-      (typeof (user.Type) !== 'string') ||
-      (typeof (user.address) !== 'string') ||
-      (typeof (user.phone) !== 'string') ||   // Also phone number must be a string
-      (typeof (user.country) !== 'string') ||
-      (typeof (user.city) !== 'string') ||
-      (typeof (user.zip_code) !== 'number'))
-        reject("Strings are expected for all parameters, except for zip_code which must be an Integer");
+    if (
+      typeof user.name !== "string" ||
+      typeof user.surname !== "string" ||
+      typeof user.email !== "string" ||
+      typeof user.hash !== "string" ||
+      typeof user.Type !== "string" ||
+      typeof user.address !== "string" ||
+      typeof user.phone !== "string" || // Also phone number must be a string
+      typeof user.country !== "string" ||
+      typeof user.city !== "string" ||
+      typeof user.zip_code !== "number"
+    )
+      reject(
+        "Strings are expected for all parameters, except for zip_code which must be an Integer"
+      );
     else {
       const balance = user.Type === "Client" ? 0.0 : null;
       const sql =
-        "INSERT INTO USER(name,surname,email,password,Type,wallet_balance,address,phone,country,city,zip_code)"
-        + " VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+        "INSERT INTO USER(name,surname,email,password,Type,wallet_balance,address,phone,country,city,zip_code)" +
+        " VALUES (?,?,?,?,?,?,?,?,?,?,?)";
       //ID is not needed. It's added by the insert operation
       db.run(
         sql,
@@ -136,7 +136,7 @@ exports.insertUser = function (user) {
           user.phone,
           user.country,
           user.city,
-          user.zip_code
+          user.zip_code,
         ],
         function (err) {
           if (err) {
@@ -145,9 +145,20 @@ exports.insertUser = function (user) {
           } else {
             let userID = this.lastID;
             console.log("User " + userID + " added successfully");
-            const u = {user_id: userID, name: user.name, surname: user.surname, email: user.email,
-              hash: user.hash, Type: user.Type, wallet_balance: balance, address: user.address,
-              phone: user.phone, country: user.country, city: user.city, zip_code: user.zip_code};
+            const u = {
+              user_id: userID,
+              name: user.name,
+              surname: user.surname,
+              email: user.email,
+              hash: user.hash,
+              Type: user.Type,
+              wallet_balance: balance,
+              address: user.address,
+              phone: user.phone,
+              country: user.country,
+              city: user.city,
+              zip_code: user.zip_code,
+            };
             resolve(u); // returning the user object
           }
         }
@@ -156,31 +167,21 @@ exports.insertUser = function (user) {
   });
 };
 
-
 // Remove a client:
 exports.removeUser = function (userID) {
   return new Promise((resolve, reject) => {
-
-    if (typeof (userID) !== 'number')
-      reject("An integer is expected");
+    if (typeof userID !== "number") reject("An integer is expected");
     else {
-      const sql =
-        "DELETE FROM USER WHERE user_id = ?";
-      db.run(
-        sql,
-        [
-          userID
-        ],
-        function (err) {
-          if (err) {
-            console.log(err);
-            reject(err);
-          } else {
-            console.log("User " + userID + " removed successfully");
-            resolve(userID);
-          }
+      const sql = "DELETE FROM USER WHERE user_id = ?";
+      db.run(sql, [userID], function (err) {
+        if (err) {
+          console.log(err);
+          reject(err);
+        } else {
+          console.log("User " + userID + " removed successfully");
+          resolve(userID);
         }
-      );
+      });
     }
   });
 };
@@ -198,9 +199,8 @@ exports.getAllUsers = function () {
         resolve(users);
       }
     });
-  })
-}
-
+  });
+};
 
 /************** Orders **************/
 
@@ -211,19 +211,20 @@ async function retrieveNextId() {
       if (err) {
         reject(err);
         console.log("Errore in retrieveNextId");
-      }
-      else {
-        const index = rows.map((e) => { return e.order_index });
+      } else {
+        const index = rows.map((e) => {
+          return e.order_index;
+        });
         if (rows[0].order_index == null) {
-          console.log("Non ci sono righe presenti")
+          console.log("Non ci sono righe presenti");
           resolve(1);
         } else {
           console.log(index);
           resolve(parseInt(index[0] + 1));
         }
       }
-    })
-  })
+    });
+  });
 }
 
 exports.insertOrder = async function (order, id_array, quantity_array) {
@@ -259,12 +260,11 @@ function createInsertOrderPromise(order, id, quantity) {
         if (err) {
           resolve(false);
         } else {
-          console.log("Succesfully added product " + id + " in order n°" + order.order_id);
           resolve(true);
         }
       }
     );
-  })
+  });
 }
 
 exports.deleteTestOrder = function (id) {
@@ -273,13 +273,11 @@ exports.deleteTestOrder = function (id) {
     db.run(sql, [id], (err) => {
       if (err) {
         reject(err);
-        console.log('Errore');
-      }
-      else
-        resolve(null);
+        console.log("Errore");
+      } else resolve(null);
     });
   });
-}
+};
 
 exports.getAllOrders = function () {
   return new Promise((resolve, reject) => {
@@ -293,8 +291,8 @@ exports.getAllOrders = function () {
         resolve(orders);
       }
     });
-  })
-}
+  });
+};
 
 exports.getOrdersByClientId = function (clientID) {
   return new Promise((resolve, reject) => {
@@ -308,19 +306,18 @@ exports.getOrdersByClientId = function (clientID) {
         resolve(orders);
       }
     });
-  })
-}
+  });
+};
 
 exports.setDeliveredOrder = function (orderID) {
   return new Promise((resolve, reject) => {
-    const sql = 'UPDATE ORDERS set status = ? where ORDERS.order_id = ?';
+    const sql = "UPDATE ORDERS set status = ? where ORDERS.order_id = ?";
     db.all(sql, ["delivered", orderID], (err, res) => {
       if (err) reject(err);
-      else
-        resolve(true);
+      else resolve(true);
     });
-  })
-}
+  });
+};
 
 exports.updateClientWallet = function (clientID, recharge) {
   return new Promise((resolve, reject) => {
@@ -328,15 +325,13 @@ exports.updateClientWallet = function (clientID, recharge) {
       reject("Negative amount");
       return;
     }
-    const sql = 'UPDATE USER set wallet_balance =wallet_balance+? where user_id = ?';
+    const sql =
+      "UPDATE USER set wallet_balance =wallet_balance+? where user_id = ?";
     db.all(sql, [recharge, clientID], (err, res) => {
-      if (err)
-        reject(err);
+      if (err) reject(err);
       else {
-        console.log("Added: ", recharge, " to the user: ", clientID);
         resolve(true);
       }
     });
-  })
-
-}
+  });
+};

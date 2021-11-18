@@ -2,14 +2,13 @@ import { useEffect, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import API from '../../../API';
-import ProductCard from '../ProductCard/ProductCard';
-import Sidebar from '../Sidebar/Sidebar';
 import { Spinner } from '../../misc';
 import Breadcrumbs from '../../misc/Breadcrumbs';
+import ProductCard from '../ProductCard/ProductCard';
+import Sidebar from '../Sidebar/Sidebar';
 
 export const Shop = ({ ...props }) => {
-  const { categories, basketProducts, setBasketProducts, show } = props;
-  const [idCategory, setIdCategory] = useState('');
+  const { basketProducts, setBasketProducts, setAnimateBasket } = props;
   const [products, setProducts] = useState([]);
   const [dirty, setDirty] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -74,6 +73,7 @@ export const Shop = ({ ...props }) => {
               availability={availability}
               basketProducts={basketProducts}
               setBasketProducts={setBasketProducts}
+              setAnimateBasket={setAnimateBasket}
             />
           </Col>
         )
@@ -82,7 +82,7 @@ export const Shop = ({ ...props }) => {
 
   return (
     <div className="flex flex-column justify-start">
-      <div className="flex flex-none justify-start py-8">
+      <div className="flex flex-none justify-start pb-8 pt-4">
         <Breadcrumbs />
       </div>
       <div className="flex flex-grow justify-between">
