@@ -69,6 +69,30 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
         }],
       - "date_order": order's date }
   - response body content : none
+- GET `/api/orders`
+    - Retrieves all the orders.
+    - request parameters and request body content: //
+    - response body content:
+        - orders = [{
+            - `order_id`: id of the order,
+            - `ref_product`: id of the ordered product,
+            - `ref_user`: id of the client who made the order,
+            - `date_order`: date and time of the order instantiation,
+            - `quantity`: quantity of the ordered products,
+            - `status`: current status of the order, {...}];
+- GET `/api/client-orders/:clientID`
+    - Retrieves all the orders made by a specific client.
+    - request parameters: `clientID`
+    - request body content: //
+    - response body content:
+        - orders = [{
+            - `order_id`: id of the order,
+            - `ref_product`: id of the ordered product,
+            - `ref_user`: id of the selected client,
+            - `date_order`: date and time of the order instantiation,
+            - `quantity`: quantity of the ordered products,
+            - `status`: current status of the order, {...}];
+
 
   ## Server Database
   - Table `USER` - it contains id, name, surname, email, password and type.

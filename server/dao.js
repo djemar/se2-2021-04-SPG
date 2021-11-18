@@ -27,6 +27,18 @@ function mappingProducts(rows) {
     price: e.price,
     availability: e.availability,
     unit_of_measure: e.unit_of_measure,
+    image_path: e.image_path
+  }));
+}
+
+function mappingOrders(rows) {
+  return rows.map((e) => ({
+    order_id: e.order_id,
+    ref_product: e.ref_product,
+    ref_user: e.ref_user,
+    date_order: e.date_order,
+    quantity: e.quantity,
+    status: e.status
   }));
 }
 
@@ -212,3 +224,32 @@ exports.deleteTestOrder = function (id) {
   });
 }
 
+exports.getAllOrders = function () {
+  return new Promise((resolve, reject) => {
+    const sql = "SELECT * from ORDERS";
+    db.all(sql, [], (err, rows) => {
+      if (err) reject(err);
+      else if (rows === undefined || rows.length === 0) {
+        reject(null);
+      } else {
+        const orders = mappingOrders(rows);
+        resolve(orders);
+      }
+    });
+  })
+}
+
+exports.getOrdersByClientId = function (clientID) {
+  return new Promise((resolve, reject) => {
+    const sql = "SELECT * from ORDERS where ref_user = ?";
+    db.all(sql, [clientID], (err, ord) => {
+      if (err) reject(err);
+      else if (ord === undefined || ord.length === 0) {
+        reject(null);
+      } else {
+        const orders = mappingOrders(ord);
+        resolve(orders);
+      }
+    });
+  })
+}
