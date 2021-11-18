@@ -1,4 +1,4 @@
-import { Card, Button as BSButton, Table } from 'react-bootstrap';
+import { Card, Table } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import Breadcrumbs from '../../misc/Breadcrumbs';
 import { ClientRow } from '.';

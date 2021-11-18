@@ -198,7 +198,7 @@ async function getClientOrders(clientID) {
 async function setDeliveredOrder(orderID) {
   let url = BASEURL + `/set-delivered-order/`;
   try {
-    const res = await axios.post(url, orderID);
+    const res = await axios.post(url, { order_id: orderID });
     return await res.data;
   } catch (error) {
     console.log(error);
