@@ -1,58 +1,115 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faShoppingCart,
-  faUserPlus,
+  faHome,
+  faList,
+  faPowerOff,
+  faReceipt,
+  faShoppingBasket,
   faStore,
+  faUser,
+  faUsers,
+  faWallet,
 } from '@fortawesome/free-solid-svg-icons';
-import { Navbar as NavbarBootstrap, NavDropdown } from 'react-bootstrap';
-import { Button } from '../../misc/';
-import img from '../../../img/undraw_profile.svg';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useState } from 'react';
+import {
+  Button as BSButton,
+  Navbar as NavbarBootstrap,
+  NavDropdown,
+} from 'react-bootstrap';
 import { Link, NavLink } from 'react-router-dom';
+import { ReactComponent as CartLogo } from '../../../img/cart-logo.svg';
+import img from '../../../img/undraw_profile.svg';
+import { Button } from '../../misc/';
+import Basket from '../Basket/Basket';
+import './navbar.css';
 
 export const Navbar = ({ ...props }) => {
-  const { user, logout } = props;
+  const { user, logout, setBasketProducts, basketProducts } = props;
+  const [showBasket, setShowBasket] = useState(false);
+
+  const handleClose = () => setShowBasket(false);
+  const handleShow = () => setShowBasket(true);
+
   return (
     <>
       <NavbarBootstrap
         bg="success"
         expand="lg"
-        className="navbar-light bg-white topbar mb-4 static-top shadow d-flex justify-content-between py-0"
+        fixed="top"
+        className="sticky navbar-light bg-white topbar mb-4 static-top shadow flex justify-between py-0 px-0 pl-4"
         variant="dark"
       >
-        <NavbarBootstrap.Brand>
-          <Link
-            to="/"
-            className="navbar-brand text-primary font-weight-bold d-flex align-items-center mr-0"
-          >
-            <FontAwesomeIcon icon={faShoppingCart} className={'mr-2 mb-0 h1'} />
-            Solidarity Purchasing Group
-          </Link>
-        </NavbarBootstrap.Brand>
-        <div className="row m-0 p-0 flex items-center">
-          <NavLink
-            activeClassName="text-primary"
-            className="navbar-item-spg"
-            to="/categories"
-          >
-            <FontAwesomeIcon icon={faStore} className={'mr-2 mb-0'} />
-            Categories
-          </NavLink>
-          <NavLink
-            activeClassName="text-primary"
-            aria-label="nav-create-client"
-            className="navbar-item-spg"
-            to="/createClient"
-          >
-            <FontAwesomeIcon icon={faUserPlus} className={'mr-2 mb-0'} />
-            Create Client
-          </NavLink>
-          <div className="topbar-divider d-none d-sm-block"></div>
+        <div className="flex flex-grow justify-between items-center">
+          <NavbarBootstrap.Brand>
+            <Link
+              id="navbar-logo"
+              to="/"
+              className="navbar-brand flex items-center mr-0"
+            >
+              <CartLogo className={'mr-2 mb-0 h1'} />
+              SolidarityBay
+            </Link>
+          </NavbarBootstrap.Brand>
+          <div className="m-0 p-0 d-flex align-items-center">
+            <NavLink
+              activeClassName="text-secondary"
+              className="navbar-item-spg"
+              exact
+              to="/"
+            >
+              <FontAwesomeIcon icon={faHome} className={'mr-2 mb-0'} />
+              Home
+            </NavLink>
+            <NavLink
+              activeClassName="text-secondary"
+              className="navbar-item-spg"
+              to="/shop"
+            >
+              <FontAwesomeIcon
+                icon={faShoppingBasket}
+                className={'mr-2 mb-0'}
+              />
+              Shop
+            </NavLink>
+            {user.userType === 2 && (
+              <>
+                <NavLink
+                  activeClassName="text-secondary"
+                  className="navbar-item-spg"
+                  to="/farmers"
+                >
+                  <FontAwesomeIcon icon={faStore} className={'mr-2 mb-0'} />
+                  Farmers
+                </NavLink>
+                <NavLink
+                  activeClassName="text-secondary"
+                  className="navbar-item-spg"
+                  to="/clients"
+                >
+                  <FontAwesomeIcon icon={faUsers} className={'mr-2 mb-0'} />
+                  Clients
+                </NavLink>
+                <NavLink
+                  activeClassName="text-secondary"
+                  className="navbar-item-spg"
+                  to="/orders"
+                >
+                  <FontAwesomeIcon icon={faReceipt} className={'mr-2 mb-0'} />
+                  Orders
+                </NavLink>
+              </>
+            )}
+          </div>
           {!user ? (
-            <Button type={'warning'} text={'Login'} url={'/login'} />
+            <div className="flex items-center mr-4">
+              <Button type="warning" text={'Register'} url={'/register'} />
+              <div className="topbar-divider"></div>
+              <Button type="outline-secondary" text={'Login'} url={'/login'} />
+            </div>
           ) : (
             <NavDropdown
-              align={'right'}
-              id="dropdown-menu-align-right"
+              align={'left'}
+              id="dropdown-menu-align-left"
               className="nav-item dropdown no-arrow"
               title={
                 <>
@@ -67,13 +124,37 @@ export const Navbar = ({ ...props }) => {
                 </>
               }
             >
+              <NavDropdown.Item className="text-dark">
+                <NavLink
+                  className="text-dark no-underline"
+                  to={`/user/${user.id}`}
+                >
+                  <FontAwesomeIcon icon={faUser} className={'mr-2 mb-0'} />
+                  Account
+                </NavLink>
+              </NavDropdown.Item>
               <NavDropdown.Item className="text-danger" onClick={logout}>
+                <FontAwesomeIcon icon={faPowerOff} className={'mr-2 mb-0'} />
                 Log Out
               </NavDropdown.Item>
             </NavDropdown>
           )}
         </div>
+        <BSButton
+          id="btn-basket"
+          className="d-flex flex-row justify-content-center align-items-center"
+          onClick={handleShow}
+        >
+          <CartLogo className="logo-icon mr-4" />
+          Your Basket
+        </BSButton>
       </NavbarBootstrap>
+      <Basket
+        show={showBasket}
+        onHide={handleClose}
+        basketProducts={basketProducts}
+        setBasketProducts={setBasketProducts}
+      />
     </>
   );
 };
