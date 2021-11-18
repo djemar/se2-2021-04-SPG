@@ -14,7 +14,6 @@ export const Shop = ({ ...props }) => {
   const [loading, setLoading] = useState(false);
 
   const { category } = useParams();
-  console.log(category);
 
   useEffect(() => {
     //useEffect è un hook che permette di usare i lyfecycle del component. Equivale alla componentDidMount, componentDidUpdate, componentWillUnmount.
