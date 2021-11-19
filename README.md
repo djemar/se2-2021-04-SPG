@@ -55,7 +55,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
             - `surname`: surname of the new client,
             - `email`: email of the new client,
             - `hash`: hash of the password selected by the new client,
-            - `Type`: "Client" type;
+            - `Type`: "Client" type,
+            - `wallet_balance`: initial wallet_balance of the new client in Euros, which is set to 0.0 € initially };
 - POST `/api/order`
   - Insert order in the DB.
   - request parameters and request body content:
@@ -92,10 +93,21 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
             - `date_order`: date and time of the order instantiation,
             - `quantity`: quantity of the ordered products,
             - `status`: current status of the order, {...}];
-
+- GET `/api/users`
+    - Retrieves all the users.
+    - request parameters and request body content: //
+    - response body content:
+        - users = [{
+            - `user_id`: id of the current user,
+            - `name`: name of the current user,
+            - `surname`: surname of the current user,
+            - `email`: email of the current user,
+            - `hash`: hash of the password selected by the current user,
+            - `Type`: user type which can be Client, Farmer, Employee, Manager 
+            - `wallet_balance`: balance of the wallet in Euros, if Type is Client / NULL otherwise }, {...}];
 
   ## Server Database
-  - Table `USER` - it contains id, name, surname, email, password and type.
+  - Table `USER` - it contains id, name, surname, email, password, type and balance.
   - Table `PRODUCT` - it contains id, name, description, category, farmer's id, price, availability and unit of measure.
   - Table `ORDERS` - it contains id, product's id, user's id, date, quantity and status.
 

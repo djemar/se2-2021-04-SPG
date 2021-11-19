@@ -30,6 +30,9 @@ const authErrorObj = {
   errors: [{ param: "Server", msg: "Authorization error" }],
 };
 
+
+/************** Products **************/
+
 // GET /products
 // Request body: //
 // Response body: json containing all the products of all categories
@@ -50,6 +53,9 @@ app.post("/api/products", [check("category").isString()], async (req, res) => {
     .then((products) => res.json(products))
     .catch((err) => res.status(503).json(dbErrorObj));
 });
+
+
+/************** Users **************/
 
 // POST /new-client
 // Request body: json containing all the needed client data (name, surname, email, hash)
@@ -78,6 +84,19 @@ app.post(
     }
   }
 );
+
+// GET /users
+// Request body: //
+// Response body: json containing all the users
+app.get("/api/users", async (req, res) => {
+    await dao
+        .getAllUsers()
+        .then((users) => res.json(users))
+        .catch((err) => res.status(503).json(dbErrorObj));
+});
+
+
+/************** Orders **************/
 
 // POST /order
 // Request body: object describing an Order (order_id,ref_user,productList[{ref_product,quantity}],date_order,status(optional))

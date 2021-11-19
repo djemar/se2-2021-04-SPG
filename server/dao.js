@@ -42,7 +42,22 @@ function mappingOrders(rows) {
   }));
 }
 
+function mappingUsers(rows) {
+  return rows.map((e) => ({
+    user_id: e.user_id,
+    name: e.name,
+    surname: e.surname,
+    email: e.email,
+    hash: e.password,
+    Type: e.Type,
+    wallet_balance: e.wallet_balance
+  }));
+}
+
 /// Queries: ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+/************** Products **************/
 
 exports.getProducts = () => {
   return new Promise((resolve, reject) => {
@@ -79,6 +94,9 @@ exports.getProductsByCategory = (category) => {
   });
 };
 
+
+/************** Users **************/
+
 // Insert a new client:
 exports.insertClient = function (client) {
   return new Promise((resolve, reject) => {
@@ -91,7 +109,7 @@ exports.insertClient = function (client) {
     else {
 
       const sql =
-        "INSERT INTO USER(name,surname,email,password,Type) VALUES (?,?,?,?,?)";
+        "INSERT INTO USER(name,surname,email,password,Type,wallet_balance) VALUES (?,?,?,?,?,?)";
       //ID is not needed. It's added by the insert operation
       db.run(
         sql,
@@ -100,7 +118,8 @@ exports.insertClient = function (client) {
           client.surname,
           client.email,
           client.hash, // password assumed to be already hashed by frontend
-          "Client"
+          "Client",
+          0.0
         ],
         function (err) {
           if (err) {
@@ -146,6 +165,24 @@ exports.removeClient = function (clientID) {
   });
 };
 
+// Get all the users:
+exports.getAllUsers = function () {
+  return new Promise((resolve, reject) => {
+    const sql = "SELECT * from USER";
+    db.all(sql, [], (err, us) => {
+      if (err) reject(err);
+      else if (us === undefined || us.length === 0) {
+        reject(null);
+      } else {
+        const users = mappingUsers(us);
+        resolve(users);
+      }
+    });
+  })
+}
+
+
+/************** Orders **************/
 
 async function retrieveNextId() {
   return new Promise((resolve, reject) => {
