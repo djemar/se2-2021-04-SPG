@@ -16,6 +16,8 @@ const getHashedPWD = pwd => {
 
 const BASEURL = '/api';
 
+/************** Products **************/
+
 async function getAllProducts() {
   let url = BASEURL + `/products`;
   try {
@@ -96,6 +98,8 @@ async function getProductsByCategory(category) {
 }
  */
 
+/************** Users **************/
+
 async function addClient(name, surname, email, hash) {
   let url = BASEURL + '/new-client';
   let client = { name, surname, email, hash };
@@ -103,6 +107,16 @@ async function addClient(name, surname, email, hash) {
   try {
     const res = await axios.post(url, client);
     return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function getAllUsers() {
+  let url = BASEURL + `/users`;
+  try {
+    const res = await axios.get(url);
+    return await res.data;
   } catch (error) {
     console.log(error);
   }
@@ -145,6 +159,8 @@ async function addClient(name, surname, email, hash) {
       });
   });
 } */
+
+/************** Orders **************/
 
 /* async function addOrder(ref_user, productList, date_order) {
   return new Promise((resolve, reject) => {
@@ -216,10 +232,12 @@ async function getClientOrders(clientID) {
   }
 }
 
+// Functions exported by this API:
 const API = {
   getAllProducts,
   getAllProductsByCategory,
   addClient,
+  getAllUsers,
   addOrder,
   getHashedPWD,
   getAllOrders,

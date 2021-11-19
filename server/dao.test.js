@@ -2,7 +2,7 @@ const dao = require("./dao");
 const bcrypt = require("bcrypt");
 const User = require("./user");
 
-
+/*======= PRODUCT API TEST ==========*/
 describe("API getProducts", () => {
   test("products", async () => {
     const p = await dao.getProducts();
@@ -49,7 +49,8 @@ describe("API getProducts", () => {
   });
 });
 
-describe("API clients", () => {
+/*======= USER API TEST ==========*/
+describe("API users", () => {
 
   test("Create new user object", () => {
     const user = new User("Luke", "Skywalker", "J3d1", "dsidshof");
@@ -116,6 +117,19 @@ describe("API clients", () => {
   test("userRemovingError", async () => {
     let e = await dao.removeClient("sample string").catch((error) => error);
     await expect(e).toBeDefined();
+  });
+
+  test("Get all users", async () => {
+    const u = await dao.getAllUsers();
+    console.log("Found", u[0])
+    expect(u).toBeDefined();
+    expect(u[0]).toHaveProperty('user_id', 1);
+    expect(u[0]).toHaveProperty('name', "Mario");
+    expect(u[0]).toHaveProperty('surname', "Biondi");
+    expect(u[0]).toHaveProperty('email', "farmer@polito.it");
+    expect(u[0]).toHaveProperty('hash', "farmer");
+    expect(u[0]).toHaveProperty('Type', "Farmer");
+    expect(u[0]).toHaveProperty('wallet_balance', null);
   });
 
 });
