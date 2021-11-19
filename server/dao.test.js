@@ -44,6 +44,7 @@ describe("API getProducts", () => {
       price: 24,
       availability: 18,
       unit_of_measure: "50 g",
+      image_path: "https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
     });
   });
 });
@@ -131,16 +132,21 @@ describe("API insertOrder", () => {
     const body = {
       "ref_user": 1,
       "productList": [
-        { "ref_product": 1, "quantity": 1 },
-        { "ref_product": 3, "quantity": 3 },
-        { "ref_product": 5, "quantity": 1 }
+        {"ref_product": 1, "quantity": 1},
+        {"ref_product": 3, "quantity": 3},
+        {"ref_product": 5, "quantity": 1}
       ],
     };
     let productsIdList = body.productList;
     var id_array = [], quantity_array = [];
-    productsIdList.forEach((obj) => { id_array.push(obj.ref_product); quantity_array.push(obj.quantity); });
+    productsIdList.forEach((obj) => {
+      id_array.push(obj.ref_product);
+      quantity_array.push(obj.quantity);
+    });
     const res = await dao.insertOrder(body, id_array, quantity_array).catch((val) => val);
-    res.forEach((tmp) => { expect(tmp).toBeFalsy() })
+    res.forEach((tmp) => {
+      expect(tmp).toBeFalsy()
+    })
   });
 
   // This should be the last one since it adds order in DB
@@ -149,16 +155,61 @@ describe("API insertOrder", () => {
     const body = {
       "ref_user": 1,
       "productList":
-        [{ "ref_product": 1, "quantity": 1 },
-        { "ref_product": 3, "quantity": 3 },
-        { "ref_product": 5, "quantity": 1 }],
+          [{"ref_product": 1, "quantity": 1},
+            {"ref_product": 3, "quantity": 3},
+            {"ref_product": 5, "quantity": 1}],
       "date_order": "222"
     };
     let productsIdList = body.productList;
     var id_array = [], quantity_array = [];
-    productsIdList.forEach((obj) => { id_array.push(obj.ref_product); quantity_array.push(obj.quantity); });
+    productsIdList.forEach((obj) => {
+      id_array.push(obj.ref_product);
+      quantity_array.push(obj.quantity);
+    });
     const res = await dao.insertOrder(body, id_array, quantity_array);
     expect(res).toBeTruthy();
+  });
+
+  test("Get all orders", async () => {
+    const o = await dao.getAllOrders();
+    console.log("Found", o[0])
+    expect(o).toBeDefined();
+    expect(o[0]).toHaveProperty('order_id', 1);
+    expect(o[0]).toHaveProperty('ref_product', 1);
+    expect(o[0]).toHaveProperty('ref_user', 1);
+    expect(o[0]).toHaveProperty('date_order', "222");
+    expect(o[0]).toHaveProperty('quantity', 1);
+    expect(o[0]).toHaveProperty('status', "pending");
+  });
+
+  test("orderByClientIdSuccess", async () => {
+    const o = await dao.getOrdersByClientId(1);
+    console.log("Found", o[0])
+    expect(o).toBeDefined();
+    expect(o[0]).toHaveProperty('order_id', 1);
+    expect(o[0]).toHaveProperty('ref_product', 1);
+    expect(o[0]).toHaveProperty('ref_user', 1);
+    expect(o[0]).toHaveProperty('date_order', "222");
+    expect(o[0]).toHaveProperty('quantity', 1);
+    expect(o[0]).toHaveProperty('status', "pending");
+  });
+
+  test("orderByClientIdError1", async () => {
+    await expect(async () => {
+      await dao.getOrdersByClientId("nocat");
+    }).rejects.toBeFalsy();
+  });
+
+  test("orderByClientIdError2", async () => {
+    await expect(async () => {
+      await dao.getOrdersByClientId("");
+    }).rejects.toBeFalsy();
+  });
+
+  test("orderByClientIdError3", async () => {
+    await expect(async () => {
+      await dao.getOrdersByClientId(22);
+    }).rejects.toBeFalsy();
   });
 
 });

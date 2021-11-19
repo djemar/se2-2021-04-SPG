@@ -196,11 +196,33 @@ async function addOrder(ref_user, productList, date_order) {
   }
 }
 
+async function getAllOrders() {
+  let url = BASEURL + `/orders`;
+  try {
+    const res = await axios.get(url);
+    return await res.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function getClientOrders(clientID) {
+  let url = BASEURL + `/client-orders/` + clientID;
+  try {
+    const res = await axios.get(url);
+    return await res.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 const API = {
   getAllProducts,
   getAllProductsByCategory,
   addClient,
   addOrder,
   getHashedPWD,
+  getAllOrders,
+  getClientOrders,
 };
 export default API;
