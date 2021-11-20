@@ -17,15 +17,34 @@ const Register = ({ ...props }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [idUser, setIdUser] = useState();
+  const [type, setType] = useState('');
 
   const submit = async event => {
     event.preventDefault();
     setLoading(true);
     try {
-      const hash = API.getHashedPWD(password);
-      const id = await API.addClient(name, surname, email, hash);
-      setIdUser(id);
-      setLoading(false);
+      if (type === 'Client' || type === 'Farmer') {
+        const hash = API.getHashedPWD(password);
+        let user = {
+          name: name,
+          surname: surname,
+          email: email,
+          hash: hash,
+          Type: type,
+          address: 'a',
+          phone: 'p',
+          country: 'c',
+          city: 'ci',
+          zip_code: 22,
+        };
+        const res = await API.addUser(user);
+        setIdUser(res.user_id);
+        setLoading(false);
+        setError('');
+      } else {
+        setError('Select a user type');
+        setLoading(false);
+      }
     } catch (err) {
       setError(err.message);
       setLoading(false);
@@ -70,6 +89,10 @@ const Register = ({ ...props }) => {
                           <span className="font-bold">Email: </span>
                           {email}
                         </div>
+                        <div>
+                          <span className="font-bold">Type: </span>
+                          {type}
+                        </div>
                       </div>
 
                       {error}
@@ -108,16 +131,21 @@ const Register = ({ ...props }) => {
                     />
                   </Form.Group>
                   <Form.Group className="my-2">
-                    <Form.Select
-                      aria-label="reg-type"
-                      size="lg"
-                      id="selectType"
-                      placeholder="User type"
+                    <Form.Label className="sr-only">Type</Form.Label>
+                    <Form.Control
+                      id="inputType"
+                      type="type"
+                      as="select"
+                      aria-label="reg-client-type"
+                      placeholder="Type"
+                      required
+                      value={type}
+                      onChange={event => setType(event.target.value)}
                     >
-                      <option>User type</option>
-                      <option value="0">Client</option>
-                      <option value="1">Farmer</option>
-                    </Form.Select>
+                      <option hidden>User type</option>
+                      <option value="Client">Client</option>
+                      <option value="Farmer">Farmer</option>
+                    </Form.Control>
                   </Form.Group>
                   <Form.Group className="my-2">
                     <Form.Label className="sr-only">Email address</Form.Label>

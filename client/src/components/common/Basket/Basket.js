@@ -9,11 +9,18 @@ import './basket.css';
 import BasketItem from './BasketItem/BasketItem';
 
 export const Basket = ({ ...props }) => {
-  const { basketProducts, setBasketProducts, show, onHide } = props;
+  const { basketProducts, setBasketProducts, show, onHide, user, isLogged } =
+    props;
   const [clientId, setClientId] = useState('');
   const [somma, setSomma] = useState(0);
   const [showOrderAlert, setShowOrderAlert] = useState(false);
   const [modalShow, setModalShow] = useState(false);
+
+  useEffect(() => {
+    if (user !== undefined && user !== null) {
+      if (isLogged && user.userType === 'Client') setClientId(user.id);
+    }
+  }, [isLogged, user]);
 
   useEffect(() => {
     let sum = 0;
@@ -73,15 +80,24 @@ export const Basket = ({ ...props }) => {
           className="d-flex justify-center w-40 my-2 mx-5"
           hasValidation
         >
-          <FormControl
-            required
-            isInvalid={clientId === '' ? true : false}
-            onInput={e => handleInputClientId(e.target.value)}
-            value={clientId}
-            aria-label="client-input"
-            placeholder={'Client ID'}
-            aria-describedby="inputGroup-sizing-sm"
-          />
+          {user !== null &&
+          user !== undefined &&
+          isLogged &&
+          user.userType === 'Client' ? (
+            <>
+              <h5 className="h5 font-weight-normal font-bold" />
+            </>
+          ) : (
+            <FormControl
+              required
+              isInvalid={clientId === '' ? true : false}
+              onInput={e => handleInputClientId(e.target.value)}
+              value={clientId}
+              aria-label="client-input"
+              placeholder={'Client ID'}
+              aria-describedby="inputGroup-sizing-sm"
+            />
+          )}
         </InputGroup>
         <Offcanvas.Body>{basket}</Offcanvas.Body>
         <Alert

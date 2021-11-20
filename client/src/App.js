@@ -1,15 +1,17 @@
-import { useState } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Main } from './components/common/Main/';
 import { Navbar } from './components/common/Navbar';
 import { Spinner } from './components/misc';
 import './vendor/fontawesome-free/css/all.min.css';
+import { useState, useEffect } from 'react';
+import API from './API';
 
 function App() {
   const [basketProducts, setBasketProducts] = useState([]);
   const [show, setShow] = useState(false);
 
   const [sessionCheck, setSessionCheck] = useState(true);
+  /*
   const [user, setUser] = useState({
     id: 1,
     username: 'pippo@baudo.it',
@@ -17,18 +19,20 @@ function App() {
     surname: 'Baudo',
     userType: 2,
   });
+  */
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
   const [isLogged, setIsLogged] = useState(true);
   const [animateBasket, setAnimateBasket] = useState(false);
 
-  /*const login = async user => {
+  const login = async user => {
     setUser(user);
     setIsLogged(true);
   };
 
   const logout = async () => {
-    await API.logOut();
-    setUser();
+    await API.logout();
+    setUser(null);
     setIsLogged(false);
   };
 
@@ -49,7 +53,7 @@ function App() {
     if (sessionCheck) {
       checkSession();
     }
-  }, [sessionCheck]); */
+  }, [sessionCheck, isLogged]);
 
   return loading ? (
     <div className="vh-100 d-flex align-items-center">
@@ -62,14 +66,16 @@ function App() {
           <div id="content">
             <Navbar
               user={user}
+              isLogged={isLogged}
               animateBasket={animateBasket}
               setAnimateBasket={setAnimateBasket}
               basketProducts={basketProducts}
+              logout={logout}
               setBasketProducts={setBasketProducts} /* logout={logout} */
             />
             <Main
               user={user}
-              //login={login}
+              login={login}
               isLogged={isLogged}
               basketProducts={basketProducts}
               setBasketProducts={setBasketProducts}

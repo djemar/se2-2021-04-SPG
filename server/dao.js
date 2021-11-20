@@ -338,3 +338,53 @@ exports.updateClientWallet = function (clientID, recharge) {
     });
   });
 };
+
+// LOGIN
+exports.getUser = (email, password) => {
+  return new Promise((resolve, reject) => {
+    const sql = "SELECT * FROM user WHERE email = ?";
+    db.get(sql, [email], (err, row) => {
+      console.log("DAJE", row);
+      if (err) reject(err);
+      if (row === undefined) {
+        reject(err);
+      } else {
+        const user = {
+          id: row.user_id,
+          username: row.email,
+          name: row.name,
+          surname: row.surname,
+          userType: row.Type,
+          wallet_balance: row.wallet_balance
+        };
+        // check the hashes with an async call
+        bcrypt.compare(password, row.password).then((result, err) => {
+          if (err) {
+            reject(err);
+          }
+
+          if (result) {
+            resolve(user);
+          } else {
+            reject(err);
+          }
+        });
+      }
+    });
+  });
+};
+
+exports.getUserById = (id) => {
+  return new Promise((resolve, reject) => {
+    const sql = "SELECT * FROM user WHERE user_id = ?";
+    db.get(sql, [id], (err, row) => {
+      if (err) reject(err);
+      else if (row === undefined) resolve({ error: "User not found." });
+      else {
+        // by default, the local strategy looks for "username"
+        const user = { id: row.user_id, username: row.email, name: row.name };
+        resolve(user);
+      }
+    });
+  });
+};

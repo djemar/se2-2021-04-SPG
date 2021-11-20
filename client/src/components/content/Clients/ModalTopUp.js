@@ -42,6 +42,7 @@ export const ModalTopUp = ({ ...props }) => {
               name="name"
               required
               value={amount}
+              min={0}
               aria-label="top-up-amount"
               type="number"
               step="any"
