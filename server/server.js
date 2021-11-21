@@ -89,10 +89,10 @@ app.post(
 // Request body: //
 // Response body: json containing all the users
 app.get("/api/users", async (req, res) => {
-    await dao
-        .getAllUsers()
-        .then((users) => res.json(users))
-        .catch((err) => res.status(503).json(dbErrorObj));
+  await dao
+    .getAllUsers()
+    .then((users) => res.json(users))
+    .catch((err) => res.status(503).json(dbErrorObj));
 });
 
 
@@ -136,38 +136,61 @@ app.post(
 // Request body: //
 // Response body: json containing all the orders of all the clients
 app.get("/api/orders", async (req, res) => {
-    await dao
-        .getAllOrders()
-        .then((orders) => res.json(orders))
-        .catch((err) => res.status(503).json(dbErrorObj));
+  await dao
+    .getAllOrders()
+    .then((orders) => res.json(orders))
+    .catch((err) => res.status(503).json(dbErrorObj));
 });
 
 // GET /client-orders/:clientID
 // Request parameters: clientID
 // Request body: //
 // Response body: json containing all the orders of a specific client
-app.get("/api/client-orders/:clientID", 
-    param('clientID').exists({checkNull: true}).bail().notEmpty().bail().isInt().bail()
-        .custom((value, req) => {
-            let regex = new RegExp(/^[1-9](\d*)/); // '\d' corresponds to '[0-9]'
-            return regex.test(value);
-        }),
-    async (req, res) => {
-        const result = validationResult(req);
-        if (!result.isEmpty()) {
-            console.log("Sanitizer-checks not passed.");
-            res.status(400).json({
-                info: "The server cannot process the request",
-                error: result.array()[0].msg,
-                valueReceived: result.array()[0].value
-            });
-        }
-        else
-            await dao
-                .getOrdersByClientId(req.params.clientID)
-                .then((orders) => res.json(orders))
-                .catch((err) => res.status(503).json(dbErrorObj));
-});
+app.get("/api/client-orders/:clientID",
+  param('clientID').exists({ checkNull: true }).bail().notEmpty().bail().isInt().bail()
+    .custom((value, req) => {
+      let regex = new RegExp(/^[1-9](\d*)/); // '\d' corresponds to '[0-9]'
+      return regex.test(value);
+    }),
+  async (req, res) => {
+    const result = validationResult(req);
+    if (!result.isEmpty()) {
+      console.log("Sanitizer-checks not passed.");
+      res.status(400).json({
+        info: "The server cannot process the request",
+        error: result.array()[0].msg,
+        valueReceived: result.array()[0].value
+      });
+    }
+    else
+      await dao
+        .getOrdersByClientId(req.params.clientID)
+        .then((orders) => res.json(orders))
+        .catch((err) => res.status(503).json(dbErrorObj));
+  });
 
+// POST /set-delivered-order
+// Request body: orderID
+// Response body: json containing the status of the request
+app.post("/api/set-delivered-order/",
+  body('orderID').exists({ checkNull: true }).bail().notEmpty().bail(),
+  async (req, res) => {
+    const result = validationResult(req);
+    if (!result.isEmpty()) {
+      console.log(req.body.orderID);
+      console.log("Sanitizer-checks not passed.");
+      res.status(400).json({
+        info: "The server cannot process the request",
+        error: result.array()[0].msg,
+        valueReceived: result.array()[0].value
+      });
+    }
+    else {
+      await dao.setDeliveredOrder(req.body.orderID)
+        .then((result) => res.json(result))
+        .catch((err) => res.status(503).json(dbErrorObj));
+    }
+  }
+);
 
 app.listen(port, () => console.log(`Server app listening at http://localhost:${port}`));

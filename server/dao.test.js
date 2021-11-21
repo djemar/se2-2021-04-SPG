@@ -135,10 +135,10 @@ describe("API users", () => {
 });
 
 /*======= ORDER API TEST ==========*/
-describe("API insertOrder", () => {
+describe("API Order", () => {
 
   beforeAll(async () => {
-    //call for clean the DB, removing testing order (id_order = 0)
+    //call for clean the DB
     return dao.deleteTestOrder(1);
   });
 
@@ -146,9 +146,9 @@ describe("API insertOrder", () => {
     const body = {
       "ref_user": 1,
       "productList": [
-        {"ref_product": 1, "quantity": 1},
-        {"ref_product": 3, "quantity": 3},
-        {"ref_product": 5, "quantity": 1}
+        { "ref_product": 1, "quantity": 1 },
+        { "ref_product": 3, "quantity": 3 },
+        { "ref_product": 5, "quantity": 1 }
       ],
     };
     let productsIdList = body.productList;
@@ -169,9 +169,9 @@ describe("API insertOrder", () => {
     const body = {
       "ref_user": 1,
       "productList":
-          [{"ref_product": 1, "quantity": 1},
-            {"ref_product": 3, "quantity": 3},
-            {"ref_product": 5, "quantity": 1}],
+        [{ "ref_product": 1, "quantity": 1 },
+        { "ref_product": 3, "quantity": 3 },
+        { "ref_product": 5, "quantity": 1 }],
       "date_order": "222"
     };
     let productsIdList = body.productList;
@@ -225,5 +225,21 @@ describe("API insertOrder", () => {
       await dao.getOrdersByClientId(22);
     }).rejects.toBeFalsy();
   });
+
+  test("changeOrderError", async () => {
+    await dao.setDeliveredOrder();
+    const o = await dao.getOrdersByClientId(1);
+    expect(o[0]).toHaveProperty('status', 'pending')
+  });
+
+  test("changeOrderSuccess", async () => {
+    await dao.setDeliveredOrder(1);
+    const o = await dao.getOrdersByClientId(1);
+    expect(o[0]).toHaveProperty('status', 'delivered')
+  });
+
+
+
+
 
 });
