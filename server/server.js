@@ -175,8 +175,8 @@ app.get("/api/client-orders/:clientID",
 app.post("/api/set-delivered-order/",
   body('orderID').exists({ checkNull: true }).bail().notEmpty().bail(),
   async (req, res) => {
-    const result = validationResult(req);
-    if (!result.isEmpty()) {
+    const validation = validationResult(req);
+    if (!validation.isEmpty()) {
       console.log(req.body.orderID);
       console.log("Sanitizer-checks not passed.");
       res.status(400).json({
