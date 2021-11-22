@@ -57,15 +57,24 @@ app.post("/api/products", [check("category").isString()], async (req, res) => {
 
 /************** Users **************/
 
-// POST /new-client
-// Request body: json containing all the needed client data (name, surname, email, hash)
-// Response body: json containing the new client just inserted
+// POST /new-user
+// Request body: json containing all the needed user data (name, surname, email, hash, Type)
+// Response body: json containing the new user just inserted
 app.post(
-  "/api/new-client",
+  "/api/new-user",
   body("name").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
   body("surname").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
   body("email").exists({ checkNull: true }).bail().notEmpty().bail().isEmail().bail(),
   body("hash").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
+  body("Type").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail()
+      .custom((value) => {
+          return !(value !== "Client" && value !== "Farmer" && value !== "Employee" && value !== "Manager");
+      }).bail(),
+  body("address").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
+  body("phone").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
+  body("country").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
+  body("city").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
+  body("zip_code").exists({ checkNull: true }).bail().notEmpty().bail().isInt().bail(),
   async (req, res) => {
     console.log(req.body);
     const result = validationResult(req);
@@ -78,8 +87,8 @@ app.post(
       });
     else {
       await dao
-        .insertClient(req.body)
-        .then((client) => res.json(client))
+        .insertUser(req.body)
+        .then((user) => res.json(user))
         .catch((err) => res.status(503).json(dbErrorObj));
     }
   }

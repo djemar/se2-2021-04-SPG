@@ -50,7 +50,12 @@ function mappingUsers(rows) {
     email: e.email,
     hash: e.password,
     Type: e.Type,
-    wallet_balance: e.wallet_balance
+    wallet_balance: e.wallet_balance,
+    address: e.address,
+    phone: e.phone,
+    country: e.country,
+    city: e.city,
+    zip_code: e.zip_code
   }));
 }
 
@@ -98,37 +103,52 @@ exports.getProductsByCategory = (category) => {
 /************** Users **************/
 
 // Insert a new client:
-exports.insertClient = function (client) {
+exports.insertUser = function (user) {
   return new Promise((resolve, reject) => {
 
-    if ((typeof (client.name) !== 'string') ||
-      (typeof (client.surname) !== 'string') ||
-      (typeof (client.email) !== 'string') ||
-      (typeof (client.hash) !== 'string'))
-      reject("Strings are expected");
+    if ((typeof (user.name) !== 'string') ||
+      (typeof (user.surname) !== 'string') ||
+      (typeof (user.email) !== 'string') ||
+      (typeof (user.hash) !== 'string') ||
+      (typeof (user.Type) !== 'string') ||
+      (typeof (user.address) !== 'string') ||
+      (typeof (user.phone) !== 'string') ||   // Also phone number must be a string
+      (typeof (user.country) !== 'string') ||
+      (typeof (user.city) !== 'string') ||
+      (typeof (user.zip_code) !== 'number'))
+        reject("Strings are expected for all parameters, except for zip_code which must be an Integer");
     else {
-
+      const balance = user.Type === "Client" ? 0.0 : null;
       const sql =
-        "INSERT INTO USER(name,surname,email,password,Type,wallet_balance) VALUES (?,?,?,?,?,?)";
+        "INSERT INTO USER(name,surname,email,password,Type,wallet_balance,address,phone,country,city,zip_code)"
+        + " VALUES (?,?,?,?,?,?,?,?,?,?,?)";
       //ID is not needed. It's added by the insert operation
       db.run(
         sql,
         [
-          client.name,
-          client.surname,
-          client.email,
-          client.hash, // password assumed to be already hashed by frontend
-          "Client",
-          0.0
+          user.name,
+          user.surname,
+          user.email,
+          user.hash, // password assumed to be already hashed by frontend
+          user.Type,
+          balance,
+          user.address,
+          user.phone,
+          user.country,
+          user.city,
+          user.zip_code
         ],
         function (err) {
           if (err) {
             console.log(err);
             reject(err);
           } else {
-            let clientID = this.lastID;
-            console.log("Client " + clientID + " added successfully");
-            resolve(clientID); // returning the client ID
+            let userID = this.lastID;
+            console.log("User " + userID + " added successfully");
+            const u = {user_id: userID, name: user.name, surname: user.surname, email: user.email,
+              hash: user.hash, Type: user.Type, wallet_balance: balance, address: user.address,
+              phone: user.phone, country: user.country, city: user.city, zip_code: user.zip_code};
+            resolve(u); // returning the user object
           }
         }
       );
@@ -138,10 +158,10 @@ exports.insertClient = function (client) {
 
 
 // Remove a client:
-exports.removeClient = function (clientID) {
+exports.removeUser = function (userID) {
   return new Promise((resolve, reject) => {
 
-    if (typeof (clientID) !== 'number')
+    if (typeof (userID) !== 'number')
       reject("An integer is expected");
     else {
       const sql =
@@ -149,15 +169,15 @@ exports.removeClient = function (clientID) {
       db.run(
         sql,
         [
-          clientID
+          userID
         ],
         function (err) {
           if (err) {
             console.log(err);
             reject(err);
           } else {
-            console.log("Client " + clientID + " removed successfully");
-            resolve(clientID);
+            console.log("User " + userID + " removed successfully");
+            resolve(userID);
           }
         }
       );

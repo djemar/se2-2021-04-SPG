@@ -41,22 +41,33 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
             - `price`: price (per unit of measure,
             - `availability`: number of products of that type available,
             - `unit_of_measure`: unit of measure of the product}, {...}]; 
-- POST `/api/new-client`
-    - Insert a new client (user Type = "Client").
+- POST `/api/new-user`
+    - Insert a new user.
     - request parameters and request body content:
-        -  {`name`: first name of the client to be inserted,
-            `surname`: surname of the client to be inserted,
-            `email`: email of the client to be inserted,
-            `hash`: hash of the password selected by the client}.
+        -  {`name`: first name of the user to be inserted,
+            `surname`: surname of the user to be inserted,
+            `email`: email of the user to be inserted,
+            `hash`: hash of the password selected by the user,
+            `Type`: Type of the user (Client, Farmer, Employee or Manager),
+            `address`: address of the user to be inserted,
+            `phone`: phone number of the user to be inserted (as a string),
+            `country`: country of the user to be inserted,
+            `city`: city of the user to be inserted,
+            `zip_code`: zip code (CAP, in Italy) of the user to be inserted (as an Integer) }.
     - response body content:
-        - client = {
-            - `user_id`: id of the new client,
-            - `name`: name of the new client,
-            - `surname`: surname of the new client,
-            - `email`: email of the new client,
-            - `hash`: hash of the password selected by the new client,
-            - `Type`: "Client" type,
-            - `wallet_balance`: initial wallet_balance of the new client in Euros, which is set to 0.0 € initially };
+        - user = {
+            - `user_id`: id of the new user,
+            - `name`: name of the new user,
+            - `surname`: surname of the new user,
+            - `email`: email of the new user,
+            - `hash`: hash of the password selected by the new user,
+            - `Type`: Type of the user just inserted,
+            - `wallet_balance`: initial client balance in Euros (set to 0.0 € initially) if Type is Client / NULL otherwise 
+            - `address`: address of the new user,
+            - `phone`: phone number of the new user (as a string),
+            - `country`: country of the new user,
+            - `city`: city of the new user,
+            - `zip_code`: zip code (CAP, in Italy) of the new user (as an Integer) };
 - POST `/api/order`
   - Insert order in the DB.
   - request parameters and request body content:
@@ -104,7 +115,12 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
             - `email`: email of the current user,
             - `hash`: hash of the password selected by the current user,
             - `Type`: user type which can be Client, Farmer, Employee, Manager 
-            - `wallet_balance`: balance of the wallet in Euros, if Type is Client / NULL otherwise }, {...}];
+            - `wallet_balance`: balance of the wallet in Euros, if Type is Client / NULL otherwise
+            - `address`: address of the current user,
+            - `phone`: phone number of the current user (as a string),
+            - `country`: country of the current user,
+            - `city`: city of the current user,
+            - `zip_code`: zip code (CAP, in Italy) of the current user (as an Integer) }, {...}];
 - POST `/api/set-delivered-order`
     - Update the status order with `delivered`
     - request parameters : none
@@ -117,7 +133,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
     - responde body content : //
 
   ## Server Database
-  - Table `USER` - it contains id, name, surname, email, password, type and wallet_balance.
+  - Table `USER` - it contains id, name, surname, email, password, Type, balance, address, phone, country, city and zip_code.
   - Table `PRODUCT` - it contains id, name, description, category, farmer's id, price, availability,unit of measure and path for images
   - Table `ORDERS` - it contains id, product's id, user's id, date, quantity and status.
 
