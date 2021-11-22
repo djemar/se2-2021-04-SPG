@@ -238,8 +238,32 @@ describe("API Order", () => {
     expect(o[0]).toHaveProperty('status', 'delivered')
   });
 
+  test("updateWalletError1", async () => {
+    await expect(async () => {
+      await dao.updateClientWallet(2, -2);
+    }).rejects.toEqual("Negative amount");
+  });
 
+  test("updateWalletError2", async () => {
+    await expect(async () => {
+      await dao.updateClientWallet(2, -2.2);
+    }).rejects.toEqual("Negative amount");
+  });
 
+  test("updateWalletSuccess", async () => {
+    await expect(async () => {
+      await dao.updateClientWallet(2, 2.2);
+    }).toBeTruthy();
+  });
+
+  test("updateWalletSuccess2", async () => {
+    let c = await dao.getAllUsers();
+    let v = c[1].wallet_balance;
+    await dao.updateClientWallet(2, 2);
+    c = await dao.getAllUsers();
+    expect(c[1].wallet_balance).toEqual(v + 2);
+  });
 
 
 });
+
