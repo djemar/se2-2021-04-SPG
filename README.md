@@ -105,10 +105,15 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
             - `hash`: hash of the password selected by the current user,
             - `Type`: user type which can be Client, Farmer, Employee, Manager 
             - `wallet_balance`: balance of the wallet in Euros, if Type is Client / NULL otherwise }, {...}];
+- POST `/api/set-delivered-order`
+    - Update the status order with `delivered`
+    - request parameters : none
+    - request body content : json containing the orderID
+    - responde body content : //
 
   ## Server Database
   - Table `USER` - it contains id, name, surname, email, password, type and balance.
-  - Table `PRODUCT` - it contains id, name, description, category, farmer's id, price, availability and unit of measure.
+  - Table `PRODUCT` - it contains id, name, description, category, farmer's id, price, availability,unit of measure and path for images
   - Table `ORDERS` - it contains id, product's id, user's id, date, quantity and status.
 
   ## Built with

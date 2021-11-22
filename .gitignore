@@ -14,3 +14,6 @@ server/coverage/lcov-report/dao.js.html
 server/coverage/lcov-report/block-navigation.js
 server/coverage/lcov-report/base.css
 server/coverage/lcov-report/server.js.html
+
+server/package-lock.json
+client/package-lock.json

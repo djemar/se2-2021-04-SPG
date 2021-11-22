@@ -11,7 +11,7 @@ const getHashedPWD = pwd => {
 };
 
 /*
-	API.js contains all the API calls and the methods that communicate with the backend.
+  API.js contains all the API calls and the methods that communicate with the backend.
 */
 
 const BASEURL = '/api';
@@ -47,56 +47,6 @@ async function getAllProductsByCategory(categoryProduct) {
   }
 }
 
-/* async function getProducts() {
-  const response = await fetch(BASEURL + '/products');
-  const products = await response.json();
-  if (response.ok) {
-    return products;
-  } else {
-    console.log('Errore');
-    throw products;
-  }
-}
-
-async function getProductsByCategory(category) {
-  return new Promise((resolve, reject) => {
-    let obj = new Object();
-    obj.category = category;
-    fetch(BASEURL + '/prducts', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(obj),
-    })
-      .then(response => {
-        if (response.ok) {
-          resolve(null);
-        } else {
-          //analyze the cause of error
-          response
-            .json()
-            .then(obj => {
-              reject(obj);
-            }) //error message in the response body
-            .catch(err => {
-              reject({
-                errors: [
-                  {
-                    param: 'Application',
-                    masg: 'Cannot parse server response',
-                  },
-                ],
-              });
-            });
-        }
-      })
-      .catch(err => {
-        reject({ errors: [{ param: 'Server', msg: 'Cannot communicate' }] });
-      });
-  });
-}
- */
 
 /************** Users **************/
 
@@ -122,83 +72,7 @@ async function getAllUsers() {
   }
 }
 
-/* async function addClient(name, surname, email, hash) {
-  return new Promise((resolve, reject) => {
-    let client = { name, surname, email, hash };
-    fetch(BASEURL + '/new-client', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(client),
-    })
-      .then(response => {
-        if (response.ok) {
-          resolve(response.json());
-        } else {
-          //analyze the cause of error
-          response
-            .json()
-            .then(obj => {
-              reject(obj);
-            }) //error message in the response body
-            .catch(err => {
-              reject({
-                errors: [
-                  {
-                    param: 'Application',
-                    masg: 'Cannot parse server response',
-                  },
-                ],
-              });
-            });
-        }
-      })
-      .catch(err => {
-        reject({ errors: [{ param: 'Server', msg: 'Cannot communicate' }] });
-      });
-  });
-} */
-
 /************** Orders **************/
-
-/* async function addOrder(ref_user, productList, date_order) {
-  return new Promise((resolve, reject) => {
-    let order = { ref_user, productList, date_order };
-    fetch(BASEURL + '/order', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(order),
-    })
-      .then(response => {
-        if (response.ok) {
-          resolve(true);
-        } else {
-          //analyze the cause of error
-          response
-            .json()
-            .then(obj => {
-              reject(obj);
-            }) //error message in the response body
-            .catch(err => {
-              reject({
-                errors: [
-                  {
-                    param: 'Application',
-                    masg: 'Cannot parse server response',
-                  },
-                ],
-              });
-            });
-        }
-      })
-      .catch(err => {
-        reject({ errors: [{ param: 'Server', msg: 'Cannot communicate' }] });
-      });
-  });
-} */
 
 async function addOrder(ref_user, productList, date_order) {
   let url = BASEURL + '/order';
@@ -232,6 +106,16 @@ async function getClientOrders(clientID) {
   }
 }
 
+async function setDeliveredOrder(orderID) {
+  let url = BASEURL + `/set-delivered-order/`;
+  try {
+    const res = await axios.post(url, orderID);
+    return await res.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 // Functions exported by this API:
 const API = {
   getAllProducts,
@@ -242,5 +126,6 @@ const API = {
   getHashedPWD,
   getAllOrders,
   getClientOrders,
+  setDeliveredOrder,
 };
 export default API;
