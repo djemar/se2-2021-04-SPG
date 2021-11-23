@@ -193,4 +193,28 @@ app.post("/api/set-delivered-order/",
   }
 );
 
+// POST /recharge-wallet
+// Request body: clientID and amount to recharge
+// Response body: json containing the status of the request
+app.post("/api/recharge-wallet/",
+  body('clientID').exists({ checkNull: true }).bail().notEmpty().bail(),
+  body('recharge').exists({ checkNull: true }).bail().notEmpty().bail().isNumeric({ min: 0.0 }).bail(),
+  async (req, res) => {
+    const validation = validationResult(req);
+    if (!validation.isEmpty()) {
+      console.log("Sanitizer-checks not passed.");
+      res.status(400).json({
+        info: "The server cannot process the request",
+        error: result.array()[0].msg,
+        valueReceived: result.array()[0].value
+      });
+    }
+    else {
+      await dao.updateClientWallet(req.body.clientID, req.body.recharge)
+        .then((result) => res.json(result))
+        .catch((err) => res.status(503).json(dbErrorObj));
+    }
+  }
+);
+
 app.listen(port, () => console.log(`Server app listening at http://localhost:${port}`));

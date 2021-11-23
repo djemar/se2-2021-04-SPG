@@ -110,9 +110,14 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
     - request parameters : none
     - request body content : json containing the orderID
     - responde body content : //
+- POST `/api/recharge-wallet`
+    - Update the client's wallet
+    - request parameters : none
+    - request body content : json containing the clientID and the amount to recharge
+    - responde body content : //
 
   ## Server Database
-  - Table `USER` - it contains id, name, surname, email, password, type and balance.
+  - Table `USER` - it contains id, name, surname, email, password, type and wallet_balance.
   - Table `PRODUCT` - it contains id, name, description, category, farmer's id, price, availability,unit of measure and path for images
   - Table `ORDERS` - it contains id, product's id, user's id, date, quantity and status.
 

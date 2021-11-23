@@ -116,6 +116,17 @@ async function setDeliveredOrder(orderID) {
   }
 }
 
+async function updateClientWallet(clientID, recharge) {
+  let url = BASEURL + `/recharge-wallet/`;
+  let data = { clientID, recharge };
+  try {
+    const res = await axios.post(url, data);
+    return await res.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 // Functions exported by this API:
 const API = {
   getAllProducts,
@@ -127,5 +138,6 @@ const API = {
   getAllOrders,
   getClientOrders,
   setDeliveredOrder,
+  updateClientWallet,
 };
 export default API;

@@ -6,7 +6,6 @@ const User = require("./user");
 describe("API getProducts", () => {
   test("products", async () => {
     const p = await dao.getProducts();
-    console.log("ECCOLO", p[0])
     expect(p).toBeDefined();
     expect(p[0]).toHaveProperty('product_id', 62)
     expect(p[0]).toHaveProperty('name', "Apples")
@@ -238,8 +237,32 @@ describe("API Order", () => {
     expect(o[0]).toHaveProperty('status', 'delivered')
   });
 
+  test("updateWalletError1", async () => {
+    await expect(async () => {
+      await dao.updateClientWallet(2, -2);
+    }).rejects.toEqual("Negative amount");
+  });
 
+  test("updateWalletError2", async () => {
+    await expect(async () => {
+      await dao.updateClientWallet(2, -2.2);
+    }).rejects.toEqual("Negative amount");
+  });
 
+  test("updateWalletSuccess", async () => {
+    let c = await dao.getAllUsers();
+    let v = c[1].wallet_balance;
+    await dao.updateClientWallet(2, 2);
+    c = await dao.getAllUsers();
+    expect(c[1].wallet_balance).toEqual(v + 2);
+  });
+
+  test("updateWalletSuccess2", async () => {
+    await expect(async () => {
+      await dao.updateClientWallet(2, 2.2);
+    }).toBeTruthy();
+  });
 
 
 });
+

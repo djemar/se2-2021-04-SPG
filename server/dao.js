@@ -301,3 +301,22 @@ exports.setDeliveredOrder = function (orderID) {
     });
   })
 }
+
+exports.updateClientWallet = function (clientID, recharge) {
+  return new Promise((resolve, reject) => {
+    if (recharge < 0.0) {
+      reject("Negative amount");
+      return;
+    }
+    const sql = 'UPDATE USER set wallet_balance =wallet_balance+? where user_id = ?';
+    db.all(sql, [recharge, clientID], (err, res) => {
+      if (err)
+        reject(err);
+      else {
+        console.log("Added: ", recharge, " to the user: ", clientID);
+        resolve(true);
+      }
+    });
+  })
+
+}
