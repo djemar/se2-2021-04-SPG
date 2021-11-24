@@ -47,15 +47,25 @@ async function getAllProductsByCategory(categoryProduct) {
   }
 }
 
-
 /************** Users **************/
 
-async function addClient(name, surname, email, hash) {
-  let url = BASEURL + '/new-client';
-  let client = { name, surname, email, hash };
+async function addUser(user_object) {
+  let url = BASEURL + '/new-user';
+  let user = {
+    name: user_object.name,
+    surname: user_object.surname,
+    email: user_object.email,
+    hash: user_object.hash,
+    Type: user_object.Type,
+    address: user_object.address,
+    phone: user_object.phone,
+    country: user_object.country,
+    city: user_object.city,
+    zip_code: user_object.zip_code,
+  };
 
   try {
-    const res = await axios.post(url, client);
+    const res = await axios.post(url, user);
     return res.data;
   } catch (error) {
     console.log(error);
@@ -131,7 +141,7 @@ async function updateClientWallet(clientID, recharge) {
 const API = {
   getAllProducts,
   getAllProductsByCategory,
-  addClient,
+  addUser,
   getAllUsers,
   addOrder,
   getHashedPWD,
