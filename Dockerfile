@@ -1,18 +1,14 @@
 FROM node:14.17.5
 
-WORKDIR /app/server
-COPY ./server .
+WORKDIR /app
 
-WORKDIR /app/client
-COPY ./client .
+COPY . .
+
+RUN cd server && npm install
 
 WORKDIR /app
-COPY ./start.sh .
 
-WORKDIR /app/server
-RUN npm i
-WORKDIR /app/client
-RUN npm i
+RUN cd client && npm install
 
 EXPOSE 3000 3001
 
