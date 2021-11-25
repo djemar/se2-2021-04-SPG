@@ -18,9 +18,13 @@ const passport = require("passport"); // auth middleware
 const LocalStrategy = require("passport-local").Strategy; // username and password for login
 const session = require("express-session"); // enable sessions
 
+const path = require("path");
 const app = express();
-const port = 3001;
-
+const port = process.env.PORT || 3001;
+const HOST = "0.0.0.0";
+const CLIENT_BUILD_PATH = path.join(__dirname, "./client/build");
+app.use(express.static(CLIENT_BUILD_PATH));
+app.use(express.static("public"));
 // Disable x-powered-by to not disclose technologies used on a website
 app.disable("x-powered-by");
 
@@ -413,6 +417,10 @@ app.post(
   }
 );
 
-app.listen(port, () =>
-  console.log(`Server app listening at http://localhost:${port}`)
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
+
+app.listen(port, HOST, () =>
+  console.log(`Server app listening at http://${HOST}:${port}`)
 );
