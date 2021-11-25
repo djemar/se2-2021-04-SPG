@@ -1,20 +1,19 @@
-FROM node:14.17.5
+FROM node:16.13.0 AS client
+WORKDIR /usr/src/app
+COPY client/ ./client/
+RUN cd client && npm install && npm run build
 
-WORKDIR /app/server
-COPY ./server .
+FROM node:16.13.0 AS server
+WORKDIR /root/
+COPY --from=client /usr/src/app/client/build ./client/build
+COPY server/package*.json .
+RUN npm install
+COPY server/server.js .
+COPY server/dao.js .
+COPY server/user.js .
+COPY server/SPG.sqlite .
+RUN ls
 
-WORKDIR /app/client
-COPY ./client .
+EXPOSE 3001
 
-WORKDIR /app
-COPY ./start.sh .
-
-WORKDIR /app/server
-RUN npm i
-WORKDIR /app/client
-RUN npm i
-
-EXPOSE 3000 3001
-
-WORKDIR /app
-CMD ["sh", "start.sh"]
+CMD ["node", "./server.js"]
