@@ -7,9 +7,15 @@ import { Strategy as LocalStrategy } from "passport-local"; // username and pass
 import session from "express-session"; // enable sessions
 import { APIbot } from "./bot/botServer.js";
 
-export const app = express();
-const port = 3001;
+const { body, param, check, validationResult, sanitizeBody, sanitizeParam } = require("express-validator"); // validation library
 
+const path = require("path");
+export const app = express();
+const port = process.env.PORT || 3001;
+const HOST = "0.0.0.0";
+const CLIENT_BUILD_PATH = path.join(__dirname, "./client/build");
+app.use(express.static(CLIENT_BUILD_PATH));
+app.use(express.static("public"));
 // Disable x-powered-by to not disclose technologies used on a website
 app.disable("x-powered-by");
 
@@ -73,8 +79,7 @@ passport.deserializeUser((id, done) => {
 app.use(
   session({
     // by default, Passport uses a MemoryStore to keep track of the sessions
-    secret:
-      "a secret sentence not to share with anybody and anywhere, used to sign the session ID cookie",
+    secret: "a secret sentence not to share with anybody and anywhere, used to sign the session ID cookie",
     resave: false,
     saveUninitialized: false,
   })
@@ -91,28 +96,24 @@ const isLoggedIn = (req, res, next) => {
 
 /************** Login **************/
 
-app.post(
-  "/api/login",
-  [check("email").isEmail(), check("password").isString()],
-  function (req, res, next) {
-    passport.authenticate("local", (err, user, info) => {
-      if (err) return next(err);
+app.post("/api/login", [check("email").isEmail(), check("password").isString()], function (req, res, next) {
+  passport.authenticate("local", (err, user, info) => {
+    if (err) return next(err);
 
-      if (!user) {
-        // display wrong login messages
-        return res.status(401).json(info);
-      }
-      // success, perform the login
-      req.login(user, (err) => {
-        if (err) return next(err);
-        // req.user contains the authenticated user, we send all the user info back
-        // this is coming from userDao.getUser()
-        console.log(req.user);
-        return res.json(req.user);
-      });
-    })(req, res, next);
-  }
-);
+    if (!user) {
+      // display wrong login messages
+      return res.status(401).json(info);
+    }
+    // success, perform the login
+    req.login(user, (err) => {
+      if (err) return next(err);
+      // req.user contains the authenticated user, we send all the user info back
+      // this is coming from userDao.getUser()
+      console.log(req.user);
+      return res.json(req.user);
+    });
+  })(req, res, next);
+});
 
 // DELETE /login/current
 // logout
@@ -132,20 +133,8 @@ app.get("/api/login/current", (req, res) => {
 
 app.post(
   "/api/telegram/weekly",
-  body("startDate")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isString()
-    .bail(),
-  body("endDate")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isString()
-    .bail(),
+  body("startDate").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
+  body("endDate").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
   async (req, res) => {
     const result = validationResult(req);
     if (!result.isEmpty())
@@ -156,10 +145,7 @@ app.post(
       });
     else {
       try {
-        const products = await dao.getProductsBetweenDates(
-          req.body.startDate,
-          req.body.endDate
-        );
+        const products = await dao.getProductsBetweenDates(req.body.startDate, req.body.endDate);
         APIbot.sendWeeklyUpdate(products)
           .then((result) => {
             console.log(result);
@@ -202,13 +188,7 @@ app.post("/api/products", [check("category").isString()], async (req, res) => {
 // Response body: json containing all the products that can be sold at that date and time
 app.post(
   "/api/products-by-date",
-  body("date")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isString()
-    .bail(),
+  body("date").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
   async (req, res) => {
     const result = validationResult(req);
     if (!result.isEmpty())
@@ -231,13 +211,7 @@ app.post(
 // Response body: json containing all the products that can be sold from that date and time
 app.post(
   "/api/products-from-date",
-  body("date")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isString()
-    .bail(),
+  body("date").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
   async (req, res) => {
     const result = validationResult(req);
     if (!result.isEmpty())
@@ -260,13 +234,7 @@ app.post(
 // Response body: json containing all the products that can be sold until that date and time
 app.post(
   "/api/products-to-date",
-  body("date")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isString()
-    .bail(),
+  body("date").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
   async (req, res) => {
     const result = validationResult(req);
     if (!result.isEmpty())
@@ -289,20 +257,8 @@ app.post(
 // Response body: json containing all the products that can be sold from starting date to ending date
 app.post(
   "/api/products-between-dates",
-  body("startDate")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isString()
-    .bail(),
-  body("endDate")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isString()
-    .bail(),
+  body("startDate").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
+  body("endDate").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
   async (req, res) => {
     const result = validationResult(req);
     if (!result.isEmpty())
@@ -322,27 +278,9 @@ app.post(
 
 app.post(
   "/api/products-between-dates-category",
-  body("category")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isString()
-    .bail(),
-  body("startDate")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isString()
-    .bail(),
-  body("endDate")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isString()
-    .bail(),
+  body("category").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
+  body("startDate").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
+  body("endDate").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
   async (req, res) => {
     const result = validationResult(req);
     if (!result.isEmpty())
@@ -353,11 +291,7 @@ app.post(
       });
     else {
       await dao
-        .getAllProductsByCategoryAndDates(
-          req.body.category,
-          req.body.startDate,
-          req.body.endDate
-        )
+        .getAllProductsByCategoryAndDates(req.body.category, req.body.startDate, req.body.endDate)
         .then((products) => res.json(products))
         .catch((err) => res.status(503).json(dbErrorObj));
     }
@@ -371,34 +305,10 @@ app.post(
 // Response body: json containing the new user just inserted
 app.post(
   "/api/new-user",
-  body("name")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isString()
-    .bail(),
-  body("surname")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isString()
-    .bail(),
-  body("email")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isEmail()
-    .bail(),
-  body("hash")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isString()
-    .bail(),
+  body("name").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
+  body("surname").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
+  body("email").exists({ checkNull: true }).bail().notEmpty().bail().isEmail().bail(),
+  body("hash").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
   body("Type")
     .exists({ checkNull: true })
     .bail()
@@ -407,49 +317,14 @@ app.post(
     .isString()
     .bail()
     .custom((value) => {
-      return !(
-        value !== "Client" &&
-        value !== "Farmer" &&
-        value !== "Employee" &&
-        value !== "Manager"
-      );
+      return !(value !== "Client" && value !== "Farmer" && value !== "Employee" && value !== "Manager");
     })
     .bail(),
-  body("address")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isString()
-    .bail(),
-  body("phone")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isString()
-    .bail(),
-  body("country")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isString()
-    .bail(),
-  body("city")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isString()
-    .bail(),
-  body("zip_code")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isInt()
-    .bail(),
+  body("address").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
+  body("phone").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
+  body("country").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
+  body("city").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
+  body("zip_code").exists({ checkNull: true }).bail().notEmpty().bail().isInt().bail(),
   async (req, res) => {
     const result = validationResult(req);
     if (!result.isEmpty())
@@ -485,12 +360,7 @@ app.get("/api/users", async (req, res) => {
 // Example of Request's Body: {"order_id": 1,"ref_user": 1,"productList": [{"ref_product":1,"quantity":1},{"ref_product": 3,"quantity": 3},{"ref_product": 5,"quantity": 1}], "date_order": "222"}
 app.post(
   "/api/order",
-  body("ref_user")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isNumeric(),
+  body("ref_user").exists({ checkNull: true }).bail().notEmpty().bail().isNumeric(),
   body("date_order").exists({ checkNull: true }).bail().notEmpty().bail(),
   body("productList").exists({ checkNull: true }).bail().notEmpty().bail(),
   body("total").exists({ checkNull: true }).bail().notEmpty().bail(),
@@ -602,13 +472,7 @@ app.post(
 app.post(
   "/api/recharge-wallet/",
   body("clientID").exists({ checkNull: true }).bail().notEmpty().bail(),
-  body("recharge")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isNumeric({ min: 0.0 })
-    .bail(),
+  body("recharge").exists({ checkNull: true }).bail().notEmpty().bail().isNumeric({ min: 0.0 }).bail(),
   async (req, res) => {
     const validation = validationResult(req);
     if (!validation.isEmpty()) {
@@ -629,77 +493,17 @@ app.post(
 
 app.post(
   "/api/new-user",
-  body("name")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isString()
-    .bail(),
-  body("surname")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isString()
-    .bail(),
-  body("email")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isEmail()
-    .bail(),
-  body("hash")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isString()
-    .bail(),
-  body("Type")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isString()
-    .bail(),
+  body("name").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
+  body("surname").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
+  body("email").exists({ checkNull: true }).bail().notEmpty().bail().isEmail().bail(),
+  body("hash").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
+  body("Type").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
 
-  body("address")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isString()
-    .bail(),
-  body("phone")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isString()
-    .bail(),
-  body("country")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isString()
-    .bail(),
-  body("city")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isString()
-    .bail(),
-  body("zip_code")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isInt()
-    .bail(),
+  body("address").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
+  body("phone").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
+  body("country").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
+  body("city").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
+  body("zip_code").exists({ checkNull: true }).bail().notEmpty().bail().isInt().bail(),
   async (req, res) => {
     const result = validationResult(req);
     if (!result.isEmpty())
@@ -719,76 +523,16 @@ app.post(
 
 app.post(
   "/api/new-product",
-  body("name")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isString()
-    .bail(),
-  body("description")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isString()
-    .bail(),
-  body("category")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isString()
-    .bail(),
-  body("ref_farmer")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isInt()
-    .bail(),
-  body("price")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isNumeric({ min: 0.0 })
-    .bail(),
-  body("availability")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isInt()
-    .bail(),
-  body("unit_of_measure")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isString()
-    .bail(),
-  body("image_path")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isString()
-    .bail(),
-  body("start_date")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isString()
-    .bail(),
-  body("end_date")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isString()
-    .bail(),
+  body("name").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
+  body("description").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
+  body("category").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
+  body("ref_farmer").exists({ checkNull: true }).bail().notEmpty().bail().isInt().bail(),
+  body("price").exists({ checkNull: true }).bail().notEmpty().bail().isNumeric({ min: 0.0 }).bail(),
+  body("availability").exists({ checkNull: true }).bail().notEmpty().bail().isInt().bail(),
+  body("unit_of_measure").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
+  body("image_path").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
+  body("start_date").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
+  body("end_date").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
   async (req, res) => {
     const result = validationResult(req);
     if (!result.isEmpty())
@@ -809,83 +553,17 @@ app.post(
 
 app.post(
   "/api/update-product",
-  body("product_id")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isInt()
-    .bail(),
-  body("name")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isString()
-    .bail(),
-  body("description")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isString()
-    .bail(),
-  body("category")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isString()
-    .bail(),
-  body("ref_farmer")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isInt()
-    .bail(),
-  body("price")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isNumeric({ min: 0.0 })
-    .bail(),
-  body("availability")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isInt()
-    .bail(),
-  body("unit_of_measure")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isString()
-    .bail(),
-  body("image_path")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isString()
-    .bail(),
-  body("start_date")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isString()
-    .bail(),
-  body("end_date")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isString()
-    .bail(),
+  body("product_id").exists({ checkNull: true }).bail().notEmpty().bail().isInt().bail(),
+  body("name").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
+  body("description").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
+  body("category").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
+  body("ref_farmer").exists({ checkNull: true }).bail().notEmpty().bail().isInt().bail(),
+  body("price").exists({ checkNull: true }).bail().notEmpty().bail().isNumeric({ min: 0.0 }).bail(),
+  body("availability").exists({ checkNull: true }).bail().notEmpty().bail().isInt().bail(),
+  body("unit_of_measure").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
+  body("image_path").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
+  body("start_date").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
+  body("end_date").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
   async (req, res) => {
     const result = validationResult(req);
 
@@ -1065,12 +743,7 @@ app.post(
 // Example of Request's Body: {"ref_user": 7,"productList": [{"ref_product":91,"quantity":1},{"ref_product": 93,"quantity": 3}], "date_order": "222","total":22,"address":"via","country":"ita","city":"turin","zip_code":10138,"schedule_date":"22","schedule_time":"22:22"}
 app.post(
   "/api/insert-scheduled-order",
-  body("ref_user")
-    .exists({ checkNull: true })
-    .bail()
-    .notEmpty()
-    .bail()
-    .isNumeric(),
+  body("ref_user").exists({ checkNull: true }).bail().notEmpty().bail().isNumeric(),
   body("date_order").exists({ checkNull: true }).bail().notEmpty().bail(),
   body("productList").exists({ checkNull: true }).bail().notEmpty().bail(),
   body("total").exists({ checkNull: true }).bail().notEmpty().bail(),
@@ -1106,8 +779,10 @@ app.post(
 
 //APIbot.start();
 
-app.listen(port, () =>
-  console.log(`Server app listening at http://localhost:${port}`)
-);
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
+
+app.listen(port, HOST, () => console.log(`Server app listening at http://${HOST}:${port}`));
 
 //module.exports = app;
