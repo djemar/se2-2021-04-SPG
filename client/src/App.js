@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import Basket from './components/common/Basket/Basket';
 import { Main } from './components/common/Main/';
 import { Navbar } from './components/common/Navbar';
 import { Spinner } from './components/misc';

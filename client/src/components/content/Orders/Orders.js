@@ -3,8 +3,6 @@ import Breadcrumbs from '../../misc/Breadcrumbs';
 import './Orders.css';
 
 export const Orders = ({ ...props }) => {
-  const {} = props;
-
   return (
     <div className="flex flex-column justify-start">
       <div className="flex flex-none justify-start py-8">

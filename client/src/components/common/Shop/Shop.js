@@ -17,12 +17,6 @@ export const Shop = ({ ...props }) => {
   const { category } = useParams();
   console.log(category);
 
-  /* useEffect(() => {
-    if (id) {
-      setIdCategory(id);
-    }
-  }, [id]); */
-
   useEffect(() => {
     //useEffect è un hook che permette di usare i lyfecycle del component. Equivale alla componentDidMount, componentDidUpdate, componentWillUnmount.
     const getAllProducts = async () => {

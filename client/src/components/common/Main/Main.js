@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { categories } from '../../fakedata.js';
 import User from '../../content/User/User.js';
-import CategoryCard from '../CategoryCard/CategoryCard';
 import { Login } from '../Login';
 import Shop from '../Shop/Shop';
 import Clients from '../../content/Clients/Clients.js';
@@ -31,10 +30,6 @@ export const Main = ({ ...props }) => {
       setUserType(user.userType);
     }
   }, [isLogged]);
-
-  /* const categoriesMapped = categories.map(cat => {
-    return <CategoryCard title={cat.name} key={cat.name} />;
-  }); */
 
   return (
     <div className="row px-5">

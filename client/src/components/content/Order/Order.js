@@ -4,8 +4,6 @@ import { useParams } from 'react-router-dom';
 import './Order.css';
 
 export const Order = ({ ...props }) => {
-  const {} = props;
-
   const { id } = useParams();
 
   return (
