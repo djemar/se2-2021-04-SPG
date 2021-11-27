@@ -1,10 +1,14 @@
-import { Route, Switch, Redirect } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import CategoryCard from '../CategoryCard/CategoryCard';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import { categories } from '../../fakedata.js';
-import Category from '../Category/Category';
+import User from '../../content/User/User.js';
 import { Login } from '../Login';
-import { CreateClient } from '../CreateClient';
+import Shop from '../Shop/Shop';
+import Clients from '../../content/Clients/Clients.js';
+import Farmers from '../../content/Farmers/Farmers.js';
+import Order from '../../content/Order/Order.js';
+import Orders from '../../content/Orders/Orders.js';
+import Register from '../Register/Register.js';
 
 export const Main = ({ ...props }) => {
   const {
@@ -27,41 +31,50 @@ export const Main = ({ ...props }) => {
     }
   }, [isLogged]);
 
-  const categoriesMapped = categories.map(cat => {
-    return <CategoryCard title={cat.name} key={cat.name} />;
-  });
-
   return (
-    <div className="col" style={{ height: '100%' }}>
+    <div className="row px-5">
       <Switch>
         <Route path="/login">
           {user ? <Redirect to="/" /> : <Login login={login} />}
         </Route>
-        <Route path="/manager/:id"></Route>
-        <Route path="/farmer/:id"></Route>
-        <Route path="/product/:id"></Route>
-        <Route path="/category/:id">
-          <>
-            <Category
-              categories={categories}
-              basketProducts={basketProducts}
-              setBasketProducts={setBasketProducts}
-              show={show}
-              setShow={setShow}
-            />
-            ;
-          </>
+        <Route path="/register">
+          <Register />
         </Route>
-        <Route path="/categories">
-          <>
-            <div className="row">{categoriesMapped}</div>
-          </>
+        <Route path="/user/:id">
+          <User />
         </Route>
-        <Route path="/createClient">
-          <CreateClient />
+        <Route path="/orders/:id">
+          <Order />
         </Route>
-        <Route path="/">
-          <Redirect to="/categories" />
+        <Route path="/orders/">
+          <Orders />
+        </Route>
+        <Route path="/farmers/">
+          <Farmers />
+        </Route>
+        <Route path="/clients/">
+          <Clients />
+        </Route>
+        <Route path="/shop/:category">
+          <Shop
+            categories={categories}
+            basketProducts={basketProducts}
+            setBasketProducts={setBasketProducts}
+            show={show}
+            setShow={setShow}
+          />
+        </Route>
+        <Route path="/shop">
+          <Shop
+            categories={categories}
+            basketProducts={basketProducts}
+            setBasketProducts={setBasketProducts}
+            show={show}
+            setShow={setShow}
+          />
+        </Route>
+        <Route exact strict path="/">
+          <Redirect to="/shop" />
         </Route>
       </Switch>
     </div>

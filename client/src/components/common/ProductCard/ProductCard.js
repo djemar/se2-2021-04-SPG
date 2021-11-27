@@ -1,8 +1,7 @@
-import { Button } from '../../misc';
-
-import { InputGroup, FormControl } from 'react-bootstrap';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { Card, Button as BSButton } from 'react-bootstrap';
+import QuantitySelector from '../../misc/QuantitySelector';
+import './productCard.css';
 
 export const ProductCard = ({ ...props }) => {
   const {
@@ -72,81 +71,48 @@ export const ProductCard = ({ ...props }) => {
     }
   };
 
+  const trimmedDesc =
+    description.length > 30
+      ? `${description.substring(0, 30)}...`
+      : description;
+
   return (
-    <div className="col-12 pb-4">
-      <div className="card border-left-light shadow h-100 py-0">
-        <div className="card-body flex justify-between">
-          <div className="flex flex-column justify-between w-100">
-            <div className="no-gutters d-flex align-items-center mb-3 flex flex-none">
-              <div className="h4 mb-0 font-weight-bold text-dark text-uppercase d-flex align-items-center mr-3">
-                {name}
-              </div>
-              {category}
-            </div>
-            <div className="flex justify-between flex-grow">{description}</div>
-          </div>
-          <div className="row no-gutters d-flex align-items-center justify-content-between">
-            <div className="flex flex-grow"></div>
-            <div className="flex flex-none">
-              <div className="flex flex-column justify-between">
-                <div className="flex justify-end">
-                  <div className="mr-9 flex flex-column justify-start pb-4">
-                    <div className="text-xs text-uppercase mb-1 text-right">
-                      Availability
-                    </div>
-                    <div className="h8 mb-0 text-right">
-                      {availableQuantity}
-                    </div>
-                  </div>
-                  <div className="mr-2 flex flex-column justify-start pb-4">
-                    <div className="text-xs font-weight-bold text-success text-uppercase mb-1 text-right">
-                      Price
-                    </div>
-                    <div className="h5 mb-0 font-weight-bold text-gray-600 text-right">
-                      €{price}
-                    </div>
-                  </div>
-                </div>
-                <div className="flex justify-between">
-                  <span className="product-unit my-auto mr-4">{unit}</span>
-                  <div className="mr-2 flex flex-column justify-end">
-                    <div className="h5 mb-0 font-weight-bold text-gray-800 text-center">
-                      <InputGroup className="w-20">
-                        <FormControl
-                          type="number"
-                          min={1}
-                          max={availableQuantity}
-                          isInvalid={
-                            (orderQuantity < 1 ||
-                              orderQuantity > availableQuantity) &&
-                            availableQuantity > 0
-                          }
-                          value={orderQuantity}
-                          onChange={handleQuantityChange}
-                        />
-                      </InputGroup>
-                    </div>
-                  </div>
-                  <div className="h5 mb-0 font-weight-bold text-gray-800 flex flex-column justify-end">
-                    <Button
-                      type="primary"
-                      text="Add"
-                      ariaLabel={'add-basket-' + pid}
-                      onClick={handleAddToBasket}
-                      disabled={
-                        availableQuantity === 0 ||
-                        orderQuantity < 1 ||
-                        orderQuantity > availableQuantity
-                      }
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
+    <Card className="product-card shadow py-0">
+      <Card.Img
+        className="product-img"
+        variant="top"
+        src="https://images.unsplash.com/photo-1584559582213-787a2953dcbe"
+      />
+      <Card.Body className="p-3 w-100">
+        <Card.Title className="font-medium text-black">{name}</Card.Title>
+        <Card.Text className="text-sm">{trimmedDesc}</Card.Text>
+        <div className="noselect pt-4 d-flex flex-row justify-between align-items-center text-black">
+          <QuantitySelector
+            orderQuantity={orderQuantity}
+            setOrderQuantity={setOrderQuantity}
+            max={availableQuantity}
+          />
+          <div className="text-xs">
+            {availableQuantity} piece{availableQuantity > 1 ? 's' : ''}{' '}
+            available
           </div>
         </div>
-      </div>
-    </div>
+        <div className="pt-5 d-flex flex-row justify-between align-items-center text-black">
+          <div className="d-flex flex-row align-items-center">
+            <div className="fg-primary font-medium text-lg mr-2">{price} €</div>
+            <div className="font-light text-sm">{unit}</div>
+          </div>
+          <BSButton
+            className="bg-primary"
+            size="sm"
+            onClick={handleAddToBasket}
+            disabled={availableQuantity === 0}
+          >
+            Add to Basket
+          </BSButton>
+        </div>
+      </Card.Body>
+    </Card>
   );
 };
 
