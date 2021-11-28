@@ -63,3 +63,17 @@
 .spg-divider {
   border-left: 1px solid #e3e6f0;
 }
+
+.bg-primary {
+  background-color: var(--primary) !important;
+  border-color: var(--primary) !important;
+}
+
+.btn.bg-primary:hover {
+  background-color: rgb(156, 58, 16) !important;
+}
+
+.btn.bg-primary:focus {
+  background-color: rgb(156, 58, 16) !important;
+  box-shadow: 0 0 0 0.2rem rgba(156, 58, 16, 0.5);
+}

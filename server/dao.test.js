@@ -291,9 +291,9 @@ describe("API Order", () => {
     const body = {
       "ref_user": 1,
       "productList": [
-        { "ref_product": 1, "quantity": 1 },
-        { "ref_product": 3, "quantity": 3 },
-        { "ref_product": 5, "quantity": 1 }
+        {"ref_product": 1, "quantity": 1},
+        {"ref_product": 3, "quantity": 3},
+        {"ref_product": 5, "quantity": 1}
       ],
     };
     let productsIdList = body.productList;
@@ -314,9 +314,9 @@ describe("API Order", () => {
     const body = {
       "ref_user": 1,
       "productList":
-        [{ "ref_product": 1, "quantity": 1 },
-        { "ref_product": 3, "quantity": 3 },
-        { "ref_product": 5, "quantity": 1 }],
+          [{"ref_product": 1, "quantity": 1},
+            {"ref_product": 3, "quantity": 3},
+            {"ref_product": 5, "quantity": 1}],
       "date_order": "222"
     };
     let productsIdList = body.productList;

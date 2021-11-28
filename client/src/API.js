@@ -80,7 +80,88 @@ async function getAllUsers() {
   }
 }
 
-/************** Orders **************/
+/*To do*/
+/*
+async function getAllClients() {
+  let url = BASEURL + `/user`;
+}
+*/
+
+/* async function addClient(name, surname, email, hash) {
+  return new Promise((resolve, reject) => {
+    let client = { name, surname, email, hash };
+    fetch(BASEURL + '/new-client', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(client),
+    })
+      .then(response => {
+        if (response.ok) {
+          resolve(response.json());
+        } else {
+          //analyze the cause of error
+          response
+            .json()
+            .then(obj => {
+              reject(obj);
+            }) //error message in the response body
+            .catch(err => {
+              reject({
+                errors: [
+                  {
+                    param: 'Application',
+                    masg: 'Cannot parse server response',
+                  },
+                ],
+              });
+            });
+        }
+      })
+      .catch(err => {
+        reject({ errors: [{ param: 'Server', msg: 'Cannot communicate' }] });
+      });
+  });
+} */
+
+/* async function addOrder(ref_user, productList, date_order) {
+  return new Promise((resolve, reject) => {
+    let order = { ref_user, productList, date_order };
+    fetch(BASEURL + '/order', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(order),
+    })
+      .then(response => {
+        if (response.ok) {
+          resolve(true);
+        } else {
+          //analyze the cause of error
+          response
+            .json()
+            .then(obj => {
+              reject(obj);
+            }) //error message in the response body
+            .catch(err => {
+              reject({
+                errors: [
+                  {
+                    param: 'Application',
+                    masg: 'Cannot parse server response',
+                  },
+                ],
+              });
+            });
+        }
+      })
+      .catch(err => {
+        reject({ errors: [{ param: 'Server', msg: 'Cannot communicate' }] });
+      });
+  });
+} */
 
 async function addOrder(ref_user, productList, date_order) {
   let url = BASEURL + '/order';

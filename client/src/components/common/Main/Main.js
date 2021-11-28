@@ -76,6 +76,7 @@ export const Main = ({ ...props }) => {
             setShow={setShow}
           />
         </Route>
+
         <Route exact strict path="/">
           <Redirect to="/shop" />
         </Route>

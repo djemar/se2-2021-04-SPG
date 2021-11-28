@@ -1,2 +1,3 @@
 import Clients from './Clients';
-export { Clients };
+import ClientRow from './ClientRow';
+export { Clients, ClientRow };
