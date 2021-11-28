@@ -418,7 +418,7 @@ app.post(
 );
 
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "build", "index.html"));
+  res.sendFile(path.join(CLIENT_BUILD_PATH, "index.html"));
 });
 
 app.listen(port, HOST, () =>
