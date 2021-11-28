@@ -259,21 +259,21 @@ app.get(
 // POST /set-delivered-order
 // Request body: orderID
 // Response body: json containing the status of the request
-app.post(
-  "/api/set-delivered-order/",
-  body("orderID").exists({ checkNull: true }).bail().notEmpty().bail(),
+app.post("/api/set-delivered-order/",
+  body('order_id').exists({ checkNull: true }).bail().notEmpty().bail(),
   async (req, res) => {
+    console.log("ZI", req.body)
     const validation = validationResult(req);
     if (!validation.isEmpty()) {
       console.log("Sanitizer-checks not passed.");
       res.status(400).json({
         info: "The server cannot process the request",
-        error: result.array()[0].msg,
-        valueReceived: result.array()[0].value,
+        error: validation.array()[0].msg,
+        valueReceived: validation.array()[0].value
       });
-    } else {
-      await dao
-        .setDeliveredOrder(req.body.orderID)
+    }
+    else {
+      await dao.setDeliveredOrder(req.body.order_id)
         .then((result) => res.json(result))
         .catch((err) => res.status(503).json(dbErrorObj));
     }

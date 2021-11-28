@@ -63,3 +63,31 @@
 .spg-divider {
   border-left: 1px solid #e3e6f0;
 }
+
+.order-title {
+  margin-top: 2%;
+  margin-left: 30%;
+  margin-bottom: 2%;
+}
+
+.order-status {
+  border-radius: 20px;
+  max-width: 90px;
+}
+
+.table-container {
+  border-radius: 12px;
+  min-height: 100%;
+}
+
+.order-delivered {
+  background-color: var(--success);
+}
+
+.order-approved {
+  background-color: var(--primary);
+}
+
+.order-pending {
+  background-color: var(--warning);
+}
