@@ -780,7 +780,7 @@ app.post(
 //APIbot.start();
 
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "build", "index.html"));
+  res.sendFile(path.join(CLIENT_BUILD_PATH, "index.html"));
 });
 
 app.listen(port, HOST, () => console.log(`Server app listening at http://${HOST}:${port}`));
