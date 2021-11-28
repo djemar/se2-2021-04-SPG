@@ -55,6 +55,7 @@ export const Shop = ({ ...props }) => {
             description,
             category,
             unit_of_measure,
+            image_path,
             availability,
           },
           index
@@ -69,6 +70,7 @@ export const Shop = ({ ...props }) => {
               description={description}
               category={category}
               unit={unit_of_measure}
+              img={image_path}
               availability={availability}
               basketProducts={basketProducts}
               setBasketProducts={setBasketProducts}

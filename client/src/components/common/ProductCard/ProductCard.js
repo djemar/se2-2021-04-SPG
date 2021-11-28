@@ -23,6 +23,7 @@ export const ProductCard = ({ ...props }) => {
     setBasketProducts,
     setAnimateBasket,
   } = props;
+  console.log('imageee', img);
   const [orderQuantity, setOrderQuantity] = useState(1);
   const [availableQuantity, setAvailableQuantity] = useState(availability);
 
@@ -73,11 +74,7 @@ export const ProductCard = ({ ...props }) => {
 
   return (
     <Card className="product-card shadow py-0">
-      <Card.Img
-        className="product-img"
-        variant="top"
-        src="https://images.unsplash.com/photo-1584559582213-787a2953dcbe"
-      />
+      <Card.Img className="product-img" variant="top" src={img} />
       <Card.Body className="p-3 w-100">
         <Card.Title className="font-medium text-black">{name}</Card.Title>
         <OverlayTrigger
