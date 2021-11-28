@@ -3,7 +3,14 @@ const morgan = require("morgan"); // logging middleware
 const jwt = require("express-jwt");
 const jsonwebtoken = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
-const { body, param, check, validationResult, sanitizeBody, sanitizeParam } = require("express-validator"); // validation library
+const {
+  body,
+  param,
+  check,
+  validationResult,
+  sanitizeBody,
+  sanitizeParam,
+} = require("express-validator"); // validation library
 const dao = require("./dao.js");
 const bcrypt = require("bcrypt");
 
@@ -30,7 +37,6 @@ const authErrorObj = {
   errors: [{ param: "Server", msg: "Authorization error" }],
 };
 
-
 /************** Products **************/
 
 // GET /products
@@ -47,13 +53,11 @@ app.get("/api/products", async (req, res) => {
 // Request body: category of the product
 // Response body: json containing all the products of that category
 app.post("/api/products", [check("category").isString()], async (req, res) => {
-  console.log(req.body);
   await dao
     .getProductsByCategory(req.body.category)
     .then((products) => res.json(products))
     .catch((err) => res.status(503).json(dbErrorObj));
 });
-
 
 /************** Users **************/
 
@@ -62,23 +66,87 @@ app.post("/api/products", [check("category").isString()], async (req, res) => {
 // Response body: json containing the new user just inserted
 app.post(
   "/api/new-user",
-  body("name").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
-  body("surname").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
-  body("email").exists({ checkNull: true }).bail().notEmpty().bail().isEmail().bail(),
-  body("hash").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
-  body("Type").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail()
-      .custom((value) => {
-          return !(value !== "Client" && value !== "Farmer" && value !== "Employee" && value !== "Manager");
-      }).bail(),
-  body("address").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
-  body("phone").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
-  body("country").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
-  body("city").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
-  body("zip_code").exists({ checkNull: true }).bail().notEmpty().bail().isInt().bail(),
+  body("name")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isString()
+    .bail(),
+  body("surname")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isString()
+    .bail(),
+  body("email")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isEmail()
+    .bail(),
+  body("hash")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isString()
+    .bail(),
+  body("Type")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isString()
+    .bail()
+    .custom((value) => {
+      return !(
+        value !== "Client" &&
+        value !== "Farmer" &&
+        value !== "Employee" &&
+        value !== "Manager"
+      );
+    })
+    .bail(),
+  body("address")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isString()
+    .bail(),
+  body("phone")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isString()
+    .bail(),
+  body("country")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isString()
+    .bail(),
+  body("city")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isString()
+    .bail(),
+  body("zip_code")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isInt()
+    .bail(),
   async (req, res) => {
-    console.log(req.body);
     const result = validationResult(req);
-    console.log(result);
     if (!result.isEmpty())
       res.status(400).json({
         info: "The server cannot process the request",
@@ -104,7 +172,6 @@ app.get("/api/users", async (req, res) => {
     .catch((err) => res.status(503).json(dbErrorObj));
 });
 
-
 /************** Orders **************/
 
 // POST /order
@@ -113,7 +180,12 @@ app.get("/api/users", async (req, res) => {
 // Example of Request's Body: {"order_id": 1,"ref_user": 1,"productList": [{"ref_product":1,"quantity":1},{"ref_product": 3,"quantity": 3},{"ref_product": 5,"quantity": 1}], "date_order": "222"}
 app.post(
   "/api/order",
-  body("ref_user").exists({ checkNull: true }).bail().notEmpty().bail().isNumeric(),
+  body("ref_user")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isNumeric(),
   body("date_order").exists({ checkNull: true }).bail().notEmpty().bail(),
   body("productList").exists({ checkNull: true }).bail().notEmpty().bail(),
   async (req, res) => {
@@ -125,7 +197,6 @@ app.post(
         valueReceived: validation.array()[0].value,
       });
     }
-    console.log(req.body);
     const order = req.body;
     let productsIdList = order.productList;
     var id_array = [],
@@ -155,8 +226,15 @@ app.get("/api/orders", async (req, res) => {
 // Request parameters: clientID
 // Request body: //
 // Response body: json containing all the orders of a specific client
-app.get("/api/client-orders/:clientID",
-  param('clientID').exists({ checkNull: true }).bail().notEmpty().bail().isInt().bail()
+app.get(
+  "/api/client-orders/:clientID",
+  param("clientID")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isInt()
+    .bail()
     .custom((value, req) => {
       let regex = new RegExp(/^[1-9](\d*)/); // '\d' corresponds to '[0-9]'
       return regex.test(value);
@@ -168,34 +246,34 @@ app.get("/api/client-orders/:clientID",
       res.status(400).json({
         info: "The server cannot process the request",
         error: result.array()[0].msg,
-        valueReceived: result.array()[0].value
+        valueReceived: result.array()[0].value,
       });
-    }
-    else
+    } else
       await dao
         .getOrdersByClientId(req.params.clientID)
         .then((orders) => res.json(orders))
         .catch((err) => res.status(503).json(dbErrorObj));
-  });
+  }
+);
 
 // POST /set-delivered-order
 // Request body: orderID
 // Response body: json containing the status of the request
-app.post("/api/set-delivered-order/",
-  body('orderID').exists({ checkNull: true }).bail().notEmpty().bail(),
+app.post(
+  "/api/set-delivered-order/",
+  body("orderID").exists({ checkNull: true }).bail().notEmpty().bail(),
   async (req, res) => {
     const validation = validationResult(req);
     if (!validation.isEmpty()) {
-      console.log(req.body.orderID);
       console.log("Sanitizer-checks not passed.");
       res.status(400).json({
         info: "The server cannot process the request",
         error: result.array()[0].msg,
-        valueReceived: result.array()[0].value
+        valueReceived: result.array()[0].value,
       });
-    }
-    else {
-      await dao.setDeliveredOrder(req.body.orderID)
+    } else {
+      await dao
+        .setDeliveredOrder(req.body.orderID)
         .then((result) => res.json(result))
         .catch((err) => res.status(503).json(dbErrorObj));
     }
@@ -205,9 +283,16 @@ app.post("/api/set-delivered-order/",
 // POST /recharge-wallet
 // Request body: clientID and amount to recharge
 // Response body: json containing the status of the request
-app.post("/api/recharge-wallet/",
-  body('clientID').exists({ checkNull: true }).bail().notEmpty().bail(),
-  body('recharge').exists({ checkNull: true }).bail().notEmpty().bail().isNumeric({ min: 0.0 }).bail(),
+app.post(
+  "/api/recharge-wallet/",
+  body("clientID").exists({ checkNull: true }).bail().notEmpty().bail(),
+  body("recharge")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isNumeric({ min: 0.0 })
+    .bail(),
   async (req, res) => {
     const validation = validationResult(req);
     if (!validation.isEmpty()) {
@@ -215,15 +300,17 @@ app.post("/api/recharge-wallet/",
       res.status(400).json({
         info: "The server cannot process the request",
         error: result.array()[0].msg,
-        valueReceived: result.array()[0].value
+        valueReceived: result.array()[0].value,
       });
-    }
-    else {
-      await dao.updateClientWallet(req.body.clientID, req.body.recharge)
+    } else {
+      await dao
+        .updateClientWallet(req.body.clientID, req.body.recharge)
         .then((result) => res.json(result))
         .catch((err) => res.status(503).json(dbErrorObj));
     }
   }
 );
 
-app.listen(port, () => console.log(`Server app listening at http://localhost:${port}`));
+app.listen(port, () =>
+  console.log(`Server app listening at http://localhost:${port}`)
+);

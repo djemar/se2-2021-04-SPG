@@ -67,3 +67,41 @@ a.text-secondary:focus {
   height: 20px;
   width: 20px;
 }
+
+.anim-basket-icon {
+  animation-name: shake;
+  animation-duration: 800ms;
+  animation-fill-mode: both;
+}
+
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+
+  10%,
+  90% {
+    color: #ffde82;
+    transform: translate3d(-1px, 0, 0);
+    transform: rotate(20deg);
+  }
+
+  30%,
+  50%,
+  70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%,
+  60% {
+    scale: 1.5;
+    transform: rotate(-20deg);
+    transform: translate3d(4px, 0, 0);
+  }
+
+  100% {
+    color: #ffffff;
+    scale: 1;
+    transform: translateX(0);
+  }
+}

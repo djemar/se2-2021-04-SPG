@@ -15,6 +15,7 @@ export const Main = ({ ...props }) => {
     user,
     basketProducts,
     setBasketProducts,
+    setAnimateBasket,
     login,
     isLogged,
     show,
@@ -60,6 +61,7 @@ export const Main = ({ ...props }) => {
             categories={categories}
             basketProducts={basketProducts}
             setBasketProducts={setBasketProducts}
+            setAnimateBasket={setAnimateBasket}
             show={show}
             setShow={setShow}
           />
@@ -69,6 +71,7 @@ export const Main = ({ ...props }) => {
             categories={categories}
             basketProducts={basketProducts}
             setBasketProducts={setBasketProducts}
+            setAnimateBasket={setAnimateBasket}
             show={show}
             setShow={setShow}
           />

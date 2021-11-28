@@ -12,6 +12,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 import {
+  Badge,
   Button as BSButton,
   Navbar as NavbarBootstrap,
   NavDropdown,
@@ -24,7 +25,14 @@ import Basket from '../Basket/Basket';
 import './navbar.css';
 
 export const Navbar = ({ ...props }) => {
-  const { user, logout, setBasketProducts, basketProducts } = props;
+  const {
+    user,
+    animateBasket,
+    setAnimateBasket,
+    logout,
+    setBasketProducts,
+    basketProducts,
+  } = props;
   const [showBasket, setShowBasket] = useState(false);
 
   const handleClose = () => setShowBasket(false);
@@ -110,7 +118,7 @@ export const Navbar = ({ ...props }) => {
             <NavDropdown
               align={'left'}
               id="dropdown-menu-align-left"
-              className="nav-item dropdown no-arrow"
+              className="nav-item dropdown no-arrow mr-4"
               title={
                 <>
                   <span className="mr-2 text-gray-500 small d-none d-sm-block uppercase">
@@ -145,8 +153,23 @@ export const Navbar = ({ ...props }) => {
           className="d-flex flex-row justify-content-center align-items-center"
           onClick={handleShow}
         >
-          <CartLogo className="logo-icon mr-4" />
+          <CartLogo
+            id="basket-icon"
+            className={
+              animateBasket
+                ? 'logo-icon mr-3 anim-basket-icon'
+                : 'logo-icon mr-3'
+            }
+            onAnimationEnd={() => setAnimateBasket(false)}
+          />
           Your Basket
+          {basketProducts.length > 0 ? (
+            <Badge pill bg="light" text="dark" className="ml-3">
+              {basketProducts.reduce((accum, item) => accum + item.quantity, 0)}
+            </Badge>
+          ) : (
+            <></>
+          )}
         </BSButton>
       </NavbarBootstrap>
       <Basket
