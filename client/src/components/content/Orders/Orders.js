@@ -31,7 +31,31 @@ export const Orders = ({ ...props }) => {
     const getAllOrders = async () => {
       const orders = await API.getAllOrders();
       console.log('Orders : ', orders);
-      setOrders(orders);
+      // Re-organizing orders:
+      const order_ids_duplicated = orders.map(order => order.order_id);
+      const order_ids = order_ids_duplicated.filter(function (item, pos) {
+        return order_ids_duplicated.indexOf(item) === pos;
+      });
+      let reorganized_orders = [];
+      order_ids.forEach(id => {
+        let products_and_qnt = [];
+        orders.forEach(ord => {
+          if (ord.order_id === id) {
+            products_and_qnt.push({ prod: ord.ref_product, qnt: ord.quantity });
+          }
+        });
+        let current_order = orders.find(o => o.order_id === id);
+        let to_be_added = {
+          order_id: id,
+          ref_user: current_order.ref_user,
+          date_order: current_order.date_order,
+          products_and_qnt: products_and_qnt,
+          status: current_order.status,
+        };
+        reorganized_orders.push(to_be_added);
+      });
+      console.log('Reorganized orders: ', reorganized_orders);
+      setOrders(reorganized_orders);
     };
 
     if (dirty) {
