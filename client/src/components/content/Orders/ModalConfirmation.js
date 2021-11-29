@@ -3,14 +3,36 @@ import { useState } from 'react';
 import API from '../../../API';
 
 export const ModalConfirmation = ({ ...props }) => {
+  const { order_id, status } = props;
+
+  let new_status = status;
+  switch (status) {
+    case 'pending':
+      new_status = 'approved';
+      break;
+    case 'approved':
+      new_status = 'delivered';
+      break;
+    case 'delivered':
+      break;
+    default:
+      break;
+  }
+
   const handleClose = () => {
     props.setShow(false);
+  };
+
+  const styleFromStatus = {
+    pending: 'order-pending',
+    delivered: 'order-delivered',
+    approved: 'order-approved',
   };
 
   const handleSubmit = async event => {
     event.preventDefault();
     try {
-      const res = await API.setDeliveredOrder(props.order_id);
+      const res = await API.setDeliveredOrder(order_id);
       console.log(res);
       props.setDirty(true);
       handleClose();
@@ -23,37 +45,37 @@ export const ModalConfirmation = ({ ...props }) => {
     <>
       <Modal size="md" show={props.show} onHide={handleClose}>
         <Modal.Header closeButton style={{ textAlign: 'center' }}>
-          <h3 className="h3 font-weight-normal font-bold">
-            You want to change the status of the order {props.order_id} to{' '}
-            <Container
-              style={{
-                borderRadius: 20,
-                maxWidth: 180,
-                background: '#198754',
-              }}
-              className="text-white text-center"
-            >
-              delievered?
-            </Container>
-          </h3>
+          Status updating
         </Modal.Header>
         <Modal.Body style={{ textAlign: 'center' }}>
+          <h4 className="h5 font-weight-normal">
+            Do you want to update status of order {order_id} to{' '}
+            <span
+              className={`text-white text-center px-3 order-status ${styleFromStatus[new_status]}`}
+            >
+              {new_status}
+            </span>
+            ?
+          </h4>
           <Form
             onSubmit={ev => {
-              handleSubmit(ev);
+              handleSubmit(ev).then();
             }}
           >
-            <h2 className="h4 font-weight-normal font-bold">
-              The operation can't be reversed.
-            </h2>
+            <h6
+              className="h6 font-weight-normal"
+              style={{ 'margin-top': '5%' }}
+            >
+              Be careful: the operation can't be reversed.
+            </h6>
             <Modal.Footer className="justify-content-center ">
               <>
                 <Button variant="secondary" onClick={handleClose}>
-                  Close
+                  Cancel
                 </Button>
                 <Button
                   className="bg-primary"
-                  ariaLabel={'change-status-' + props.order_id}
+                  ariaLabel={'change-status-' + order_id}
                   type="onSubmit"
                 >
                   Change the status

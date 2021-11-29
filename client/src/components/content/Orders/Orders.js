@@ -17,10 +17,9 @@ export const Orders = ({ ...props }) => {
         <OrderRow
           index={index}
           order_id={order.order_id}
-          ref_product={order.ref_product}
           ref_user={order.ref_user}
           date_order={order.date_order}
-          quantity={order.quantity}
+          products_and_qnt={order.products_and_qnt}
           status={order.status}
           setDirty={setDirty}
         />
@@ -86,10 +85,9 @@ export const Orders = ({ ...props }) => {
                 <thead>
                   <tr>
                     <th className="text-center">Order ID</th>
-                    <th className="text-center">Ordered product</th>
                     <th className="text-center">Ordering user</th>
                     <th className="text-center">Date and time</th>
-                    <th className="text-center">Quantity</th>
+                    <th className="text-center">Ordered products</th>
                     <th className="text-center">Status</th>
                     <th />
                   </tr>
