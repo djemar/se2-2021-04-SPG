@@ -5,8 +5,8 @@ import API from '../../../API';
 export const ModalConfirmation = ({ ...props }) => {
   const { order_id, status } = props;
 
-  let new_status = status;
-  switch (status) {
+  let new_status = 'delivered';
+  /*switch (status) {
     case 'pending':
       new_status = 'approved';
       break;
@@ -17,7 +17,7 @@ export const ModalConfirmation = ({ ...props }) => {
       break;
     default:
       break;
-  }
+  }*/
 
   const handleClose = () => {
     props.setShow(false);

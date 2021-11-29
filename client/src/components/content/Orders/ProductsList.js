@@ -18,6 +18,8 @@ export const ProductsList = ({ ...props }) => {
         <>
           <tr>
             <td className="text-center">{prod_and_qnt.prod}</td>
+            <td className="text-center">{prod_and_qnt.prod_name}</td>
+            <td className="text-center">€ {prod_and_qnt.price_per_unit}</td>
             <td className="text-center">{prod_and_qnt.qnt}</td>
           </tr>
         </>
@@ -29,6 +31,8 @@ export const ProductsList = ({ ...props }) => {
       <thead>
         <tr>
           <th className="text-center">Product ID</th>
+          <th className="text-center">Name</th>
+          <th className="text-center">Price per unit</th>
           <th className="text-center">Quantity</th>
         </tr>
       </thead>

@@ -4,7 +4,14 @@ import ProductsModal from './ProductsModal';
 import { useState } from 'react';
 
 export const OrderRow = ({ ...props }) => {
-  const { order_id, ref_user, date_order, products_and_qnt, status } = props;
+  const {
+    order_id,
+    ref_user,
+    date_order,
+    products_and_qnt,
+    tot_price,
+    status,
+  } = props;
 
   const [show, setShow] = useState(false);
   const [details, setDetails] = useState(false);
@@ -30,6 +37,7 @@ export const OrderRow = ({ ...props }) => {
             See details
           </Button>
         </td>
+        <td className="text-center">€ {tot_price}</td>
         <td className="text-center">
           <span
             className={`text-white text-center px-3 order-status ${styleFromStatus[status]}`}
