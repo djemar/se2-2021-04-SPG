@@ -27,6 +27,7 @@ import './navbar.css';
 export const Navbar = ({ ...props }) => {
   const {
     user,
+    isLogged,
     animateBasket,
     setAnimateBasket,
     logout,
@@ -79,7 +80,7 @@ export const Navbar = ({ ...props }) => {
               />
               Shop
             </NavLink>
-            {user.userType === 2 && (
+            {user && user.userType === 'ShopDirector' && (
               <>
                 <NavLink
                   activeClassName="text-secondary"
@@ -141,7 +142,10 @@ export const Navbar = ({ ...props }) => {
                   Account
                 </NavLink>
               </NavDropdown.Item>
-              <NavDropdown.Item className="text-danger" onClick={logout}>
+              <NavDropdown.Item
+                className="text-danger"
+                onClick={() => logout()}
+              >
                 <FontAwesomeIcon icon={faPowerOff} className={'mr-2 mb-0'} />
                 Log Out
               </NavDropdown.Item>
@@ -177,6 +181,8 @@ export const Navbar = ({ ...props }) => {
         onHide={handleClose}
         basketProducts={basketProducts}
         setBasketProducts={setBasketProducts}
+        user={user}
+        isLogged={isLogged}
       />
     </>
   );

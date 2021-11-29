@@ -37,6 +37,108 @@ const authErrorObj = {
   errors: [{ param: "Server", msg: "Authorization error" }],
 };
 
+passport.use(
+  new LocalStrategy(
+    {
+      usernameField: "email",
+      passwordField: "password",
+    },
+    function (username, password, done) {
+      dao
+        .getUser(username, password)
+        .then((user) => {
+          if (!user) {
+            return done(null, false, {
+              message: "Incorrect username and/or password.",
+            });
+          }
+          return done(null, user);
+        })
+        .catch((err) => {
+          return done(null, false, {
+            message: "Incorrect username and/or password.",
+          });
+        });
+    }
+  )
+);
+
+// we serialize the user id and we store it in the session: the session is very small in this way
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+// starting from the data in the session, we extract the current (logged-in) user
+passport.deserializeUser((id, done) => {
+  dao
+    .getUserById(id)
+    .then((user) => {
+      done(null, user); // this will be available in req.user
+    })
+    .catch((err) => {
+      done(err, null);
+    });
+});
+
+// set up the session
+app.use(
+  session({
+    // by default, Passport uses a MemoryStore to keep track of the sessions
+    secret:
+      "a secret sentence not to share with anybody and anywhere, used to sign the session ID cookie",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+const isLoggedIn = (req, res, next) => {
+  if (req.isAuthenticated()) return next();
+
+  return res.status(401).json({ error: "not authenticated" });
+};
+
+/************** Login **************/
+
+app.post(
+  "/api/login",
+  [check("email").isEmail(), check("password").isString()],
+  function (req, res, next) {
+    passport.authenticate("local", (err, user, info) => {
+      if (err) return next(err);
+
+      if (!user) {
+        // display wrong login messages
+        return res.status(401).json(info);
+      }
+      // success, perform the login
+      req.login(user, (err) => {
+        if (err) return next(err);
+        // req.user contains the authenticated user, we send all the user info back
+        // this is coming from userDao.getUser()
+        console.log(req.user);
+        console.log("CIAO");
+        return res.json(req.user);
+      });
+    })(req, res, next);
+  }
+);
+
+// DELETE /login/current
+// logout
+app.delete("/api/login/current", isLoggedIn, (req, res) => {
+  req.logout();
+  res.end();
+});
+
+app.get("/api/login/current", (req, res) => {
+  if (req.isAuthenticated()) {
+    res.status(200).json(req.user.name);
+  } else res.status(401).json({ error: "Unauthenticated user!" });
+});
+
 /************** Products **************/
 
 // GET /products
@@ -259,21 +361,22 @@ app.get(
 // POST /set-delivered-order
 // Request body: orderID
 // Response body: json containing the status of the request
-app.post("/api/set-delivered-order/",
-  body('order_id').exists({ checkNull: true }).bail().notEmpty().bail(),
+app.post(
+  "/api/set-delivered-order/",
+  body("order_id").exists({ checkNull: true }).bail().notEmpty().bail(),
   async (req, res) => {
-    console.log("ZI", req.body)
+    console.log("ZI", req.body);
     const validation = validationResult(req);
     if (!validation.isEmpty()) {
       console.log("Sanitizer-checks not passed.");
       res.status(400).json({
         info: "The server cannot process the request",
         error: validation.array()[0].msg,
-        valueReceived: validation.array()[0].value
+        valueReceived: validation.array()[0].value,
       });
-    }
-    else {
-      await dao.setDeliveredOrder(req.body.order_id)
+    } else {
+      await dao
+        .setDeliveredOrder(req.body.order_id)
         .then((result) => res.json(result))
         .catch((err) => res.status(503).json(dbErrorObj));
     }

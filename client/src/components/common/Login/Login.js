@@ -21,9 +21,10 @@ export function Login({ ...props }) {
   const submit = async event => {
     event.preventDefault();
     setLoading(true);
-    const credentials = { username: email, password: password };
+    const credentials = { email: email, password: password };
+
     try {
-      const user = await API.logIn(credentials);
+      const user = await API.login(credentials);
       login(user);
       setLoading(false);
     } catch (err) {

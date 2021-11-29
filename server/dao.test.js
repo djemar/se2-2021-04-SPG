@@ -2,6 +2,7 @@ const dao = require("./dao");
 const bcrypt = require("bcrypt");
 const User = require("./user");
 
+
 /*======= PRODUCT API TEST ==========*/
 describe("API getProducts", () => {
   test("products", async () => {
@@ -412,3 +413,16 @@ describe("API Order", () => {
 
 });
 
+describe('login API', ()=> {
+  test('Login success', async () => {
+    const user = {username: 'equijoin@join.it', password: 'EQUIJOIN'};
+    const res = dao.getUser('equijoin@join.it', 'EQUIJOIN');
+    expect(res).toBeDefined()
+  });
+
+  test('Login failure', async () => {
+    const user = {username: 'equijoin@join.it', password: 'EQUI'};
+    const res = dao.getUser('equijoin@join.it', 'EQ');
+    expect(res).rejects.toBeFalsy();
+  });
+});
