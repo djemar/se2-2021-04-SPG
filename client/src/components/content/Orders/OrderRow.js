@@ -11,6 +11,7 @@ export const OrderRow = ({ ...props }) => {
     products_and_qnt,
     tot_price,
     status,
+    isManager,
   } = props;
 
   const [show, setShow] = useState(false);
@@ -25,10 +26,10 @@ export const OrderRow = ({ ...props }) => {
   return (
     <>
       <tr>
-        <td className="text-center">{order_id}</td>
-        <td className="text-center">{ref_user}</td>
-        <td className="text-center">{date_order}</td>
-        <td className="text-center">
+        <td className="text-center align-middle">{order_id}</td>
+        <td className="text-center align-middle">{ref_user}</td>
+        <td className="text-center align-middle">{date_order}</td>
+        <td className="text-center align-middle">
           <Button
             className="buttons-order-details mx-1"
             size="sm"
@@ -37,24 +38,26 @@ export const OrderRow = ({ ...props }) => {
             See details
           </Button>
         </td>
-        <td className="text-center">€ {tot_price}</td>
-        <td className="text-center">
+        <td className="text-center align-middle">€ {tot_price}</td>
+        <td className="text-center align-middle">
           <span
-            className={`text-white text-center px-3 order-status ${styleFromStatus[status]}`}
+            className={`text-white text-center px-3 py-1 order-status ${styleFromStatus[status]}`}
           >
             {status}
           </span>
         </td>
-        <td className="text-center">
-          <Button
-            className="buttons-order mx-1 bg-primary"
-            size="sm"
-            onClick={() => setShow(true)}
-            disabled={status === 'delivered'}
-          >
-            Update Status
-          </Button>
-        </td>
+        {isManager && (
+          <td className="text-center align-middle">
+            <Button
+              className="buttons-order mx-1 bg-primary"
+              size="sm"
+              onClick={() => setShow(true)}
+              disabled={status === 'delivered'}
+            >
+              Update Status
+            </Button>
+          </td>
+        )}
       </tr>
       <ModalConfirmation
         show={show}

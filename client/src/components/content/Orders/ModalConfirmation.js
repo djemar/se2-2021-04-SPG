@@ -1,5 +1,4 @@
-import { Button, Modal, Form, Alert, Container } from 'react-bootstrap';
-import { useState } from 'react';
+import { Button, Form, Modal } from 'react-bootstrap';
 import API from '../../../API';
 
 export const ModalConfirmation = ({ ...props }) => {
@@ -33,7 +32,6 @@ export const ModalConfirmation = ({ ...props }) => {
     event.preventDefault();
     try {
       const res = await API.setDeliveredOrder(order_id);
-      console.log(res);
       props.setDirty(true);
       handleClose();
     } catch (err) {

@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Alert, FormControl, InputGroup, Offcanvas } from 'react-bootstrap';
 import API from '../../../API';
 import '../../../App.css';
+import { TimeContext } from '../../../context/TimeContext';
 import { ReactComponent as CartLogo } from '../../../img/cart-logo.svg';
 import { Button } from '../../misc';
 import ConfirmModal from '../../misc/ConfirmModal';
@@ -15,6 +16,7 @@ export const Basket = ({ ...props }) => {
   const [somma, setSomma] = useState(0);
   const [showOrderAlert, setShowOrderAlert] = useState(false);
   const [modalShow, setModalShow] = useState(false);
+  const { orderEnabled } = useContext(TimeContext);
 
   useEffect(() => {
     if (user !== undefined && user !== null) {
@@ -80,14 +82,7 @@ export const Basket = ({ ...props }) => {
           className="d-flex justify-center w-40 my-2 mx-5"
           hasValidation
         >
-          {user !== null &&
-          user !== undefined &&
-          isLogged &&
-          user.userType === 'Client' ? (
-            <>
-              <h5 className="h5 font-weight-normal font-bold" />
-            </>
-          ) : (
+          {user && user.userType === 'Employee' && (
             <FormControl
               required
               isInvalid={clientId === '' ? true : false}
@@ -117,6 +112,9 @@ export const Basket = ({ ...props }) => {
               {somma + ' €'}
             </div>
           </div>
+          <Alert show={!orderEnabled} variant="warning" className="mx-4">
+            Orders are available from Saturday 9AM to Sunday 11PM
+          </Alert>
           <div className="d-flex justify-between mx-5 my-5">
             <Button
               text={'Clear Basket'}
@@ -124,13 +122,16 @@ export const Basket = ({ ...props }) => {
               onClick={() => setModalShow(true)}
               disabled={basketProducts.length === 0}
             />
+
             <Button
               text={'Confirm Order'}
               type={'success'}
               ariaLabel="btn-confirm-order"
               onClick={handleAddOrder}
               disabled={
-                clientId === '' || basketProducts.length === 0 ? true : false
+                clientId === '' || basketProducts.length === 0 || !orderEnabled
+                  ? true
+                  : false
               }
             />
           </div>

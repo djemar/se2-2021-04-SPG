@@ -26,8 +26,7 @@ const BasketItem = ({ ...props }) => {
   }, [basketProducts, qnt]);
 
   useEffect(() => {
-    let p = basketProducts.find(x => x.pid == pid);
-    console.log(p);
+    let p = basketProducts.find(x => x.pid === pid);
     if (p.orderQuantity === undefined) setQnt(quantity);
     else setQnt(p.orderQuantity);
   }, [basketProducts]);

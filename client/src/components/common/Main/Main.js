@@ -1,16 +1,14 @@
 import { useEffect, useState } from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
-import { categories } from '../../fakedata.js';
-import User from '../../content/User/User.js';
-import { Login } from '../Login';
-import Shop from '../Shop/Shop';
-import Clients from '../../content/Clients/Clients.js';
-import Farmers from '../../content/Farmers/Farmers.js';
-import Order from '../../content/Order/Order.js';
-import Orders from '../../content/Orders/Orders.js';
-import Register from '../Register/Register.js';
 import Alert from 'react-bootstrap/Alert';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import API from '../../../API';
+import Clients from '../../content/Clients/Clients.js';
+import Orders from '../../content/Orders/Orders.js';
+import User from '../../content/User/User.js';
+import { categories } from '../../fakedata.js';
+import { Login } from '../Login';
+import Register from '../Register/Register.js';
+import Shop from '../Shop/Shop';
 
 export const Main = ({ ...props }) => {
   const {
@@ -53,7 +51,6 @@ export const Main = ({ ...props }) => {
       const getAllOrders = async () => {
         const orders = await API.getAllOrders();
         if (!loadingProd) {
-          console.log('Orders : ', orders);
           const filteredOrders = orders.filter(
             o => o.ref_user === user.id && o.status === 'pending'
           );
@@ -97,22 +94,35 @@ export const Main = ({ ...props }) => {
           {user ? <Redirect to="/" /> : <Login login={login} />}
         </Route>
         <Route path="/register">
-          <Register />
+          {user ? <Redirect to="/" /> : <Register />}
         </Route>
-        <Route path="/user/:id">
-          <User />
+        <Route path="/user/">
+          {user && user.userType === 'Client' ? (
+            <User user={user} />
+          ) : (
+            <Redirect to="/" />
+          )}
         </Route>
-        <Route path="/orders/:id">
-          <Order />
-        </Route>
+        {/* <Route path="/orders/:id">
+          {user ? <Redirect to="/" /> : <Order />}
+        </Route> */}
         <Route path="/orders/">
-          <Orders />
+          {user && user.userType === 'Employee' ? (
+            <Orders />
+          ) : (
+            <Redirect to="/" />
+          )}
         </Route>
-        <Route path="/farmers/">
+        {/* <Route path="/farmers/">
+          {user ? <Redirect to="/" /> : <Register />}
           <Farmers />
-        </Route>
+        </Route> */}
         <Route path="/clients/">
-          <Clients />
+          {user && user.userType === 'Employee' ? (
+            <Clients />
+          ) : (
+            <Redirect to="/" />
+          )}
         </Route>
         <Route path="/shop/:category">
           <Shop

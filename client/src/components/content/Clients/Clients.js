@@ -37,7 +37,6 @@ export const Clients = ({ ...props }) => {
     //useEffect è un hook che permette di usare i lyfecycle del component. Equivale alla componentDidMount, componentDidUpdate, componentWillUnmount.
     const getAllUsers = async () => {
       const users = await API.getAllUsers();
-      console.log('Users : ', users);
       setUsers(users);
     };
 

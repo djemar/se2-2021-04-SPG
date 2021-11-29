@@ -80,16 +80,16 @@ export const Navbar = ({ ...props }) => {
               />
               Shop
             </NavLink>
-            {user && user.userType === 'ShopDirector' && (
+            {user && user.userType === 'Employee' && (
               <>
-                <NavLink
+                {/* <NavLink
                   activeClassName="text-secondary"
                   className="navbar-item-spg"
                   to="/farmers"
                 >
                   <FontAwesomeIcon icon={faStore} className={'mr-2 mb-0'} />
                   Farmers
-                </NavLink>
+                </NavLink> */}
                 <NavLink
                   activeClassName="text-secondary"
                   className="navbar-item-spg"
@@ -133,15 +133,17 @@ export const Navbar = ({ ...props }) => {
                 </>
               }
             >
-              <NavDropdown.Item className="text-dark">
-                <NavLink
-                  className="text-dark no-underline"
-                  to={`/user/${user.id}`}
-                >
-                  <FontAwesomeIcon icon={faUser} className={'mr-2 mb-0'} />
-                  Account
-                </NavLink>
-              </NavDropdown.Item>
+              {user.userType === 'Client' && (
+                <NavDropdown.Item className="text-dark">
+                  <NavLink
+                    className="text-dark no-underline"
+                    to={`/user/${user.id}`}
+                  >
+                    <FontAwesomeIcon icon={faUser} className={'mr-2 mb-0'} />
+                    Account
+                  </NavLink>
+                </NavDropdown.Item>
+              )}
               <NavDropdown.Item
                 className="text-danger"
                 onClick={() => logout()}

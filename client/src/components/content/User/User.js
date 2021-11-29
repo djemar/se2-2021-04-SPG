@@ -1,12 +1,68 @@
-import { Card, Button as BSButton, Tabs, Sonnet, Tab } from 'react-bootstrap';
-import { useState } from 'react';
-import Breadcrumbs from '../../misc/Breadcrumbs';
+import { useEffect, useState } from 'react';
+import { Card, Table } from 'react-bootstrap';
+import API from '../../../API';
 import img from '../../../img/undraw_profile.svg';
+import Breadcrumbs from '../../misc/Breadcrumbs';
+import OrderRow from '../Orders/OrderRow';
 import './User.css';
 
 export const User = ({ ...props }) => {
   const { user } = props;
   const [key, setKey] = useState('orders');
+
+  const [orders, setOrders] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [dirty, setDirty] = useState(true);
+  const [dirtyProd, setDirtyProd] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [loadingProd, setLoadingProd] = useState(true);
+
+  const mappedOrders = orders.map((order, index) => (
+    <OrderRow
+      index={index}
+      order_id={order.order_id}
+      ref_user={order.ref_user}
+      date_order={order.date_order}
+      products_and_qnt={order.products_and_qnt}
+      tot_price={order.tot_price}
+      status={order.status}
+      setDirty={setDirty}
+      isManager={false}
+    />
+  ));
+
+  useEffect(() => {
+    const getAllProducts = async () => {
+      const products = await API.getAllProducts();
+      setProducts(products);
+    };
+
+    if (dirtyProd) {
+      setLoadingProd(true);
+      getAllProducts().then(() => {
+        setLoadingProd(false);
+        setDirtyProd(false);
+      });
+    }
+  }, [dirtyProd]);
+
+  useEffect(() => {
+    const getAllOrders = async () => {
+      const orders = await API.getClientOrders(user.id);
+      if (!loadingProd && products && orders) {
+        const mappedOrders = API.mapOrders(orders, products);
+        setOrders(mappedOrders);
+      }
+    };
+
+    if (dirty || dirtyProd) {
+      setLoading(true);
+      getAllOrders().then(() => {
+        setLoading(false);
+        setDirty(false);
+      });
+    }
+  }, [dirtyProd, dirty]);
 
   return (
     <div className="flex flex-column justify-start">
@@ -28,17 +84,39 @@ export const User = ({ ...props }) => {
                     src={img}
                   />
                   <Card.Text className="text-xl font-bold flex justify-center text-dark mb-2">
-                    Nome Cognome
+                    {`${String(user.name)} ${String(user.surname)}`}
                   </Card.Text>
                   <Card.Text className="text-md  flex justify-center text-dark mb-2">
-                    User Type
+                    <span className="font-bold">User Type:</span>
+                    <span className="ml-2">{user.userType}</span>
                   </Card.Text>
                   <Card.Text className="text-md flex justify-center text-dark mb-2">
-                    User ID
+                    <span className="font-bold">User ID:</span>
+                    <span className="ml-2">{user.id}</span>
                   </Card.Text>
                 </div>
-                <div className="col-9 flex flex-column justify-start py-4 user-divider">
-                  <Tabs
+                <div className="col-9 flex flex-column justify-start user-divider items-center">
+                  <span className="font-bold text-2xl">Orders</span>
+                  <Table borderless striped>
+                    <thead>
+                      <tr>
+                        <th className="text-center">Order ID</th>
+                        <th className="text-center">Ordering user</th>
+                        <th className="text-center">Date and time</th>
+                        <th className="text-center">Ordered products</th>
+                        <th className="text-center">TOT price</th>
+                        <th className="text-center">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {loading ? (
+                        <h3>Please wait, we're loading your orders...</h3>
+                      ) : (
+                        mappedOrders
+                      )}
+                    </tbody>
+                  </Table>
+                  {/* <Tabs
                     activeKey={key}
                     onSelect={k => setKey(k)}
                     className="mb-3"
@@ -47,17 +125,15 @@ export const User = ({ ...props }) => {
                       tabClassName="no-underline text-primary"
                       eventKey="orders"
                       title="Orders"
-                    >
-                      Order List
-                    </Tab>
+                    ></Tab>
                     <Tab
                       tabClassName="no-underline text-primary"
                       eventKey="wallet"
                       title="Wallet"
                     >
-                      Wallet content
+                      {user.wallet_balance}
                     </Tab>
-                  </Tabs>
+                  </Tabs> */}
                 </div>
               </div>
             </Card.Body>

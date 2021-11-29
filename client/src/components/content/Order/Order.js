@@ -1,6 +1,6 @@
-import { Card, Button as BSButton } from 'react-bootstrap';
-import Breadcrumbs from '../../misc/Breadcrumbs';
+import { Card } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
+import Breadcrumbs from '../../misc/Breadcrumbs';
 import './Order.css';
 
 export const Order = ({ ...props }) => {

@@ -11,15 +11,6 @@ function App() {
   const [show, setShow] = useState(false);
 
   const [sessionCheck, setSessionCheck] = useState(true);
-  /*
-  const [user, setUser] = useState({
-    id: 1,
-    username: 'pippo@baudo.it',
-    name: 'Pippo',
-    surname: 'Baudo',
-    userType: 2,
-  });
-  */
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
   const [isLogged, setIsLogged] = useState(true);
@@ -45,7 +36,6 @@ function App() {
         setSessionCheck(false);
         setLoading(false);
       } catch (err) {
-        console.log(err.error);
         setSessionCheck(false);
         setLoading(false);
       }

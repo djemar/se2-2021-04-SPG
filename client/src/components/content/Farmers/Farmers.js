@@ -1,4 +1,4 @@
-import { Card, Button as BSButton } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 import Breadcrumbs from '../../misc/Breadcrumbs';
 import './Farmers.css';
 
