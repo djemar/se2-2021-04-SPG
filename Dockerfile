@@ -1,10 +1,10 @@
 
-FROM node:16.13.0 AS client
+FROM node:16.13.0-alpine AS client
 WORKDIR /usr/src/app
 COPY client/ ./client/
 RUN cd client && npm install && npm run build
 
-FROM node:16.13.0 AS server
+FROM node:16.13.0-alpine AS server
 # WORKDIR /
 # RUN git clone https://github.com/wolfcw/libfaketime.git
 # WORKDIR /libfaketime/src
