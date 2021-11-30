@@ -1,17 +1,17 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Card } from 'react-bootstrap';
 import Table from 'react-bootstrap/Table';
 import API from '../../../API';
+import { UserContext } from '../../../context/UserContext';
 import Breadcrumbs from '../../misc/Breadcrumbs';
 import OrderRow from './OrderRow';
 import './Orders.css';
 
 export const Orders = ({ ...props }) => {
-  const [orders, setOrders] = useState([]);
-  const [products, setProducts] = useState([]);
+  const { orders, products, loading } = useContext(UserContext);
+
   const [dirty, setDirty] = useState(true);
   const [dirtyProd, setDirtyProd] = useState(true);
-  const [loading, setLoading] = useState(true);
   const [loadingProd, setLoadingProd] = useState(true);
 
   const mappedOrders = orders.map((order, index) => (
@@ -28,7 +28,7 @@ export const Orders = ({ ...props }) => {
     />
   ));
 
-  useEffect(() => {
+  /* useEffect(() => {
     const getAllProducts = async () => {
       const products = await API.getAllProducts();
       setProducts(products);
@@ -59,11 +59,11 @@ export const Orders = ({ ...props }) => {
         setDirty(false);
       });
     }
-  }, [dirtyProd, dirty]);
+  }, [dirtyProd, dirty]); */
 
   return (
     <div className="flex flex-column justify-start">
-      <div className="flex flex-none justify-start pb-8 pt-4">
+      <div className="flex flex-none justify-start pb-4">
         <Breadcrumbs />
       </div>
       <div className="flex flex-grow justify-between">

@@ -41,7 +41,7 @@ export const OrderRow = ({ ...props }) => {
         <td className="text-center align-middle">€ {tot_price}</td>
         <td className="text-center align-middle">
           <span
-            className={`text-white text-center px-3 py-1 order-status ${styleFromStatus[status]}`}
+            className={`text-white text-center px-3 py-0.5 order-status ${styleFromStatus[status]}`}
           >
             {status}
           </span>

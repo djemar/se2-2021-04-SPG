@@ -33,7 +33,7 @@ export const ProductsModal = ({ ...props }) => {
               <Col>
                 Status:{' '}
                 <span
-                  className={`text-white text-center px-3 py-1 order-status ${styleFromStatus[status]}`}
+                  className={`text-white text-center px-3 py-0.5 order-status ${styleFromStatus[status]}`}
                 >
                   {status}
                 </span>

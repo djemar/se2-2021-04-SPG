@@ -83,7 +83,7 @@ export const Shop = ({ ...props }) => {
 
   return (
     <div className="flex flex-column justify-start">
-      <div className="flex flex-none justify-start pb-8 pt-4">
+      <div className="flex flex-none justify-start pb-4">
         <Breadcrumbs />
       </div>
       <div className="flex flex-grow justify-between">

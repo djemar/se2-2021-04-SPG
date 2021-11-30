@@ -135,10 +135,7 @@ export const Navbar = ({ ...props }) => {
             >
               {user.userType === 'Client' && (
                 <NavDropdown.Item className="text-dark">
-                  <NavLink
-                    className="text-dark no-underline"
-                    to={`/user/${user.id}`}
-                  >
+                  <NavLink className="text-dark no-underline" to={`/user`}>
                     <FontAwesomeIcon icon={faUser} className={'mr-2 mb-0'} />
                     Account
                   </NavLink>
