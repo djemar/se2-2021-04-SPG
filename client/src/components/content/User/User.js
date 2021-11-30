@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Card, Table } from 'react-bootstrap';
 import API from '../../../API';
+import { UserContext } from '../../../context/UserContext';
 import img from '../../../img/undraw_profile.svg';
 import Breadcrumbs from '../../misc/Breadcrumbs';
 import OrderRow from '../Orders/OrderRow';
@@ -8,14 +9,9 @@ import './User.css';
 
 export const User = ({ ...props }) => {
   const { user } = props;
+  const { name, surname } = user;
   const [key, setKey] = useState('orders');
-
-  const [orders, setOrders] = useState([]);
-  const [products, setProducts] = useState([]);
-  const [dirty, setDirty] = useState(true);
-  const [dirtyProd, setDirtyProd] = useState(true);
-  const [loading, setLoading] = useState(true);
-  const [loadingProd, setLoadingProd] = useState(true);
+  const { orders, loading } = useContext(UserContext);
 
   const mappedOrders = orders.map((order, index) => (
     <OrderRow
@@ -26,48 +22,14 @@ export const User = ({ ...props }) => {
       products_and_qnt={order.products_and_qnt}
       tot_price={order.tot_price}
       status={order.status}
-      setDirty={setDirty}
       isManager={false}
     />
   ));
 
-  useEffect(() => {
-    const getAllProducts = async () => {
-      const products = await API.getAllProducts();
-      setProducts(products);
-    };
-
-    if (dirtyProd) {
-      setLoadingProd(true);
-      getAllProducts().then(() => {
-        setLoadingProd(false);
-        setDirtyProd(false);
-      });
-    }
-  }, [dirtyProd]);
-
-  useEffect(() => {
-    const getAllOrders = async () => {
-      const orders = await API.getClientOrders(user.id);
-      if (!loadingProd && products && orders) {
-        const mappedOrders = API.mapOrders(orders, products);
-        setOrders(mappedOrders);
-      }
-    };
-
-    if (dirty || dirtyProd) {
-      setLoading(true);
-      getAllOrders().then(() => {
-        setLoading(false);
-        setDirty(false);
-      });
-    }
-  }, [dirtyProd, dirty]);
-
   return (
     <div className="flex flex-column justify-start">
-      <div className="flex flex-none justify-start pb-8 pt-4">
-        <Breadcrumbs />
+      <div className="flex flex-none justify-start pb-4">
+        <Breadcrumbs latestField={`${name} ${surname}`} />
       </div>
       <div className="flex flex-grow justify-between">
         <div className="flex w-100 h-100 px-3">
@@ -83,8 +45,14 @@ export const User = ({ ...props }) => {
                     className="img-profile rounded-circle h-36 mb-6"
                     src={img}
                   />
-                  <Card.Text className="text-xl font-bold flex justify-center text-dark mb-2">
+                  <Card.Text className="text-xl text-primary font-bold flex justify-center text-dark mb-2">
                     {`${String(user.name)} ${String(user.surname)}`}
+                  </Card.Text>
+                  <Card.Text className="text-md flex justify-center text-dark mb-2 flex items-center">
+                    <span className="font-bold">Wallet Balance:</span>
+                    <span className="ml-2 px-3 py-0.5 order-status bg-secondary">
+                      {user.wallet_balance} €
+                    </span>
                   </Card.Text>
                   <Card.Text className="text-md  flex justify-center text-dark mb-2">
                     <span className="font-bold">User Type:</span>

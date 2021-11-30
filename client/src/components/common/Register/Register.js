@@ -53,7 +53,7 @@ const Register = ({ ...props }) => {
 
   return (
     <div className="flex flex-column justify-start">
-      <div className="flex flex-none justify-start py-8">
+      <div className="flex flex-none justify-start">
         <Breadcrumbs />
       </div>
       <div className="flex flex-grow justify-between">
@@ -190,7 +190,7 @@ const Register = ({ ...props }) => {
                             className="mr-2"
                           />
                         )}
-                        Create Client
+                        Register
                       </span>
                     </ButtonBootstrap>
                   </Form.Group>

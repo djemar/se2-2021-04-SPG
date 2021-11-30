@@ -8,10 +8,12 @@ import { Button } from '../../misc';
 import ConfirmModal from '../../misc/ConfirmModal';
 import './basket.css';
 import BasketItem from './BasketItem/BasketItem';
+import { UserContext } from '../../../context/UserContext';
 
 export const Basket = ({ ...props }) => {
   const { basketProducts, setBasketProducts, show, onHide, user, isLogged } =
     props;
+  const { setDirty } = useContext(UserContext);
   const [clientId, setClientId] = useState('');
   const [somma, setSomma] = useState(0);
   const [showOrderAlert, setShowOrderAlert] = useState(false);
@@ -47,6 +49,7 @@ export const Basket = ({ ...props }) => {
       // clear basket
       setBasketProducts([]);
       setClientId('');
+      setDirty(true);
       setShowOrderAlert(true);
       window.setTimeout(() => {
         setShowOrderAlert(false);

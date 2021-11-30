@@ -7,12 +7,15 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import TimeContextProvider from './context/TimeContext';
+import UserContextProvider from './context/UserContext';
 
 ReactDOM.render(
   <React.StrictMode>
-    <TimeContextProvider>
-      <App />
-    </TimeContextProvider>
+    <UserContextProvider>
+      <TimeContextProvider>
+        <App />
+      </TimeContextProvider>
+    </UserContextProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
