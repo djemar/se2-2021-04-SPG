@@ -23,7 +23,6 @@ export const ProductCard = ({ ...props }) => {
     setBasketProducts,
     setAnimateBasket,
   } = props;
-  console.log('imageee', img);
   const [orderQuantity, setOrderQuantity] = useState(1);
   const [availableQuantity, setAvailableQuantity] = useState(availability);
 

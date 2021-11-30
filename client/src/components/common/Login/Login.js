@@ -1,15 +1,13 @@
 import { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import {
-  Spinner,
-  Form,
+  Alert,
   Button as ButtonBootstrap,
   Card,
-  Alert,
+  Form,
+  Spinner,
 } from 'react-bootstrap';
-import Breadcrumbs from '../../misc/Breadcrumbs.js';
 import API from '../../../API.js';
+import Breadcrumbs from '../../misc/Breadcrumbs.js';
 
 export function Login({ ...props }) {
   const { login } = props;

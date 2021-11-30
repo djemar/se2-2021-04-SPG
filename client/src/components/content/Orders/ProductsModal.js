@@ -1,14 +1,4 @@
-import {
-  Button,
-  Modal,
-  Form,
-  Alert,
-  Container,
-  Row,
-  Col,
-} from 'react-bootstrap';
-import { useState } from 'react';
-import API from '../../../API';
+import { Col, Container, Modal, Row } from 'react-bootstrap';
 import ProductsList from './ProductsList';
 
 export const ProductsModal = ({ ...props }) => {
@@ -43,7 +33,7 @@ export const ProductsModal = ({ ...props }) => {
               <Col>
                 Status:{' '}
                 <span
-                  className={`text-white text-center px-3 order-status ${styleFromStatus[status]}`}
+                  className={`text-white text-center px-3 py-1 order-status ${styleFromStatus[status]}`}
                 >
                   {status}
                 </span>

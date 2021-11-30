@@ -119,7 +119,6 @@ app.post(
         // req.user contains the authenticated user, we send all the user info back
         // this is coming from userDao.getUser()
         console.log(req.user);
-        console.log("CIAO");
         return res.json(req.user);
       });
     })(req, res, next);
@@ -135,7 +134,8 @@ app.delete("/api/login/current", isLoggedIn, (req, res) => {
 
 app.get("/api/login/current", (req, res) => {
   if (req.isAuthenticated()) {
-    res.status(200).json(req.user.name);
+    console.log(req.user);
+    res.status(200).json(req.user);
   } else res.status(401).json({ error: "Unauthenticated user!" });
 });
 
@@ -365,7 +365,6 @@ app.post(
   "/api/set-delivered-order/",
   body("order_id").exists({ checkNull: true }).bail().notEmpty().bail(),
   async (req, res) => {
-    console.log("ZI", req.body);
     const validation = validationResult(req);
     if (!validation.isEmpty()) {
       console.log("Sanitizer-checks not passed.");

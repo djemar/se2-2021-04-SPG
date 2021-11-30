@@ -1,7 +1,7 @@
-import { Card, Button, Container, Alert, Row, Col } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCoins } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
+import { Button } from 'react-bootstrap';
 import ModalTopUp from './ModalTopUp';
 
 export const ClientRow = ({ ...props }) => {
@@ -24,11 +24,11 @@ export const ClientRow = ({ ...props }) => {
   return (
     <>
       <tr>
-        <td>{props.user_id}</td>
-        <td>{props.name}</td>
-        <td>{props.surname}</td>
-        <td>{props.email}</td>
-        <td>
+        <td className="text-center align-middle">{props.user_id}</td>
+        <td className="text-center align-middle">{props.name}</td>
+        <td className="text-center align-middle">{props.surname}</td>
+        <td className="text-center align-middle">{props.email}</td>
+        <td className="text-center align-middle">
           €{' '}
           <i
             id={'currAmount' + props.user_id}
@@ -37,13 +37,15 @@ export const ClientRow = ({ ...props }) => {
             {props.wallet_balance}
           </i>
         </td>
-        <td>{renderButton()}</td>
+        <td className="text-center align-middle">{renderButton()}</td>
       </tr>
       <ModalTopUp
         show={show}
         setShow={setShow}
         currAmount={props.wallet_balance}
         user_id={props.user_id}
+        name={props.name}
+        surname={props.surname}
         setDirty={props.setDirty}
       ></ModalTopUp>
     </>

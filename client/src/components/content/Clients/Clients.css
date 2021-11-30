@@ -77,3 +77,15 @@
   background-color: rgb(156, 58, 16) !important;
   box-shadow: 0 0 0 0.2rem rgba(156, 58, 16, 0.5);
 }
+.bg-secondary {
+  background-color: var(--secondary) !important;
+  border-color: var(--secondary) !important;
+}
+
+.btn.bg-secondary:hover {
+  background-color: var(--secondary-hover) !important;
+}
+.btn.bg-secondary:focus {
+  background-color: var(--secondary-hover) !important;
+  box-shadow: 0 0 0 0.2rem rgba(16, 156, 86, 0.5);
+}

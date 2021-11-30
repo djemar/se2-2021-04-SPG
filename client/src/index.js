@@ -6,10 +6,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import TimeContextProvider from './context/TimeContext';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <TimeContextProvider>
+      <App />
+    </TimeContextProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

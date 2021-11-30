@@ -18,8 +18,6 @@ const db = new sqlite.Database("SPG.sqlite", (err) => {
 /// Functions: /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function mappingProducts(rows) {
-  console.log("MAP");
-  console.log("rows", rows);
   return rows.map((e) => ({
     product_id: e.product_id,
     name: e.name,
@@ -76,7 +74,6 @@ exports.getProducts = () => {
         console.log("0 ROWS!");
       } else {
         const products = mappingProducts(rows);
-        console.log("ROWS", rows);
         resolve(products);
       }
     });
@@ -222,7 +219,6 @@ async function retrieveNextId() {
           console.log("Non ci sono righe presenti");
           resolve(1);
         } else {
-          console.log(index);
           resolve(parseInt(index[0] + 1));
         }
       }
@@ -344,7 +340,6 @@ exports.getUser = (email, password) => {
   return new Promise((resolve, reject) => {
     const sql = "SELECT * FROM user WHERE email = ?";
     db.get(sql, [email], (err, row) => {
-      console.log("DAJE", row);
       if (err) reject(err);
       if (row === undefined) {
         reject(err);
@@ -355,7 +350,7 @@ exports.getUser = (email, password) => {
           name: row.name,
           surname: row.surname,
           userType: row.Type,
-          wallet_balance: row.wallet_balance
+          wallet_balance: row.wallet_balance,
         };
         // check the hashes with an async call
         bcrypt.compare(password, row.password).then((result, err) => {
@@ -382,7 +377,14 @@ exports.getUserById = (id) => {
       else if (row === undefined) resolve({ error: "User not found." });
       else {
         // by default, the local strategy looks for "username"
-        const user = { id: row.user_id, username: row.email, name: row.name };
+        const user = {
+          id: row.user_id,
+          username: row.email,
+          name: row.name,
+          surname: row.surname,
+          userType: row.Type,
+          wallet_balance: row.wallet_balance,
+        };
         resolve(user);
       }
     });

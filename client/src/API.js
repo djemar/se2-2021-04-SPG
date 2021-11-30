@@ -19,7 +19,6 @@ const BASEURL = '/api';
 /************** Products **************/
 
 async function login(credentials) {
-  console.log(credentials);
   let jsonCred = JSON.stringify(credentials);
   let response = await fetch(BASEURL + '/login', {
     method: 'POST',
@@ -48,7 +47,6 @@ async function logout() {
 async function checkSession() {
   const response = await fetch(BASEURL + '/login/current');
   const userInfo = await response.json();
-  console.log(userInfo);
   if (response.ok) {
     return userInfo;
   } else {
@@ -213,6 +211,39 @@ async function addOrder(ref_user, productList, date_order) {
   }
 }
 
+const mapOrders = (orders, products) => {
+  const IDs = Array.from(new Set(orders?.map(o => o.order_id)));
+
+  const mappedTmp = IDs.map(id => {
+    const orderFilters = orders?.filter(({ order_id: oid }) => oid === id);
+
+    let totalPrice = 0;
+    const productsMapped = orderFilters.map(o => {
+      const product = products.find(p => p.product_id === o.ref_product);
+      if (!product) return false;
+      totalPrice += product.price * o.quantity;
+      return {
+        prod: o.ref_product,
+        qnt: o.quantity,
+        prod_name: product.name,
+        price_per_unit: product.price,
+      };
+    });
+
+    return {
+      order_id: id,
+      ref_user: orderFilters[0].ref_user,
+      date_order: orderFilters[0].date_order,
+      products_and_qnt: productsMapped,
+      tot_price: totalPrice,
+      status: orderFilters[0].status,
+    };
+  });
+
+  // Filtering testing order
+  return mappedTmp.filter(o => o.order_id !== 1);
+};
+
 async function getAllOrders() {
   let url = BASEURL + `/orders`;
   try {
@@ -268,5 +299,7 @@ const API = {
   updateClientWallet,
   login,
   logout,
+  mapOrders,
+  checkSession,
 };
 export default API;

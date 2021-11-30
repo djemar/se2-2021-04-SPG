@@ -1,10 +1,10 @@
-import { Card } from 'react-bootstrap';
-import Breadcrumbs from '../../misc/Breadcrumbs';
-import './Orders.css';
-import Table from 'react-bootstrap/Table';
 import { useEffect, useState } from 'react';
-import OrderRow from './OrderRow';
+import { Card } from 'react-bootstrap';
+import Table from 'react-bootstrap/Table';
 import API from '../../../API';
+import Breadcrumbs from '../../misc/Breadcrumbs';
+import OrderRow from './OrderRow';
+import './Orders.css';
 
 export const Orders = ({ ...props }) => {
   const [orders, setOrders] = useState([]);
@@ -14,26 +14,23 @@ export const Orders = ({ ...props }) => {
   const [loading, setLoading] = useState(true);
   const [loadingProd, setLoadingProd] = useState(true);
 
-  function mapOrders() {
-    if (orders && orders.length > 0)
-      return orders.map((order, index) => (
-        <OrderRow
-          index={index}
-          order_id={order.order_id}
-          ref_user={order.ref_user}
-          date_order={order.date_order}
-          products_and_qnt={order.products_and_qnt}
-          tot_price={order.tot_price}
-          status={order.status}
-          setDirty={setDirty}
-        />
-      ));
-  }
+  const mappedOrders = orders.map((order, index) => (
+    <OrderRow
+      index={index}
+      order_id={order.order_id}
+      ref_user={order.ref_user}
+      date_order={order.date_order}
+      products_and_qnt={order.products_and_qnt}
+      tot_price={order.tot_price}
+      status={order.status}
+      setDirty={setDirty}
+      isManager={true}
+    />
+  ));
 
   useEffect(() => {
     const getAllProducts = async () => {
       const products = await API.getAllProducts();
-      console.log('Products: ', products);
       setProducts(products);
     };
 
@@ -49,47 +46,9 @@ export const Orders = ({ ...props }) => {
   useEffect(() => {
     const getAllOrders = async () => {
       const orders = await API.getAllOrders();
-      if (!loadingProd) {
-        console.log('Orders : ', orders);
-        // Re-organizing orders:
-        const order_ids_duplicated = orders.map(order => order.order_id);
-        const order_ids = order_ids_duplicated.filter(function (item, pos) {
-          return order_ids_duplicated.indexOf(item) === pos;
-        });
-        let reorganized_orders = [];
-        order_ids.forEach(id => {
-          let products_and_qnt = [];
-          let sum = 0;
-          orders.forEach(ord => {
-            if (ord.order_id === id) {
-              let current_product = products.find(
-                p => p.product_id === ord.ref_product
-              );
-              if (current_product === undefined) return false;
-              sum += current_product.price * ord.quantity;
-              products_and_qnt.push({
-                prod: ord.ref_product,
-                qnt: ord.quantity,
-                prod_name: current_product.name,
-                price_per_unit: current_product.price,
-              });
-            }
-          });
-          let current_order = orders.find(o => o.order_id === id);
-          let to_be_added = {
-            order_id: id,
-            ref_user: current_order.ref_user,
-            date_order: current_order.date_order,
-            products_and_qnt: products_and_qnt,
-            tot_price: sum,
-            status: current_order.status,
-          };
-          if (to_be_added.order_id !== 1)
-            // JUST USED TO FILTER OUT TESTING ORDER
-            reorganized_orders.push(to_be_added);
-        });
-        console.log('Reorganized orders: ', reorganized_orders);
-        setOrders(reorganized_orders);
+      if (!loadingProd && products && orders) {
+        const mappedOrders = API.mapOrders(orders, products);
+        setOrders(mappedOrders);
       }
     };
 
@@ -113,7 +72,7 @@ export const Orders = ({ ...props }) => {
             <Card.Title className="flex items-center justify-center text-center w-100 text-3xl font-bold text-white spg-box-title">
               Orders
               <span className="font-normal text-xl flex items-end ml-2">
-                (#{orders.length})
+                (#{orders ? orders.length : '0'})
               </span>
             </Card.Title>
             <Card.Body className="w-100 h-100 p-0">
@@ -133,7 +92,7 @@ export const Orders = ({ ...props }) => {
                   {loading ? (
                     <h3>Please wait, we're loading your orders...</h3>
                   ) : (
-                    mapOrders()
+                    mappedOrders
                   )}
                 </tbody>
               </Table>
