@@ -94,6 +94,7 @@ export const Navbar = ({ ...props }) => {
                 </NavLink> */}
                 <NavLink
                   activeClassName="text-secondary"
+                  ariaLabel="nav-clients"
                   className="navbar-item-spg"
                   to="/clients"
                 >
@@ -102,6 +103,7 @@ export const Navbar = ({ ...props }) => {
                 </NavLink>
                 <NavLink
                   activeClassName="text-secondary"
+                  ariaLabel="nav-orders"
                   className="navbar-item-spg"
                   to="/orders"
                 >
@@ -133,9 +135,19 @@ export const Navbar = ({ ...props }) => {
           </div>
           {!user ? (
             <div className="flex items-center mr-4">
-              <Button type="warning" text={'Register'} url={'/register'} />
+              <Button
+                type="warning"
+                ariaLabel="btn-register"
+                text={'Register'}
+                url={'/register'}
+              />
               <div className="topbar-divider"></div>
-              <Button type="outline-secondary" text={'Login'} url={'/login'} />
+              <Button
+                ariaLabel="btn-login"
+                type="outline-secondary"
+                text={'Login'}
+                url={'/login'}
+              />
             </div>
           ) : (
             <NavDropdown

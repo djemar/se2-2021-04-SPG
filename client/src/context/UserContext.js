@@ -104,6 +104,7 @@ const UserContextProvider = ({ ...props }) => {
         user,
         orders,
         products,
+        dirty,
         setDirty,
       }}
     >

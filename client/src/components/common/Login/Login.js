@@ -60,6 +60,7 @@ export function Login({ ...props }) {
                       <Form.Control
                         size="lg"
                         id="inputEmail"
+                        ariaLabel="inputEmail"
                         type="email"
                         aria-label="login-email"
                         placeholder="Email address"

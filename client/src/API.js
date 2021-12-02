@@ -239,6 +239,7 @@ async function addUser(user_object) {
   let user = {
     name: user_object.name,
     surname: user_object.surname,
+    company: user_object.company,
     email: user_object.email,
     hash: user_object.hash,
     Type: user_object.Type,

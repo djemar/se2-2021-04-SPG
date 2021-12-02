@@ -8,9 +8,9 @@ import OrderRow from './OrderRow';
 import './Orders.css';
 
 export const Orders = ({ ...props }) => {
-  const { orders, products, loading } = useContext(UserContext);
+  const { orders, products, loading, dirty, setDirty } =
+    useContext(UserContext);
 
-  const [dirty, setDirty] = useState(true);
   const [dirtyProd, setDirtyProd] = useState(true);
   const [loadingProd, setLoadingProd] = useState(true);
 
