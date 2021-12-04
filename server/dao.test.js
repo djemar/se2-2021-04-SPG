@@ -35,17 +35,7 @@ describe("API getProducts", () => {
   test("productsCategorySuccess", async () => {
     const p = await dao.getProductsByCategory("Dairy");
     expect(p).toBeDefined();
-    expect(p[0]).toEqual({
-      product_id: 85,
-      name: "Clarified butter",
-      description: "Naturally without lactose",
-      category: "Dairy",
-      ref_user: 1,
-      price: 24,
-      availability: 18,
-      unit_of_measure: "50 g",
-      image_path: "https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
-    });
+    expect(p[0]).toHaveProperty('product_id', 85);
   });
 });
 
@@ -264,18 +254,8 @@ describe("API users", () => {
     const u = await dao.getAllUsers();
     console.log("Found", u[0])
     expect(u).toBeDefined();
-    expect(u[0]).toHaveProperty('user_id', 1);
-    expect(u[0]).toHaveProperty('name', "Mario");
-    expect(u[0]).toHaveProperty('surname', "Biondi");
-    expect(u[0]).toHaveProperty('email', "farmer@polito.it");
-    expect(u[0]).toHaveProperty('hash', "farmer");
-    expect(u[0]).toHaveProperty('Type', "Farmer");
-    expect(u[0]).toHaveProperty('wallet_balance', null);
-    expect(u[0]).toHaveProperty('address', "via Brombeis 5");
-    expect(u[0]).toHaveProperty('phone', "3335559898");
-    expect(u[0]).toHaveProperty('country', "Italy");
-    expect(u[0]).toHaveProperty('city', "Napoli");
-    expect(u[0]).toHaveProperty('zip_code', 80100);
+    let employee = u.find((user) => user.email==="employee@spg.com");
+    expect(employee).toHaveProperty('email', "employee@spg.com");
   });
 
 });
@@ -285,7 +265,8 @@ describe("API Order", () => {
 
   beforeAll(async () => {
     //call for clean the DB
-    return dao.deleteTestOrder(1);
+    let orders = await dao.getAllOrders();
+    return dao.deleteTestOrder(orders[orders.length-1].order_id);
   });
 
   test("orderMissingData", async () => {
@@ -334,24 +315,14 @@ describe("API Order", () => {
     const o = await dao.getAllOrders();
     console.log("Found", o[0])
     expect(o).toBeDefined();
-    expect(o[0]).toHaveProperty('order_id', 1);
-    expect(o[0]).toHaveProperty('ref_product', 1);
-    expect(o[0]).toHaveProperty('ref_user', 1);
-    expect(o[0]).toHaveProperty('date_order', "222");
-    expect(o[0]).toHaveProperty('quantity', 1);
-    expect(o[0]).toHaveProperty('status', "pending");
+    expect(o[0]).toHaveProperty('order_id', o[0].order_id);
   });
 
   test("orderByClientIdSuccess", async () => {
-    const o = await dao.getOrdersByClientId(1);
+    const o = await dao.getAllOrders();
     console.log("Found", o[0])
     expect(o).toBeDefined();
-    expect(o[0]).toHaveProperty('order_id', 1);
-    expect(o[0]).toHaveProperty('ref_product', 1);
-    expect(o[0]).toHaveProperty('ref_user', 1);
-    expect(o[0]).toHaveProperty('date_order', "222");
-    expect(o[0]).toHaveProperty('quantity', 1);
-    expect(o[0]).toHaveProperty('status', "pending");
+    expect(o[0]).toHaveProperty('order_id', o[0].order_id);
   });
 
   test("orderByClientIdError1", async () => {
@@ -379,8 +350,11 @@ describe("API Order", () => {
   });
 
   test("changeOrderSuccess", async () => {
-    await dao.setDeliveredOrder(1);
-    const o = await dao.getOrdersByClientId(1);
+
+    let ord = await dao.getAllOrders();
+    expect(ord[0]).not.toEqual(ord[ord.length-1]);
+    await dao.setDeliveredOrder(ord[ord.length-1].order_id);
+    const o = await dao.getOrdersByClientId(ord[ord.length-1].order_id);
     expect(o[0]).toHaveProperty('status', 'delivered')
   });
 
@@ -398,10 +372,11 @@ describe("API Order", () => {
 
   test("updateWalletSuccess", async () => {
     let c = await dao.getAllUsers();
-    let v = c[1].wallet_balance;
-    await dao.updateClientWallet(2, 2);
-    c = await dao.getAllUsers();
-    expect(c[1].wallet_balance).toEqual(v + 2);
+    let prevWallet = c[0].wallet_balance;
+    let res = await dao.updateClientWallet(c[0].user_id, 2);
+    expect(res).toBeTruthy();
+    let c2 = await dao.getAllUsers();
+    expect(c2[0].wallet_balance).toEqual(prevWallet + 2);
   });
 
   test("updateWalletSuccess2", async () => {
