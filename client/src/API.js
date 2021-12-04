@@ -277,6 +277,7 @@ async function setDeliveredOrder(orderID) {
 async function updateClientWallet(clientID, recharge) {
   let url = BASEURL + `/recharge-wallet/`;
   let data = { clientID, recharge };
+  console.log(data);
   try {
     const res = await axios.post(url, data);
     return await res.data;

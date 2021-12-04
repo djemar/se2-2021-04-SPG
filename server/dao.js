@@ -23,7 +23,7 @@ function mappingProducts(rows) {
     name: e.name,
     description: e.description,
     category: e.category,
-    ref_user: e.ref_user,
+    ref_farmer: e.ref_farmer,
     price: e.price,
     availability: e.availability,
     unit_of_measure: e.unit_of_measure,

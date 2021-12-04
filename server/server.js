@@ -401,8 +401,8 @@ app.post(
       console.log("Sanitizer-checks not passed.");
       res.status(400).json({
         info: "The server cannot process the request",
-        error: result.array()[0].msg,
-        valueReceived: result.array()[0].value,
+        error: validation.array()[0].msg,
+        valueReceived: validation.array()[0].value,
       });
     } else {
       await dao
@@ -416,3 +416,5 @@ app.post(
 app.listen(port, () =>
   console.log(`Server app listening at http://localhost:${port}`)
 );
+
+module.exports = app;
