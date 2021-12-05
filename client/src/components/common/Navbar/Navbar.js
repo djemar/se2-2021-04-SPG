@@ -9,6 +9,7 @@ import {
   faUsers,
   faWallet,
 } from '@fortawesome/free-solid-svg-icons';
+import { IoStorefrontOutline } from 'react-icons/io5';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 import {
@@ -105,6 +106,26 @@ export const Navbar = ({ ...props }) => {
                 >
                   <FontAwesomeIcon icon={faReceipt} className={'mr-2 mb-0'} />
                   Orders
+                </NavLink>
+              </>
+            )}
+            {user && user.userType === 'Farmer' && (
+              <>
+                <NavLink
+                  activeClassName="text-secondary"
+                  className="navbar-item-spg d-flex items-center"
+                  to="/myShop"
+                >
+                  <IoStorefrontOutline className={'mr-2 mb-0 text-lg'} />
+                  My Shop
+                </NavLink>
+                <NavLink
+                  activeClassName="text-secondary"
+                  className="navbar-item-spg"
+                  to="/myOrders"
+                >
+                  <FontAwesomeIcon icon={faReceipt} className={'mr-2 mb-0'} />
+                  My Orders
                 </NavLink>
               </>
             )}
