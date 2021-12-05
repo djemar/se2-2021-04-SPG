@@ -9,6 +9,7 @@ import {
   faUsers,
   faWallet,
 } from '@fortawesome/free-solid-svg-icons';
+import { IoStorefrontOutline } from 'react-icons/io5';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 import {
@@ -18,8 +19,9 @@ import {
   NavDropdown,
 } from 'react-bootstrap';
 import { Link, NavLink } from 'react-router-dom';
-import { ReactComponent as CartLogo } from '../../../img/cart-logo.svg';
 import img from '../../../img/undraw_profile.svg';
+import { ReactComponent as CartLogo } from '../../../img/cart-logo.svg';
+import { ReactComponent as CartLogoXmas } from '../../../img/cart-logo-xmas.svg';
 import { Button } from '../../misc/';
 import Basket from '../Basket/Basket';
 import './navbar.css';
@@ -55,7 +57,7 @@ export const Navbar = ({ ...props }) => {
               to="/"
               className="navbar-brand flex items-center mr-0"
             >
-              <CartLogo className={'mr-2 mb-0 h1'} />
+              <CartLogoXmas className={'mr-2 mb-0 h1'} />
               SolidarityBay
             </Link>
           </NavbarBootstrap.Brand>
@@ -105,6 +107,26 @@ export const Navbar = ({ ...props }) => {
                 >
                   <FontAwesomeIcon icon={faReceipt} className={'mr-2 mb-0'} />
                   Orders
+                </NavLink>
+              </>
+            )}
+            {user && user.userType === 'Farmer' && (
+              <>
+                <NavLink
+                  activeClassName="text-secondary"
+                  className="navbar-item-spg d-flex items-center"
+                  to="/myShop"
+                >
+                  <IoStorefrontOutline className={'mr-2 mb-0 text-lg'} />
+                  My Shop
+                </NavLink>
+                <NavLink
+                  activeClassName="text-secondary"
+                  className="navbar-item-spg"
+                  to="/myOrders"
+                >
+                  <FontAwesomeIcon icon={faReceipt} className={'mr-2 mb-0'} />
+                  My Orders
                 </NavLink>
               </>
             )}
