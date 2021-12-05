@@ -261,7 +261,6 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
   - Table `USER` - it contains id, name, surname, email, password, Type, balance, address, phone, country, city, zip code and company name for a farmer.
   - Table `PRODUCT` - it contains id, name, description, category, farmer's id, price, availability,unit of measure, path for images, start date and end date
   - Table `ORDERS` - it contains id, product's id, user's id, date, quantity and status.
-
   ## Built with
   - [React](https://github.com/facebook/react) 
   - [React-Bootstrap](https://react-bootstrap.github.io/)
