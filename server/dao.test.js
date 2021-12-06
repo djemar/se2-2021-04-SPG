@@ -272,7 +272,7 @@ describe("API Order", () => {
   beforeAll(async () => {
     //call for clean the DB
     let orders = await dao.getAllOrders();
-    return dao.deleteTestOrder(orders[orders.length - 1].order_id);
+    return dao.deleteOrder(orders[orders.length - 1].order_id);
   });
 
   test("orderMissingData", async () => {
@@ -412,10 +412,44 @@ describe("API Order", () => {
     expect(o[0]).toHaveProperty('status', 'pending_cancellation');
   });
 
+  test("deleteOrderSuccess", async () => {
+    const o = await dao.getAllOrders();
+    //Insert a new order
+    const body = {
+      "ref_user": 1,
+      "productList":
+        [{ "ref_product": 1, "quantity": 1 },
+        { "ref_product": 3, "quantity": 3 },
+        { "ref_product": 5, "quantity": 1 }],
+      "date_order": "222"
+    };
+    let productsIdList = body.productList;
+    var id_array = [], quantity_array = [];
+    productsIdList.forEach((obj) => {
+      id_array.push(obj.ref_product);
+      quantity_array.push(obj.quantity);
+    });
+    const res = await dao.insertOrder(body, id_array, quantity_array);
+    const n = await dao.getAllOrders();
+    //console.log("n[length -1]", n[n.length - 1]);
+    const id = n[n.length - 1].order_id;
+    await dao.deleteOrder(id);
+    const t = await dao.getAllOrders();
+    expect(o).toEqual(t);
+  })
+
+  test("deleteOrderError", async () => {
+    const o = await dao.getAllOrders();
+    await dao.deleteOrder(1212112)
+    const t = await dao.getAllOrders()
+    expect(o).toEqual(t);
+  })
+
   test("Get Orders and Wallets", async () => {
     let o = dao.getOrdersAndWallets();
     expect(o[0]).not.toBeDefined();
   });
+
 
 
 });

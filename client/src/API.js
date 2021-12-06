@@ -316,6 +316,16 @@ async function setPendingCancellationOrder(orderID) {
   }
 }
 
+async function deleteOrder(orderID) {
+  let url = BASEURL + `/delete-order/` + orderID;
+  try {
+    const res = await axios.post(url, { order_id: orderID });
+    return await res.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 // Functions exported by this API:
 const API = {
   getAllProducts,
@@ -335,5 +345,6 @@ const API = {
   setPendingCancellationOrder,
   setAllPendingCancellationOrder,
   deleteAllPendingOrder,
+  deleteOrder,
 };
 export default API;

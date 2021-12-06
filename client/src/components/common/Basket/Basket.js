@@ -9,6 +9,7 @@ import ConfirmModal from '../../misc/ConfirmModal';
 import './basket.css';
 import BasketItem from './BasketItem/BasketItem';
 import { UserContext } from '../../../context/UserContext';
+import dayjs from 'dayjs';
 
 export const Basket = ({ ...props }) => {
   const { basketProducts, setBasketProducts, show, onHide, user, isLogged } =
@@ -19,6 +20,7 @@ export const Basket = ({ ...props }) => {
   const [showOrderAlert, setShowOrderAlert] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const { orderEnabled } = useContext(TimeContext);
+  const { dateState } = useContext(TimeContext);
 
   useEffect(() => {
     if (user !== undefined && user !== null) {
@@ -40,11 +42,8 @@ export const Basket = ({ ...props }) => {
   };
 
   const handleAddOrder = async () => {
-    const result = await API.addOrder(
-      clientId,
-      basketProducts,
-      new Date(Date.now()).toLocaleDateString('it-IT')
-    );
+    const date = dayjs(dateState).format('DD/MM/YYYY');
+    const result = await API.addOrder(clientId, basketProducts, date);
     if (result) {
       // clear basket
       setBasketProducts([]);

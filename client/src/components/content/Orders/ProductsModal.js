@@ -29,7 +29,7 @@ export const ProductsModal = ({ ...props }) => {
           <Container>
             <Row>
               <Col>Ordering user ID: {ref_user}</Col>
-              <Col>Date and time: {date_order}</Col>
+              <Col>Date: {date_order}</Col>
               <Col>
                 Status:{' '}
                 <span
