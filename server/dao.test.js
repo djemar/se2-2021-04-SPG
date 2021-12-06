@@ -34,8 +34,44 @@ describe("API getProducts", () => {
 
   test("productsCategorySuccess", async () => {
     const p = await dao.getProductsByCategory("Dairy");
-    expect(p).toBeDefined();
-    expect(p[0]).toHaveProperty('product_id', 85);
+    await expect(p).toBeDefined();
+    await expect(p[0]).toHaveProperty('product_id', 85);
+  });
+
+  test("productsByDateSuccess", async () => {
+    const p = await dao.getProductsByDate("2021-12-19");
+    await expect(p).toBeDefined();
+    await expect(p[0]).toHaveProperty('name', 'Apples');
+  });
+  test("productsByDateError", async () => {
+    const e = await dao.getProductsByDate(999).catch((error) => error);
+  });
+
+  test("productsFromDateSuccess", async () => {
+    const p = await dao.getProductsFromDate("2021-09-01");
+    await expect(p).toBeDefined();
+  });
+  test("productsFromDateError", async () => {
+    const e = await dao.getProductsFromDate(999).catch((error) => error);
+  });
+
+  test("productsToDateSuccess", async () => {
+    const p = await dao.getProductsToDate("2021-12-31");
+    await expect(p).toBeDefined();
+  });
+  test("productsToDateError", async () => {
+    const e = await dao.getProductsToDate(999).catch((error) => error);
+  });
+
+  test("productsBetweenDatesSuccess", async () => {
+    const p = await dao.getProductsBetweenDates("2021-12-18", "2021-12-19");
+    await expect(p).toBeDefined();
+  });
+  test("productsBetweenDatesError", async () => {
+    const e = await dao.getProductsBetweenDates(999, 999).catch((error) => error);
+  });
+  test("productsBetweenDatesWrongOrder", async () => {
+    const e = await dao.getProductsBetweenDates("2021-10-07", "2021-10-01").catch((error) => error);
   });
 });
 
