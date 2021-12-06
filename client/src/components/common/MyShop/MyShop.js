@@ -12,7 +12,7 @@ const product = {
   price: 0,
   description: 'Description',
   category: 'Category',
-  unit: 'Unit',
+  unit_of_measure: 'Unit',
   img: 'Img',
   availability: 0,
 };
@@ -99,53 +99,65 @@ export const MyShop = ({ ...props }) => {
             </Card.Body>
           </Card>
           <Card className="mt-5">
-            <Card.Body className="items-center">
+            <Card.Title className="px-5 pt-5 font-bold uppercase">
+              Insert product details
+            </Card.Title>
+            <Card.Body className="items-center p-8">
               <Form>
-                <Row className="mb-3">
-                  <Form.Group as={Col} controlId="formGridEmail">
-                    <Form.Label>Email</Form.Label>
-                    <Form.Control type="email" placeholder="Enter email" />
-                  </Form.Group>
+                <Row>
+                  <Col>
+                    <Row className="mb-3">
+                      <Form.Group as={Col} controlId="formGridName">
+                        <Form.Label>Product Name</Form.Label>
+                        <Form.Control type="text" value={addedProduct.name} />
+                      </Form.Group>
 
-                  <Form.Group as={Col} controlId="formGridPassword">
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control type="password" placeholder="Password" />
-                  </Form.Group>
+                      <Form.Group as={Col} controlId="formGridPrice">
+                        <Form.Label>Price €</Form.Label>
+                        <Form.Control
+                          type="number"
+                          pattern="[0-9]"
+                          min={0}
+                          value={addedProduct.price}
+                        />
+                      </Form.Group>
+                    </Row>
+                    <Row className="mb-3">
+                      <Form.Group as={Col} controlId="formGridPieces">
+                        <Form.Label>Available pieces</Form.Label>
+                        <Form.Control
+                          type="text"
+                          value={addedProduct.availability}
+                        />
+                      </Form.Group>
+
+                      <Form.Group as={Col} controlId="formGridQuantity">
+                        <Form.Label>Quantity per-piece</Form.Label>
+                        <Form.Control
+                          type="text"
+                          value={addedProduct.unit_of_measure}
+                        />
+                      </Form.Group>
+                    </Row>
+                  </Col>
+                  <Col>
+                    <Form.Group as={Col} controlId="formGridDescription">
+                      <Form.Label>Description</Form.Label>
+                      <Form.Control
+                        as="textarea"
+                        type="text"
+                        value={addedProduct.description}
+                      />
+                    </Form.Group>
+                  </Col>
                 </Row>
 
-                <Form.Group className="mb-3" controlId="formGridAddress1">
-                  <Form.Label>Address</Form.Label>
-                  <Form.Control placeholder="1234 Main St" />
-                </Form.Group>
-
-                <Form.Group className="mb-3" controlId="formGridAddress2">
-                  <Form.Label>Address 2</Form.Label>
-                  <Form.Control placeholder="Apartment, studio, or floor" />
-                </Form.Group>
-
                 <Row className="mb-3">
-                  <Form.Group as={Col} controlId="formGridCity">
-                    <Form.Label>City</Form.Label>
-                    <Form.Control />
-                  </Form.Group>
-
-                  <Form.Group as={Col} controlId="formGridState">
-                    <Form.Label>State</Form.Label>
-                    <Form.Select defaultValue="Choose...">
-                      <option>Choose...</option>
-                      <option>...</option>
-                    </Form.Select>
-                  </Form.Group>
-
-                  <Form.Group as={Col} controlId="formGridZip">
-                    <Form.Label>Zip</Form.Label>
-                    <Form.Control />
+                  <Form.Group as={Col} controlId="formGridImg">
+                    <Form.Label>Image URL</Form.Label>
+                    <Form.Control type="text" value={addedProduct.image_path} />
                   </Form.Group>
                 </Row>
-
-                <Form.Group className="mb-3" id="formGridCheckbox">
-                  <Form.Check type="checkbox" label="Check me out" />
-                </Form.Group>
 
                 {/*                 <Button variant="primary" type="submit">
                   Submit
@@ -163,7 +175,7 @@ export const MyShop = ({ ...props }) => {
             price={addedProduct.price}
             description={addedProduct.description}
             category={addedProduct.category}
-            unit={addedProduct.unit}
+            unit={addedProduct.unit_of_measure}
             img={addedProduct.image_path}
             availability={addedProduct.availability}
             basketProducts={[]}
