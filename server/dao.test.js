@@ -404,3 +404,74 @@ describe('login API', ()=> {
     expect(res).rejects.toBeFalsy();
   });
 });
+
+describe('Insert product API', () => {
+  test ('Succesful insert product', async () => {
+    const product = {
+      "name":"supreme test lord",
+      "description":"solo equijoin",
+      "category":"Dairy",
+      "ref_farmer":1,
+      "price":69,
+      "availability":2000,
+      "unit_of_measure":"1 babilonia",
+      "image_path":"https://m.media-amazon.com/images/I/61vRV720szS._AC_SX466_.jpg",
+      "start_date":"2021-12-10",
+      "end_date":"2021-12-17"
+    }
+    const res = await dao.insertProduct(product);
+    await expect(res).toHaveProperty("name", "supreme test lord");
+    await expect(res.description).toEqual('solo equijoin')
+
+    const res2 = await dao.removeProduct(res.product_id);
+    expect(res2).toBeTruthy();
+  });
+  test ('Error insert product wrong availability', async () => {
+    const product = {
+      "name":"supreme test lord",
+      "description":"solo equijoin",
+      "category":"Dairy",
+      "ref_farmer":1,
+      "price":69,
+      "availability": "errore",
+      "unit_of_measure":"1 babilonia",
+      "image_path":"https://m.media-amazon.com/images/I/61vRV720szS._AC_SX466_.jpg",
+      "start_date":"2021-12-10",
+      "end_date":"2021-12-17"
+    }
+    const res = await dao.insertProduct(product).catch((error) => error);
+    await expect(res).toBeDefined();
+  });
+  test ('Error insert product wrong price', async () => {
+    const product = {
+      "name":"supreme test lord",
+      "description":"solo equijoin",
+      "category":"Dairy",
+      "ref_farmer":1,
+      "price": "wrong",
+      "availability": 200,
+      "unit_of_measure":"1 babilonia",
+      "image_path":"https://m.media-amazon.com/images/I/61vRV720szS._AC_SX466_.jpg",
+      "start_date":"2021-12-10",
+      "end_date":"2021-12-17"
+    }
+    const res = await dao.insertProduct(product).catch((error) => error);
+    await expect(res).toBeDefined();
+  });
+  test ('Error insert product wrong price', async () => {
+    const product = {
+      "name":"supreme test lord",
+      "description":"solo equijoin",
+      "category":"Dairy",
+      "ref_farmer": "wrong",
+      "price": 55,
+      "availability": 200,
+      "unit_of_measure":"1 babilonia",
+      "image_path":"https://m.media-amazon.com/images/I/61vRV720szS._AC_SX466_.jpg",
+      "start_date":"2021-12-10",
+      "end_date":"2021-12-17"
+    }
+    const res = await dao.insertProduct(product).catch((error) => error);
+    await expect(res).toBeDefined();
+  });
+});

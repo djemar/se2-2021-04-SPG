@@ -167,6 +167,89 @@ exports.insertUser = function (user) {
   });
 };
 
+exports.insertProduct = function (product) {
+  return new Promise((resolve, reject) => {
+    if (
+        typeof product.name !== "string" ||
+        typeof product.description !== "string" ||
+        typeof product.category !== "string" ||
+        typeof product.ref_farmer !== "number" ||
+        typeof product.price !== "number" ||
+        typeof product.availability !== "number" ||
+        typeof product.unit_of_measure !== "string" ||
+        typeof product.image_path !== "string" ||
+        typeof product.start_date !== "string" ||
+        typeof product.end_date !== "string"
+    )
+      reject(
+          "Parameter constraints must be respected"
+      );
+    else {
+      const sql =
+          "INSERT INTO PRODUCT(name, description,category, ref_farmer, price, availability, unit_of_measure, image_path, start_date, end_date)" +
+          " VALUES (?,?,?,?,?,?,?,?,?,?)";
+      //ID is not needed. It's added by the insert operation
+      db.run(
+          sql,
+          [
+            product.name,
+            product.description,
+            product.category,
+            product.ref_farmer,
+            product.price,
+            product.availability,
+            product.unit_of_measure,
+            product.image_path,
+            product.start_date,
+            product.end_date,
+          ],
+          function (err) {
+            if (err) {
+              console.log(err);
+              reject(err);
+            } else {
+              let productID = this.lastID;
+              console.log("Product " + productID + " added successfully");
+              const p = {
+                product_id: productID,
+                name: product.name,
+                description: product.description,
+                category: product.category,
+                ref_farmer: product.ref_farmer,
+                price: product.price,
+                availability: product.availability,
+                unit_of_measure: product.unit_of_measure,
+                image_path: product.image_path,
+                start_date: product.start_date,
+                end_date: product.end_date,
+              };
+              resolve(p); // returning the product object
+            }
+          }
+      );
+    }
+  });
+};
+
+
+exports.removeProduct= function (productID) {
+  return new Promise((resolve, reject) => {
+    if (typeof productID !== "number") reject("An integer is expected");
+    else {
+      const sql = "DELETE FROM PRODUCT WHERE product_id = ?";
+      db.run(sql, [productID], function (err) {
+        if (err) {
+          console.log(err);
+          reject(err);
+        } else {
+          console.log("Product " + productID + " removed successfully");
+          resolve(productID);
+        }
+      });
+    }
+  });
+};
+
 // Remove a client:
 exports.removeUser = function (userID) {
   return new Promise((resolve, reject) => {
