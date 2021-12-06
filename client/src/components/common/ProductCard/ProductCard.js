@@ -22,6 +22,7 @@ export const ProductCard = ({ ...props }) => {
     basketProducts,
     setBasketProducts,
     setAnimateBasket,
+    preview,
   } = props;
   const [orderQuantity, setOrderQuantity] = useState(1);
   const [availableQuantity, setAvailableQuantity] = useState(availability);
@@ -88,6 +89,7 @@ export const ProductCard = ({ ...props }) => {
             setOrderQuantity={setOrderQuantity}
             max={availableQuantity}
             location={'ProductCard'}
+            preview={preview}
           />
           <div className="text-xs">
             {availableQuantity} piece{availableQuantity > 1 ? 's' : ''}{' '}
@@ -103,7 +105,7 @@ export const ProductCard = ({ ...props }) => {
             className="bg-primary"
             size="sm"
             onClick={handleAddToBasket}
-            disabled={availableQuantity === 0}
+            disabled={availableQuantity === 0 || preview}
           >
             Add to Basket
           </BSButton>

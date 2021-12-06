@@ -103,6 +103,7 @@ const UserContextProvider = ({ ...props }) => {
         loading,
         user,
         orders,
+        products,
         setDirty,
       }}
     >

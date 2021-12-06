@@ -1,33 +1,31 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Card, Col, Form, Row } from 'react-bootstrap';
-import { useParams } from 'react-router-dom';
-import API from '../../../API';
-import { Spinner } from '../../misc';
 import Breadcrumbs from '../../misc/Breadcrumbs';
 import ProductCard from '../ProductCard/ProductCard';
 import Select from 'react-select';
+import { UserContext } from '../../../context/UserContext';
 
 const product = {
   product_id: -1,
   ref_user: -1,
-  name: 'Product name',
-  price: 'Product price',
-  description: 'Product description',
-  category: 'Product category',
-  unit: 'Product unit',
-  img: 'Product img',
-  availability: 'Product availability',
+  name: 'Name',
+  price: 0,
+  description: 'Description',
+  category: 'Category',
+  unit: 'Unit',
+  img: 'Img',
+  availability: 0,
 };
 
 export const MyShop = ({ ...props }) => {
   const {} = props;
-  const [products, setProducts] = useState([]);
-  const [dirty, setDirty] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [addedProduct, setAddedProduct] = useState(product);
+  const { products, user } = useContext(UserContext);
 
   useEffect(() => {
     //useEffect è un hook che permette di usare i lyfecycle del component. Equivale alla componentDidMount, componentDidUpdate, componentWillUnmount.
   }, []);
+
   /* 
   const mappedProduct =
     (products &&
@@ -77,33 +75,22 @@ export const MyShop = ({ ...props }) => {
           <Card>
             <Card.Body className="items-center">
               <Form>
-                <div
-                  key={`inline-radio`}
-                  className="d-flex items-center justify-between"
-                >
-                  <Form.Check
-                    inline
-                    label="Add a new product"
-                    name="group1"
-                    type="radio"
-                    id={`inline-radio-1`}
-                  />
+                <div className="d-flex items-center justify-between">
+                  <span> Add a new product below</span>
                   <div className="d-flex items-center">
-                    <Form.Check
-                      inline
-                      label="Select from past inventory"
-                      name="group1"
-                      type="radio"
-                      id={`inline-radio-2`}
-                    />
+                    or select one from your past inventory
                     <Select
-                      className="basic-single w-60"
+                      className="basic-single w-80 mx-10"
                       classNamePrefix="select"
-                      //defaultValue={colourOptions[0]}
+                      placeholder="Type to search..."
+                      onChange={v => {
+                        v ? setAddedProduct(v) : setAddedProduct(product);
+                      }}
                       isClearable={true}
                       isSearchable={true}
                       name="inventory"
-                      //options={colourOptions}
+                      getOptionLabel={option => `${option.name}`}
+                      options={products.filter(p => p.ref_farmer === user.id)}
                     />
                   </div>
                 </div>
@@ -168,17 +155,18 @@ export const MyShop = ({ ...props }) => {
         </div>
         <div className="col d-flex justify-content-center items-center">
           <ProductCard
-            key={product.product_id}
-            pid={product.product_id}
-            fid={product.ref_user}
-            name={product.name}
-            price={product.price}
-            description={product.description}
-            category={product.category}
-            unit={product.unit}
-            img={product.img}
-            availability={product.availability}
+            key={addedProduct.product_id}
+            pid={addedProduct.product_id}
+            fid={addedProduct.ref_user}
+            name={addedProduct.name}
+            price={addedProduct.price}
+            description={addedProduct.description}
+            category={addedProduct.category}
+            unit={addedProduct.unit}
+            img={addedProduct.image_path}
+            availability={addedProduct.availability}
             basketProducts={[]}
+            preview={true}
             // setBasketProducts={()}
             //setAnimateBasket={()}
           />

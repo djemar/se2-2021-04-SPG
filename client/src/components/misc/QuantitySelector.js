@@ -10,39 +10,44 @@ export const QuantitySelector = ({ ...props }) => {
     basketProducts,
     location,
     setAvailability,
+    preview,
   } = props;
 
   const handleIncreaseQuantity = () => {
-    if (orderQuantity < max) {
-      setOrderQuantity(orderQuantity + 1);
-      if (location === 'Basket') {
-        let oldItem = basketProducts.find(x => x.pid === pid);
-        oldItem.orderQuantity = orderQuantity + 1;
-        let newItem = oldItem;
-        let newBasketProducts = basketProducts.map((item, index) => {
-          if (item.pid === pid) return newItem;
+    if (!preview) {
+      if (orderQuantity < max) {
+        setOrderQuantity(orderQuantity + 1);
+        if (location === 'Basket') {
+          let oldItem = basketProducts.find(x => x.pid === pid);
+          oldItem.orderQuantity = orderQuantity + 1;
+          let newItem = oldItem;
+          let newBasketProducts = basketProducts.map((item, index) => {
+            if (item.pid === pid) return newItem;
 
-          return item;
-        });
-        setBasketProducts(newBasketProducts);
-        setAvailability(max - newItem.orderQuantity);
+            return item;
+          });
+          setBasketProducts(newBasketProducts);
+          setAvailability(max - newItem.orderQuantity);
+        }
       }
     }
   };
   const handleDecreaseQuantity = () => {
-    if (orderQuantity > 1) {
-      setOrderQuantity(orderQuantity - 1);
-      if (location === 'Basket') {
-        let oldItem = basketProducts.find(x => x.pid === pid);
-        oldItem.orderQuantity = orderQuantity - 1;
-        let newItem = oldItem;
-        let newBasketProducts = basketProducts.map((item, index) => {
-          if (item.pid === pid) return newItem;
+    if (!preview) {
+      if (orderQuantity > 1) {
+        setOrderQuantity(orderQuantity - 1);
+        if (location === 'Basket') {
+          let oldItem = basketProducts.find(x => x.pid === pid);
+          oldItem.orderQuantity = orderQuantity - 1;
+          let newItem = oldItem;
+          let newBasketProducts = basketProducts.map((item, index) => {
+            if (item.pid === pid) return newItem;
 
-          return item;
-        });
-        setBasketProducts(newBasketProducts);
-        setAvailability(max - newItem.orderQuantity);
+            return item;
+          });
+          setBasketProducts(newBasketProducts);
+          setAvailability(max - newItem.orderQuantity);
+        }
       }
     }
   };
