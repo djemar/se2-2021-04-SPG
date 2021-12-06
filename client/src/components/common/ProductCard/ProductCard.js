@@ -73,7 +73,7 @@ export const ProductCard = ({ ...props }) => {
   };
 
   return (
-    <Card className="product-card shadow py-0">
+    <Card className="product-card shadow-lg py-0">
       <Card.Img className="product-img" variant="top" src={img} />
       <Card.Body className="p-3 w-100">
         <Card.Title className="font-medium text-black">{name}</Card.Title>
