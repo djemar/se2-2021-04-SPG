@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b80d63c4-88fe-40d5-ad49-64b099ece003" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/client/src/test/unit/OrderList.test.js" afterDir="false" />
+    <list default="true" id="b80d63c4-88fe-40d5-ad49-64b099ece003" name="Changes" comment="Updated readme">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/coverage/lcov.info" beforeDir="false" afterPath="$PROJECT_DIR$/client/coverage/lcov.info" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/client/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/SPG.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/server/SPG.sqlite" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/coverage/lcov.info" beforeDir="false" afterPath="$PROJECT_DIR$/server/coverage/lcov.info" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/dao.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/dao.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/dao.test.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/dao.test.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,28 +25,61 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="frontend/clientpage" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="ProjectId" id="21jsXEcGNa8BxZXGEUYR7ypHFjY" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent">
+    <property name="Git.Branch.Popup.ShowAllRemotes" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
+    <property name="vue.rearranger.settings.migration" value="true" />
   </component>
-  <component name="RunManager">
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\maste\OneDrive\Desktop\MAGISTRALE\MAGISTRALE\SE2\se2-2021-04-SPG\server" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Node.js.prova.js">
     <configuration name="ClientList.test.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/client/src/test/unit/ClientList.test.js" working-dir="$PROJECT_DIR$/client/src/test/unit">
+      <method v="2" />
+    </configuration>
+    <configuration name="prova.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/server/prova.js" working-dir="$PROJECT_DIR$/client/src">
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Node.js.prova.js" />
         <item itemvalue="Node.js.ClientList.test.js" />
       </list>
     </recent_temporary>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b80d63c4-88fe-40d5-ad49-64b099ece003" name="Changes" comment="Updated readme" />
+      <created>1638465875312</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1638465875312</updated>
+      <workItem from="1638465876893" duration="139000" />
+      <workItem from="1638561328249" duration="1375000" />
+      <workItem from="1638571922066" duration="4751000" />
+    </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
