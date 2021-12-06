@@ -89,6 +89,7 @@ export const MyShop = ({ ...props }) => {
                       isClearable={true}
                       isSearchable={true}
                       name="inventory"
+                      getOptionValue={option => option.product_id}
                       getOptionLabel={option => `${option.name}`}
                       options={products.filter(p => p.ref_farmer === user.id)}
                     />
