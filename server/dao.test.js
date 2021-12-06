@@ -344,9 +344,11 @@ describe("API Order", () => {
   });
 
   test("changeOrderError", async () => {
-    await dao.setDeliveredOrder();
-    const o = await dao.getOrdersByClientId(1);
-    expect(o[0]).toHaveProperty('status', 'pending')
+    let ord = await dao.getAllOrders();
+    //await dao.setDeliveredOrder(ord[0].order_id); // not executing the status updating (on purpose)
+    const ord2 = await dao.getAllOrders();
+    const o = ord2.filter(order => order.order_id === ord[0].order_id);
+    expect(o[0]).toHaveProperty('status', 'pending');
   });
 
   test("changeOrderSuccess", async () => {
@@ -354,8 +356,9 @@ describe("API Order", () => {
     let ord = await dao.getAllOrders();
     expect(ord[0]).not.toEqual(ord[ord.length-1]);
     await dao.setDeliveredOrder(ord[ord.length-1].order_id);
-    const o = await dao.getOrdersByClientId(ord[ord.length-1].order_id);
-    expect(o[0]).toHaveProperty('status', 'delivered')
+    const ord2 = await dao.getAllOrders();
+    const o = ord2.filter(order => order.order_id === ord2[ord.length-1].order_id);
+    expect(o[0]).toHaveProperty('status', 'delivered');
   });
 
   test("updateWalletError1", async () => {
