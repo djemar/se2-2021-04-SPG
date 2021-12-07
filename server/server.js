@@ -600,6 +600,102 @@ app.post(
     }
 );
 
+app.post(
+    "/api/update-product",
+    body("product_id")
+        .exists({ checkNull: true })
+        .bail()
+        .notEmpty()
+        .bail()
+        .isInt()
+        .bail(),
+    body("name")
+        .exists({ checkNull: true })
+        .bail()
+        .notEmpty()
+        .bail()
+        .isString()
+        .bail(),
+    body("description")
+        .exists({ checkNull: true })
+        .bail()
+        .notEmpty()
+        .bail()
+        .isString()
+        .bail(),
+    body("category")
+        .exists({ checkNull: true })
+        .bail()
+        .notEmpty()
+        .bail()
+        .isString()
+        .bail(),
+    body("ref_farmer")
+        .exists({ checkNull: true })
+        .bail()
+        .notEmpty()
+        .bail()
+        .isInt()
+        .bail(),
+    body("price")
+        .exists({ checkNull: true })
+        .bail()
+        .notEmpty()
+        .bail()
+        .isNumeric({ min: 0.0 })
+        .bail(),
+    body("availability")
+        .exists({ checkNull: true })
+        .bail()
+        .notEmpty()
+        .bail()
+        .isInt()
+        .bail(),
+    body("unit_of_measure")
+        .exists({ checkNull: true })
+        .bail()
+        .notEmpty()
+        .bail()
+        .isString()
+        .bail(),
+    body("image_path")
+        .exists({ checkNull: true })
+        .bail()
+        .notEmpty()
+        .bail()
+        .isString()
+        .bail(),
+    body("start_date")
+        .exists({ checkNull: true })
+        .bail()
+        .notEmpty()
+        .bail()
+        .isString()
+        .bail(),
+    body("end_date")
+        .exists({ checkNull: true })
+        .bail()
+        .notEmpty()
+        .bail()
+        .isString()
+        .bail(),
+    async (req, res) => {
+        const result = validationResult(req);
+        if (!result.isEmpty())
+            res.status(400).json({
+                info: "The server cannot process the request",
+                error: result.array(),
+                valueReceived: result.array(),
+            });
+        else {
+            await dao
+                .updateProduct(req.body)
+                .then((product) => res.json(product))
+                .catch((err) => res.status(503).json(dbErrorObj));
+        }
+    }
+);
+
 app.listen(port, () =>
   console.log(`Server app listening at http://localhost:${port}`)
 );

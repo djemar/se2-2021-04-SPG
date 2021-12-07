@@ -37,10 +37,11 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
             - `name`: name of the product,
             - `description`: description of the product ,
             - `category`: category of the product,
-            - `ref_user`: id of the user (specifically farmer) which the product is related to,
+            - `ref_farmer`: id of the user (specifically farmer) which the product is related to,
             - `price`: price (per unit of measure,
             - `availability`: number of products of that type available,
-            - `unit_of_measure`: unit of measure of the product}, {...}]; 
+            - `unit_of_measure`: unit of measure of the product
+            - `image_path`: URL of the image}, {...}]; 
 - POST `/api/new-user`
     - Insert a new user.
     - request parameters and request body content:
@@ -131,10 +132,45 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
     - request parameters : none
     - request body content : json containing the clientID and the amount to recharge
     - responde body content : //
+- POST `/api/new-product`
+    - Add a new product to the database
+    - request parameters : //
+    - request body content : 
+      - products = {
+          - `name`: name of the product,
+          - `description`: description of the product ,
+          - `category`: category of the product,
+          - `ref_farmer`: id of the user (specifically farmer) which the product is related to,
+          - `price`: price (per unit of measure,
+          - `availability`: number of products of that type available,
+          - `unit_of_measure`: unit of measure of the product
+          - `image_path`: URL of the image
+          - `start_date`: starting date from when the product will be available
+          - `end_date`: ending date from when the product will be available
+        };
+    - response body content : JSON containing all the data from the product
+- POST `/api/update-product`
+    - Add a new product to the database
+    - request parameters : //
+    - request body content :
+        - products = {
+            - `product_id`: id of the product
+            - `name`: name of the product,
+            - `description`: description of the product ,
+            - `category`: category of the product,
+            - `ref_farmer`: id of the user (specifically farmer) which the product is related to,
+            - `price`: price (per unit of measure,
+            - `availability`: number of products of that type available,
+            - `unit_of_measure`: unit of measure of the product
+            - `image_path`: URL of the image
+            - `start_date`: starting date from when the product will be available
+            - `end_date`: ending date from when the product will be available
+            };
+    - response body content : JSON containing all the data from the product after the edit
 
   ## Server Database
-  - Table `USER` - it contains id, name, surname, email, password, Type, balance, address, phone, country, city and zip_code.
-  - Table `PRODUCT` - it contains id, name, description, category, farmer's id, price, availability,unit of measure and path for images
+  - Table `USER` - it contains id, name, surname, email, password, Type, balance, address, phone, country, city, zip code and company name for a farmer.
+  - Table `PRODUCT` - it contains id, name, description, category, farmer's id, price, availability,unit of measure, path for images, start date and end date
   - Table `ORDERS` - it contains id, product's id, user's id, date, quantity and status.
 
   ## Built with
