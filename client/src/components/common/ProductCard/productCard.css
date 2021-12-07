@@ -30,16 +30,26 @@
   align-items: flex-start;
   padding: 0px;
   width: 240px;
-  height: 360px;
+  /* height: 360px; */
   border-radius: 12px;
   overflow: hidden;
   font-family: 'IBM Plex Sans', sans-serif;
+}
+
+.product-img:hover {
+  scale: 1.25;
 }
 
 .product-img {
   overflow: hidden;
   object-fit: cover;
   height: 175px;
+}
+.product-img-div {
+  overflow: hidden;
+  object-fit: cover;
+  height: 175px;
+  width: 100%;
 }
 
 .product-title {

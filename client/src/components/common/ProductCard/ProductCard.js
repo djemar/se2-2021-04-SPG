@@ -73,8 +73,10 @@ export const ProductCard = ({ ...props }) => {
   };
 
   return (
-    <Card className="product-card shadow-lg py-0">
-      <Card.Img className="product-img" variant="top" src={img} />
+    <Card className="product-card shadow-lg py-0 h-auto">
+      <div className="product-img-div">
+        <Card.Img className="product-img" variant="top" src={img} />
+      </div>
       <Card.Body className="p-3 w-100">
         <Card.Title className="font-medium text-black">{name}</Card.Title>
         <OverlayTrigger
@@ -96,21 +98,21 @@ export const ProductCard = ({ ...props }) => {
             available
           </div>
         </div>
-        <div className="pt-5 d-flex flex-row justify-between align-items-center text-black">
-          <div className="d-flex flex-row align-items-center">
-            <div className="fg-primary font-medium text-lg mr-2">{price} €</div>
-            <div className="font-light text-sm">{unit}</div>
-          </div>
-          <BSButton
-            className="bg-primary"
-            size="sm"
-            onClick={handleAddToBasket}
-            disabled={availableQuantity === 0 || preview}
-          >
-            Add to Basket
-          </BSButton>
+        <div className="pt-5 d-flex flex-row align-items-center">
+          <div className="fg-primary font-medium text-lg mr-2">{price} €</div>
+          <div className="font-light text-sm">{unit}</div>
         </div>
       </Card.Body>
+      <Card.Footer className="w-100 text-end bg-white border-0 pb-3">
+        <BSButton
+          className="bg-primary"
+          size="sm"
+          onClick={handleAddToBasket}
+          disabled={availableQuantity === 0 || preview}
+        >
+          Add to Basket
+        </BSButton>
+      </Card.Footer>
     </Card>
   );
 };
