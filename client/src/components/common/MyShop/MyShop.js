@@ -17,53 +17,46 @@ const product = {
   availability: 0,
 };
 
+const NEWVALUE = {
+  NAME: 0,
+  PRICE: 1,
+  DESCRIPTION: 2,
+  AVAILABILITY: 4,
+  UNIT: 5,
+  IMAGE: 6,
+};
+
 export const MyShop = ({ ...props }) => {
   const {} = props;
   const [addedProduct, setAddedProduct] = useState(product);
   const { products, user } = useContext(UserContext);
 
-  useEffect(() => {
-    //useEffect è un hook che permette di usare i lyfecycle del component. Equivale alla componentDidMount, componentDidUpdate, componentWillUnmount.
-  }, []);
-
-  /* 
-  const mappedProduct =
-    (products &&
-      products.map(
-        (
-          {
-            product_id,
-            ref_user,
-            name,
-            price,
-            description,
-            category,
-            unit_of_measure,
-            image_path,
-            availability,
-          },
-          index
-        ) => (
-          <Col key={index} className="pl-10 pr-0 pt-5 pb-5 flex-none w-auto">
-            <ProductCard
-              key={product_id}
-              pid={product_id}
-              fid={ref_user}
-              name={name}
-              price={price}
-              description={description}
-              category={category}
-              unit={unit_of_measure}
-              img={image_path}
-              availability={availability}
-              basketProducts={basketProducts}
-              setBasketProducts={setBasketProducts}
-              setAnimateBasket={setAnimateBasket}
-            />
-          </Col>
-        )
-      )) ||
-    []; */
+  const handleChange = (value, attr) => {
+    let tmpProd = { ...addedProduct };
+    switch (attr) {
+      case NEWVALUE.NAME:
+        tmpProd.name = value;
+        break;
+      case NEWVALUE.PRICE:
+        tmpProd.price = parseFloat(value).toFixed(2);
+        break;
+      case NEWVALUE.DESCRIPTION:
+        tmpProd.description = value;
+        break;
+      case NEWVALUE.AVAILABILITY:
+        tmpProd.availability = parseInt(value);
+        break;
+      case NEWVALUE.UNIT:
+        tmpProd.unit_of_measure = value;
+        break;
+      case NEWVALUE.IMAGE:
+        tmpProd.image_path = value;
+        break;
+      default:
+        break;
+    }
+    setAddedProduct(tmpProd);
+  };
 
   return (
     <div className="flex flex-column justify-start">
@@ -109,7 +102,13 @@ export const MyShop = ({ ...props }) => {
                     <Row className="mb-3">
                       <Form.Group as={Col} controlId="formGridName">
                         <Form.Label>Product Name</Form.Label>
-                        <Form.Control type="text" value={addedProduct.name} />
+                        <Form.Control
+                          type="text"
+                          value={addedProduct.name}
+                          onChange={e =>
+                            handleChange(e.target.value, NEWVALUE.NAME)
+                          }
+                        />
                       </Form.Group>
 
                       <Form.Group as={Col} controlId="formGridPrice">
@@ -118,7 +117,11 @@ export const MyShop = ({ ...props }) => {
                           type="number"
                           pattern="[0-9]"
                           min={0}
+                          step={0.05}
                           value={addedProduct.price}
+                          onChange={e =>
+                            handleChange(e.target.value, NEWVALUE.PRICE)
+                          }
                         />
                       </Form.Group>
                     </Row>
@@ -126,8 +129,11 @@ export const MyShop = ({ ...props }) => {
                       <Form.Group as={Col} controlId="formGridPieces">
                         <Form.Label>Available pieces</Form.Label>
                         <Form.Control
-                          type="text"
+                          type="number"
                           value={addedProduct.availability}
+                          onChange={e =>
+                            handleChange(e.target.value, NEWVALUE.AVAILABILITY)
+                          }
                         />
                       </Form.Group>
 
@@ -136,6 +142,9 @@ export const MyShop = ({ ...props }) => {
                         <Form.Control
                           type="text"
                           value={addedProduct.unit_of_measure}
+                          onChange={e =>
+                            handleChange(e.target.value, NEWVALUE.UNIT)
+                          }
                         />
                       </Form.Group>
                     </Row>
@@ -147,6 +156,9 @@ export const MyShop = ({ ...props }) => {
                         as="textarea"
                         type="text"
                         value={addedProduct.description}
+                        onChange={e =>
+                          handleChange(e.target.value, NEWVALUE.DESCRIPTION)
+                        }
                       />
                     </Form.Group>
                   </Col>
@@ -155,7 +167,13 @@ export const MyShop = ({ ...props }) => {
                 <Row className="mb-3">
                   <Form.Group as={Col} controlId="formGridImg">
                     <Form.Label>Image URL</Form.Label>
-                    <Form.Control type="text" value={addedProduct.image_path} />
+                    <Form.Control
+                      type="text"
+                      value={addedProduct.image_path}
+                      onChange={e =>
+                        handleChange(e.target.value, NEWVALUE.IMAGE)
+                      }
+                    />
                   </Form.Group>
                 </Row>
 
