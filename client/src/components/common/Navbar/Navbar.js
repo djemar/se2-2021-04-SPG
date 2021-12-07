@@ -19,8 +19,9 @@ import {
   NavDropdown,
 } from 'react-bootstrap';
 import { Link, NavLink } from 'react-router-dom';
-import { ReactComponent as CartLogo } from '../../../img/cart-logo.svg';
 import img from '../../../img/undraw_profile.svg';
+import { ReactComponent as CartLogo } from '../../../img/cart-logo.svg';
+import { ReactComponent as CartLogoXmas } from '../../../img/cart-logo-xmas.svg';
 import { Button } from '../../misc/';
 import Basket from '../Basket/Basket';
 import './navbar.css';
@@ -56,7 +57,7 @@ export const Navbar = ({ ...props }) => {
               to="/"
               className="navbar-brand flex items-center mr-0"
             >
-              <CartLogo className={'mr-2 mb-0 h1'} />
+              <CartLogoXmas className={'mr-2 mb-0 h1'} />
               SolidarityBay
             </Link>
           </NavbarBootstrap.Brand>
