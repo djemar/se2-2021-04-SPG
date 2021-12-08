@@ -1,4 +1,5 @@
 import axios from 'axios';
+import * as dayjs from 'dayjs';
 const bcrypt = require('bcryptjs');
 
 // UTILS
@@ -15,8 +16,6 @@ const getHashedPWD = pwd => {
 */
 
 const BASEURL = '/api';
-
-/************** Products **************/
 
 async function login(credentials) {
   let jsonCred = JSON.stringify(credentials);
@@ -54,6 +53,8 @@ async function checkSession() {
   }
 }
 
+/************** Products **************/
+
 async function getAllProducts() {
   let url = BASEURL + `/products`;
   try {
@@ -76,6 +77,55 @@ async function getAllProductsByCategory(categoryProduct) {
     });
     //console.log(res);
     return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function getProductsByDate(date) {
+  let url = BASEURL + `/products-by-date`;
+  try {
+    const res = await axios.post(url, {
+      date: date,
+    });
+    return await res.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function getProductsFromDate(date) {
+  let url = BASEURL + `/products-from-date`;
+  try {
+    const res = await axios.post(url, {
+      date: date,
+    });
+    return await res.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function getProductsToDate(date) {
+  let url = BASEURL + `/products-to-date`;
+  try {
+    const res = await axios.post(url, {
+      date: date,
+    });
+    return await res.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function getProductsBetweenDates(startDate, endDate) {
+  let url = BASEURL + `/products-between-dates`;
+  try {
+    const res = await axios.post(url, {
+      startDate: startDate,
+      endDate: endDate,
+    });
+    return await res.data;
   } catch (error) {
     console.log(error);
   }
@@ -290,6 +340,10 @@ async function updateClientWallet(clientID, recharge) {
 const API = {
   getAllProducts,
   getAllProductsByCategory,
+  getProductsByDate,
+  getProductsFromDate,
+  getProductsToDate,
+  getProductsBetweenDates,
   addUser,
   getAllUsers,
   addOrder,
