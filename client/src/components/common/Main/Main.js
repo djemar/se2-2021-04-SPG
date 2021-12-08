@@ -2,11 +2,13 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import Clients from '../../content/Clients/Clients.js';
 import Orders from '../../content/Orders/Orders.js';
 import User from '../../content/User/User.js';
+/*maybe we should rename fakedata.js and clean it or import from db*/
 import { categories } from '../../fakedata.js';
 import { Login } from '../Login';
 import MyShop from '../MyShop/MyShop';
 import Register from '../Register/Register.js';
 import Shop from '../Shop/Shop';
+import HomePage from '../HomePage/HomePage';
 
 export const Main = ({ ...props }) => {
   const {
@@ -83,9 +85,12 @@ export const Main = ({ ...props }) => {
             setShow={setShow}
           />
         </Route>
+        <Route path="/homepage">
+          <HomePage categories={categories} />
+        </Route>
 
         <Route strict path="/">
-          <Redirect to="/shop" />
+          <Redirect to="/homepage" />
         </Route>
       </Switch>
     </div>

@@ -202,7 +202,7 @@ export const Navbar = ({ ...props }) => {
               activeClassName="text-secondary"
               className="navbar-item-spg"
               exact
-              to="/"
+              to="/homepage"
             >
               <FontAwesomeIcon icon={faHome} className={'mr-2 mb-0'} />
               Home
