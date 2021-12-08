@@ -26,7 +26,10 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
           - `ref_user`: id of the user (specifically farmer) which the product is related to,
           - `price`: price (per unit of measure,
           - `availability`: number of products of that type available,
-          - `unit_of_measure`: unit of measure of the product}, {...}];
+          - `unit_of_measure`: unit of measure of the product,
+          - `image_path`: url of the image,
+          - `start_date`: date and time from which the current product is salable,
+          - `end_date`: date and time until which the current product is salable}, {...}];
 - POST `/api/products`
     - Retrieves all the products.
     - request parameters and request body content: 
@@ -41,7 +44,78 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
             - `price`: price (per unit of measure,
             - `availability`: number of products of that type available,
             - `unit_of_measure`: unit of measure of the product
-            - `image_path`: URL of the image}, {...}]; 
+            - `image_path`: url of the image,
+            - `start_date`: date and time from which the current product is salable,
+            - `end_date`: date and time until which the current product is salable}, {...}]; 
+- POST `/api/products-by-date`
+    - Retrieves all the products that can be sold at that specific date.
+    - request parameters and request body content:
+        -  {`date`: date at which the products can be sold }.
+    - response body content:
+        - products = [{
+            - `product_id`: id of the product,
+            - `name`: name of the product,
+            - `description`: description of the product ,
+            - `category`: category of the product,
+            - `ref_user`: id of the user (specifically farmer) which the product is related to,
+            - `price`: price (per unit of measure,
+            - `availability`: number of products of that type available,
+            - `unit_of_measure`: unit of measure of the product
+            - `image_path`: url of the image,
+            - `start_date`: date and time from which the current product is salable,
+            - `end_date`: date and time until which the current product is salable}, {...}];
+- POST `/api/products-from-date`
+    - Retrieves all the products that can be sold from a certain date.
+    - request parameters and request body content:
+        -  {`date`: date from which the products can be sold }.
+    - response body content:
+        - products = [{
+            - `product_id`: id of the product,
+            - `name`: name of the product,
+            - `description`: description of the product ,
+            - `category`: category of the product,
+            - `ref_user`: id of the user (specifically farmer) which the product is related to,
+            - `price`: price (per unit of measure,
+            - `availability`: number of products of that type available,
+            - `unit_of_measure`: unit of measure of the product
+            - `image_path`: url of the image,
+            - `start_date`: date and time from which the current product is salable,
+            - `end_date`: date and time until which the current product is salable}, {...}];
+- POST `/api/products-to-date`
+    - Retrieves all the products that can be sold until a certain date.
+    - request parameters and request body content:
+        -  {`date`: date until which the products can be sold }.
+    - response body content:
+        - products = [{
+            - `product_id`: id of the product,
+            - `name`: name of the product,
+            - `description`: description of the product ,
+            - `category`: category of the product,
+            - `ref_user`: id of the user (specifically farmer) which the product is related to,
+            - `price`: price (per unit of measure,
+            - `availability`: number of products of that type available,
+            - `unit_of_measure`: unit of measure of the product
+            - `image_path`: url of the image,
+            - `start_date`: date and time from which the current product is salable,
+            - `end_date`: date and time until which the current product is salable}, {...}];
+- POST `/api/products-between-dates`
+    - Retrieves all the products that can be sold between a starting date and an ending one.
+    - request parameters and request body content:
+        -  {`startDate`: date from which the products can be sold,
+            `endDate`: date until which the products can be sold }.
+    - response body content:
+        - products = [{
+            - `product_id`: id of the product,
+            - `name`: name of the product,
+            - `description`: description of the product ,
+            - `category`: category of the product,
+            - `ref_user`: id of the user (specifically farmer) which the product is related to,
+            - `price`: price (per unit of measure,
+            - `availability`: number of products of that type available,
+            - `unit_of_measure`: unit of measure of the product
+            - `image_path`: url of the image,
+            - `start_date`: date and time from which the current product is salable,
+            - `end_date`: date and time until which the current product is salable}, {...}];
 - POST `/api/new-user`
     - Insert a new user.
     - request parameters and request body content:
@@ -126,7 +200,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
     - Update the status order with `delivered`
     - request parameters : none
     - request body content : json containing the orderID
-    - responde body content : //
+    - response body content : //
 - POST `/api/recharge-wallet`
     - Update the client's wallet
     - request parameters : none
