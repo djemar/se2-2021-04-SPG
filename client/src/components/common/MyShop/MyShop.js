@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { Card, Col, Form, Row } from 'react-bootstrap';
+import { Alert, Card, Col, Form, Row } from 'react-bootstrap';
 import Breadcrumbs from '../../misc/Breadcrumbs';
 import ProductCard from '../ProductCard/ProductCard';
 import Select from 'react-select';
@@ -60,10 +60,6 @@ export const MyShop = ({ ...props }) => {
     }
     setAddedProduct(tmpProd);
   };
-
-  useEffect(() => {
-    console.log('addingProductsDays: ', addingProductsDays);
-  }, [dateState, addingProductsDays]);
 
   return (
     <div className="flex flex-column justify-start">
@@ -223,11 +219,15 @@ export const MyShop = ({ ...props }) => {
             </>
           ) : (
             <>
-              <div className="text-center">
-                <h4 className="h4">
-                  Products can not be added for next week, come here after
-                  Tuesday, 9 AM
-                </h4>
+              <div className="justify-content-center font-ibm mx-auto my-auto">
+                <Alert variant="warning" className="mx-4">
+                  <strong>
+                    <i>Wuoops!</i>
+                  </strong>
+                  <br />
+                  Products for next week can not be added for now, come here{' '}
+                  <strong>after Tuesday, 9 AM</strong>
+                </Alert>
               </div>
             </>
           )}

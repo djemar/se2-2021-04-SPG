@@ -28,9 +28,9 @@ const TimeContextProvider = ({ ...props }) => {
 
     // tuesday 9:00 < x < saturday 23:00
     if (
-      (today >= 2 && hour >= 9) ||
+      (today === 2 && hour >= 9) ||
       (today > 2 && today < 6) ||
-      (today <= 6 && hour < 23)
+      (today === 6 && hour < 23)
     ) {
       setAddingProductsDays(true);
     } else {
