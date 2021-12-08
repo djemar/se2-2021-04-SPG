@@ -1,5 +1,5 @@
 import axios from 'axios';
-import * as dayjs from 'dayjs';
+
 const bcrypt = require('bcryptjs');
 
 // UTILS
@@ -120,6 +120,10 @@ async function getProductsToDate(date) {
 
 async function getProductsBetweenDates(startDate, endDate) {
   let url = BASEURL + `/products-between-dates`;
+  if (endDate < startDate) {
+    console.log('endDate cannot come before than startDate.');
+    return { error: 'endDate cannot come before than startDate' };
+  }
   try {
     const res = await axios.post(url, {
       startDate: startDate,

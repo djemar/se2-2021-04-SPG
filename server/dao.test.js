@@ -34,8 +34,49 @@ describe("API getProducts", () => {
 
   test("productsCategorySuccess", async () => {
     const p = await dao.getProductsByCategory("Dairy");
-    expect(p).toBeDefined();
-    expect(p[0]).toHaveProperty('product_id', 85);
+    await expect(p).toBeDefined();
+    await expect(p[0]).toHaveProperty('product_id', 85);
+  });
+
+  test("productsByDateSuccess", async () => {
+    const p = await dao.getProductsByDate("2021-07-02T00:00:00.000Z");
+    await expect(p).toBeDefined();
+    await expect(p[0]).toHaveProperty('name', 'Apples');
+  });
+  test("productsByDateError", async () => {
+    const e = await dao.getProductsByDate(999).catch((error) => error);
+  });
+
+  test("productsFromDateSuccess", async () => {
+    const p = await dao.getProductsFromDate("2021-09-01T00:00:00.000Z");
+    await expect(p).toBeDefined();
+    await expect(p[0]).toHaveProperty('name', 'Avocados');
+    await expect(p[1]).toHaveProperty('name', 'Pomegranates');
+  });
+  test("productsFromDateError", async () => {
+    const e = await dao.getProductsFromDate(999).catch((error) => error);
+  });
+
+  test("productsToDateSuccess", async () => {
+    const p = await dao.getProductsToDate("2021-08-31T00:00:00.000Z");
+    await expect(p).toBeDefined();
+    await expect(p[0]).toHaveProperty('name', 'Apples');
+    await expect(p[1]).toHaveProperty('name', 'Lemons');
+  });
+  test("productsToDateError", async () => {
+    const e = await dao.getProductsToDate(999).catch((error) => error);
+  });
+
+  test("productsBetweenDatesSuccess", async () => {
+    const p = await dao.getProductsBetweenDates("2021-09-01T00:00:00.000Z", "2021-10-07T00:00:00.000Z");
+    await expect(p).toBeDefined();
+    await expect(p[0]).toHaveProperty('name', 'Pomegranates');
+  });
+  test("productsBetweenDatesError", async () => {
+    const e = await dao.getProductsBetweenDates(999, 999).catch((error) => error);
+  });
+  test("productsBetweenDatesWrongOrder", async () => {
+    const e = await dao.getProductsBetweenDates("2021-10-07T00:00:00.000Z", "2021-10-01T00:00:00.000Z").catch((error) => error);
   });
 });
 
