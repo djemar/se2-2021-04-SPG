@@ -28,6 +28,8 @@ function mappingProducts(rows) {
     availability: e.availability,
     unit_of_measure: e.unit_of_measure,
     image_path: e.image_path,
+    start_date:  e.start_date,
+    end_date: e.end_date
   }));
 }
 
@@ -85,6 +87,74 @@ exports.getProductsByCategory = (category) => {
     const sql = "SELECT * FROM product WHERE category = ?";
 
     db.all(sql, [category], (err, rows) => {
+      if (err) reject(err);
+      else if (rows === undefined || rows.length === 0) {
+        reject(err);
+        console.log("0 ROWS!");
+      } else {
+        const products = mappingProducts(rows);
+        resolve(products);
+      }
+    });
+  });
+};
+
+exports.getProductsByDate = (date) => {
+  return new Promise((resolve, reject) => {
+    const sql = "SELECT * FROM product WHERE start_date <= ? AND end_date >= ?";
+
+    db.all(sql, [date, date], (err, rows) => {
+      if (err) reject(err);
+      else if (rows === undefined || rows.length === 0) {
+        reject(err);
+        console.log("0 ROWS!");
+      } else {
+        const products = mappingProducts(rows);
+        resolve(products);
+      }
+    });
+  });
+};
+
+exports.getProductsFromDate = (date) => {
+  return new Promise((resolve, reject) => {
+    const sql = "SELECT * FROM product WHERE start_date >= ?";
+
+    db.all(sql, [date], (err, rows) => {
+      if (err) reject(err);
+      else if (rows === undefined || rows.length === 0) {
+        reject(err);
+        console.log("0 ROWS!");
+      } else {
+        const products = mappingProducts(rows);
+        resolve(products);
+      }
+    });
+  });
+};
+
+exports.getProductsToDate = (date) => {
+  return new Promise((resolve, reject) => {
+    const sql = "SELECT * FROM product WHERE end_date <= ?";
+
+    db.all(sql, [date], (err, rows) => {
+      if (err) reject(err);
+      else if (rows === undefined || rows.length === 0) {
+        reject(err);
+        console.log("0 ROWS!");
+      } else {
+        const products = mappingProducts(rows);
+        resolve(products);
+      }
+    });
+  });
+};
+
+exports.getProductsBetweenDates = (startDate, endDate) => {
+  return new Promise((resolve, reject) => {
+    const sql = "SELECT * FROM product WHERE start_date >= ? AND end_date <= ?";
+
+    db.all(sql, [startDate, endDate], (err, rows) => {
       if (err) reject(err);
       else if (rows === undefined || rows.length === 0) {
         reject(err);

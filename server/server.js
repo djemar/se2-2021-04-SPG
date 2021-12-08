@@ -161,6 +161,70 @@ app.post("/api/products", [check("category").isString()], async (req, res) => {
     .catch((err) => res.status(503).json(dbErrorObj));
 });
 
+// POST /products-by-date
+// Request body: specific date
+// Response body: json containing all the products that can be sold at that date and time
+app.post("/api/products-by-date", [check("date").isString()], async (req, res) => {
+    await dao
+        .getProductsByDate(req.body.date)
+        .then((products) => res.json(products))
+        .catch((err) => res.status(503).json(dbErrorObj));
+});
+
+// POST /products-from-date
+// Request body: starting date
+// Response body: json containing all the products that can be sold from that date and time
+app.post("/api/products-from-date", [check("date").isString()], async (req, res) => {
+    await dao
+        .getProductsFromDate(req.body.date)
+        .then((products) => res.json(products))
+        .catch((err) => res.status(503).json(dbErrorObj));
+});
+
+// POST /products-to-date
+// Request body: ending date
+// Response body: json containing all the products that can be sold until that date and time
+app.post("/api/products-to-date", [check("date").isString()], async (req, res) => {
+    await dao
+        .getProductsToDate(req.body.date)
+        .then((products) => res.json(products))
+        .catch((err) => res.status(503).json(dbErrorObj));
+});
+
+// POST /products-between-dates
+// Request body: starting date and ending date
+// Response body: json containing all the products that can be sold from starting date to ending date
+app.post("/api/products-between-dates",
+    body("startDate")
+        .exists({ checkNull: true })
+        .bail()
+        .notEmpty()
+        .bail()
+        .isString()
+        .bail(),
+    body("endDate")
+        .exists({ checkNull: true })
+        .bail()
+        .notEmpty()
+        .bail()
+        .isString()
+        .bail(),
+ async (req, res) => {
+     const result = validationResult(req);
+     if (!result.isEmpty())
+         res.status(400).json({
+             info: "The server cannot process the request",
+             error: result.array()[0].msg,
+             valueReceived: result.array()[0].value,
+         });
+     else {
+         await dao
+             .getProductsBetweenDates(req.body.startDate, req.body.endDate)
+             .then((products) => res.json(products))
+             .catch((err) => res.status(503).json(dbErrorObj));
+     }
+});
+
 /************** Users **************/
 
 // POST /new-user
