@@ -4,6 +4,8 @@ import Breadcrumbs from '../../misc/Breadcrumbs';
 import ProductCard from '../ProductCard/ProductCard';
 import Select from 'react-select';
 import { UserContext } from '../../../context/UserContext';
+import { TimeContext } from '../../../context/TimeContext';
+import * as dayjs from 'dayjs';
 
 const product = {
   product_id: -1,
@@ -30,6 +32,7 @@ export const MyShop = ({ ...props }) => {
   const {} = props;
   const [addedProduct, setAddedProduct] = useState(product);
   const { products, user } = useContext(UserContext);
+  const { dateState, addingProductsDays } = useContext(TimeContext);
 
   const handleChange = (value, attr) => {
     let tmpProd = { ...addedProduct };
@@ -58,150 +61,177 @@ export const MyShop = ({ ...props }) => {
     setAddedProduct(tmpProd);
   };
 
+  useEffect(() => {
+    console.log('addingProductsDays: ', addingProductsDays);
+  }, [dateState, addingProductsDays]);
+
   return (
     <div className="flex flex-column justify-start">
       <div className="flex flex-none justify-start pb-4">
         <Breadcrumbs />
       </div>
       <div className="flex flex-grow justify-between">
-        <div className="col-8">
-          <Card>
-            <Card.Body className="items-center">
-              <Form>
-                <div className="d-flex items-center justify-between">
-                  <span> Add a new product below</span>
-                  <div className="d-flex items-center">
-                    or select one from your past inventory
-                    <Select
-                      className="basic-single w-80 mx-10"
-                      classNamePrefix="select"
-                      placeholder="Type to search..."
-                      onChange={v => {
-                        v ? setAddedProduct(v) : setAddedProduct(product);
-                      }}
-                      isClearable={true}
-                      isSearchable={true}
-                      name="inventory"
-                      getOptionValue={option => option.product_id}
-                      getOptionLabel={option => `${option.name}`}
-                      options={products.filter(p => p.ref_farmer === user.id)}
-                    />
-                  </div>
-                </div>
-              </Form>
-            </Card.Body>
-          </Card>
-          <Card className="mt-5">
-            <Card.Title className="px-5 pt-5 font-bold uppercase">
-              Insert product details
-            </Card.Title>
-            <Card.Body className="items-center p-8">
-              <Form>
-                <Row>
-                  <Col>
-                    <Row className="mb-3">
-                      <Form.Group as={Col} controlId="formGridName">
-                        <Form.Label>Product Name</Form.Label>
-                        <Form.Control
-                          type="text"
-                          value={addedProduct.name}
-                          onChange={e =>
-                            handleChange(e.target.value, NEWVALUE.NAME)
-                          }
-                        />
-                      </Form.Group>
+        <>
+          {addingProductsDays ? (
+            <>
+              <div className="col-8">
+                <Card>
+                  <Card.Body className="items-center">
+                    <Form>
+                      <div className="d-flex items-center justify-between">
+                        <span> Add a new product below</span>
+                        <div className="d-flex items-center">
+                          or select one from your past inventory
+                          <Select
+                            className="basic-single w-80 mx-10"
+                            classNamePrefix="select"
+                            placeholder="Type to search..."
+                            onChange={v => {
+                              v ? setAddedProduct(v) : setAddedProduct(product);
+                            }}
+                            isClearable={true}
+                            isSearchable={true}
+                            name="inventory"
+                            getOptionValue={option => option.product_id}
+                            getOptionLabel={option => `${option.name}`}
+                            options={products.filter(
+                              p => p.ref_farmer === user.id
+                            )}
+                          />
+                        </div>
+                      </div>
+                    </Form>
+                  </Card.Body>
+                </Card>
+                <Card className="mt-5">
+                  <Card.Title className="px-5 pt-5 font-bold uppercase">
+                    Insert product details
+                  </Card.Title>
+                  <Card.Body className="items-center p-8">
+                    <Form>
+                      <Row>
+                        <Col>
+                          <Row className="mb-3">
+                            <Form.Group as={Col} controlId="formGridName">
+                              <Form.Label>Product Name</Form.Label>
+                              <Form.Control
+                                type="text"
+                                value={addedProduct.name}
+                                onChange={e =>
+                                  handleChange(e.target.value, NEWVALUE.NAME)
+                                }
+                              />
+                            </Form.Group>
 
-                      <Form.Group as={Col} controlId="formGridPrice">
-                        <Form.Label>Price €</Form.Label>
-                        <Form.Control
-                          type="number"
-                          pattern="[0-9]"
-                          min={0}
-                          step={0.05}
-                          value={addedProduct.price}
-                          onChange={e =>
-                            handleChange(e.target.value, NEWVALUE.PRICE)
-                          }
-                        />
-                      </Form.Group>
-                    </Row>
-                    <Row className="mb-3">
-                      <Form.Group as={Col} controlId="formGridPieces">
-                        <Form.Label>Available pieces</Form.Label>
-                        <Form.Control
-                          type="number"
-                          value={addedProduct.availability}
-                          onChange={e =>
-                            handleChange(e.target.value, NEWVALUE.AVAILABILITY)
-                          }
-                        />
-                      </Form.Group>
+                            <Form.Group as={Col} controlId="formGridPrice">
+                              <Form.Label>Price €</Form.Label>
+                              <Form.Control
+                                type="number"
+                                pattern="[0-9]"
+                                min={0}
+                                step={0.05}
+                                value={addedProduct.price}
+                                onChange={e =>
+                                  handleChange(e.target.value, NEWVALUE.PRICE)
+                                }
+                              />
+                            </Form.Group>
+                          </Row>
+                          <Row className="mb-3">
+                            <Form.Group as={Col} controlId="formGridPieces">
+                              <Form.Label>Available pieces</Form.Label>
+                              <Form.Control
+                                type="number"
+                                value={addedProduct.availability}
+                                onChange={e =>
+                                  handleChange(
+                                    e.target.value,
+                                    NEWVALUE.AVAILABILITY
+                                  )
+                                }
+                              />
+                            </Form.Group>
 
-                      <Form.Group as={Col} controlId="formGridQuantity">
-                        <Form.Label>Quantity per-piece</Form.Label>
-                        <Form.Control
-                          type="text"
-                          value={addedProduct.unit_of_measure}
-                          onChange={e =>
-                            handleChange(e.target.value, NEWVALUE.UNIT)
-                          }
-                        />
-                      </Form.Group>
-                    </Row>
-                  </Col>
-                  <Col>
-                    <Form.Group as={Col} controlId="formGridDescription">
-                      <Form.Label>Description</Form.Label>
-                      <Form.Control
-                        as="textarea"
-                        type="text"
-                        value={addedProduct.description}
-                        onChange={e =>
-                          handleChange(e.target.value, NEWVALUE.DESCRIPTION)
-                        }
-                      />
-                    </Form.Group>
-                  </Col>
-                </Row>
+                            <Form.Group as={Col} controlId="formGridQuantity">
+                              <Form.Label>Quantity per-piece</Form.Label>
+                              <Form.Control
+                                type="text"
+                                value={addedProduct.unit_of_measure}
+                                onChange={e =>
+                                  handleChange(e.target.value, NEWVALUE.UNIT)
+                                }
+                              />
+                            </Form.Group>
+                          </Row>
+                        </Col>
+                        <Col>
+                          <Form.Group as={Col} controlId="formGridDescription">
+                            <Form.Label>Description</Form.Label>
+                            <Form.Control
+                              as="textarea"
+                              type="text"
+                              value={addedProduct.description}
+                              onChange={e =>
+                                handleChange(
+                                  e.target.value,
+                                  NEWVALUE.DESCRIPTION
+                                )
+                              }
+                            />
+                          </Form.Group>
+                        </Col>
+                      </Row>
 
-                <Row className="mb-3">
-                  <Form.Group as={Col} controlId="formGridImg">
-                    <Form.Label>Image URL</Form.Label>
-                    <Form.Control
-                      type="text"
-                      value={addedProduct.image_path}
-                      onChange={e =>
-                        handleChange(e.target.value, NEWVALUE.IMAGE)
-                      }
-                    />
-                  </Form.Group>
-                </Row>
+                      <Row className="mb-3">
+                        <Form.Group as={Col} controlId="formGridImg">
+                          <Form.Label>Image URL</Form.Label>
+                          <Form.Control
+                            type="text"
+                            value={addedProduct.image_path}
+                            onChange={e =>
+                              handleChange(e.target.value, NEWVALUE.IMAGE)
+                            }
+                          />
+                        </Form.Group>
+                      </Row>
 
-                {/*                 <Button variant="primary" type="submit">
+                      {/*                 <Button variant="primary" type="submit">
                   Submit
                 </Button> */}
-              </Form>
-            </Card.Body>
-          </Card>
-        </div>
-        <div className="col d-flex justify-content-center items-center">
-          <ProductCard
-            key={addedProduct.product_id}
-            pid={addedProduct.product_id}
-            fid={addedProduct.ref_user}
-            name={addedProduct.name}
-            price={addedProduct.price}
-            description={addedProduct.description}
-            category={addedProduct.category}
-            unit={addedProduct.unit_of_measure}
-            img={addedProduct.image_path}
-            availability={addedProduct.availability}
-            basketProducts={[]}
-            preview={true}
-            // setBasketProducts={()}
-            //setAnimateBasket={()}
-          />
-        </div>
+                    </Form>
+                  </Card.Body>
+                </Card>
+              </div>
+              <div className="col d-flex justify-content-center items-center">
+                <ProductCard
+                  key={addedProduct.product_id}
+                  pid={addedProduct.product_id}
+                  fid={addedProduct.ref_user}
+                  name={addedProduct.name}
+                  price={addedProduct.price}
+                  description={addedProduct.description}
+                  category={addedProduct.category}
+                  unit={addedProduct.unit_of_measure}
+                  img={addedProduct.image_path}
+                  availability={addedProduct.availability}
+                  basketProducts={[]}
+                  preview={true}
+                  // setBasketProducts={()}
+                  //setAnimateBasket={()}
+                />
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="text-center">
+                <h4 className="h4">
+                  Products can not be added for next week, come here after
+                  Tuesday, 9 AM
+                </h4>
+              </div>
+            </>
+          )}
+        </>
       </div>
     </div>
   );
