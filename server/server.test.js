@@ -28,6 +28,64 @@ describe('Get products by category API', () => {
     });
 });
 
+describe('Get products by dates API', () => {
+    test('Get products by date success', async () => {
+        const date = {date: '2021-07-02T00:00:00.000Z'}
+        const response = await request.post('/api/products-by-date').send(date)
+
+        expect(response.status).toBe(200)
+        expect(response.body).toBeTruthy()
+    });
+    test('Get products by date failure', async () => {
+        const date = {a: "b"}
+        const response = await request.post('/api/products-by-date').send(date)
+
+        expect(response.status).toBe(400)
+    });
+
+    test('Get products from date success', async () => {
+        const date = {date: '2021-09-01T00:00:00.000Z'}
+        const response = await request.post('/api/products-from-date').send(date)
+
+        expect(response.status).toBe(200)
+        expect(response.body).toBeTruthy()
+    });
+    test('Get products from date failure', async () => {
+        const date = {a: "b"}
+        const response = await request.post('/api/products-from-date').send(date)
+
+        expect(response.status).toBe(400)
+    });
+
+    test('Get products until date success', async () => {
+        const date = {date: '2021-08-31T00:00:00.000Z'}
+        const response = await request.post('/api/products-to-date').send(date)
+
+        expect(response.status).toBe(200)
+        expect(response.body).toBeTruthy()
+    });
+    test('Get products until date failure', async () => {
+        const date = {a: "b"}
+        const response = await request.post('/api/products-to-date').send(date)
+
+        expect(response.status).toBe(400)
+    });
+
+    test('Get products between dates success', async () => {
+        const dates = {startDate:"2021-09-01T00:00:00.000Z", endDate:"2021-10-07T00:00:00.000Z"};
+        const response = await request.post('/api/products-between-dates').send(dates)
+
+        expect(response.status).toBe(200)
+        expect(response.body).toBeTruthy()
+    });
+    test('Get products from date failure', async () => {
+        const dates = {a: "b", c: "d"}
+        const response = await request.post('/api/products-between-dates').send(dates)
+
+        expect(response.status).toBe(400)
+    });
+});
+
 describe('Get users API', () => {
     test('Get method', async () => {
         const response = await request.get('/api/users')
@@ -68,7 +126,7 @@ describe('Get orders API', () => {
 });
 
 describe('Login API test cases', () => {
-    test('Succesful login', async () => {
+    test('Successful login', async () => {
         const user = {'email': 'employee@spg.com', 'password': 'employee'}
         const response = await request.post('/api/login').send(user);
 

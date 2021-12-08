@@ -101,6 +101,9 @@ exports.getProductsByCategory = (category) => {
 
 exports.getProductsByDate = (date) => {
   return new Promise((resolve, reject) => {
+    if (typeof date !== "string")
+      reject("Strings are expected for all date parameters");
+
     const sql = "SELECT * FROM product WHERE start_date <= ? AND end_date >= ?";
 
     db.all(sql, [date, date], (err, rows) => {
@@ -118,6 +121,9 @@ exports.getProductsByDate = (date) => {
 
 exports.getProductsFromDate = (date) => {
   return new Promise((resolve, reject) => {
+    if (typeof date !== "string")
+      reject("Strings are expected for all date parameters");
+
     const sql = "SELECT * FROM product WHERE start_date >= ?";
 
     db.all(sql, [date], (err, rows) => {
@@ -135,6 +141,9 @@ exports.getProductsFromDate = (date) => {
 
 exports.getProductsToDate = (date) => {
   return new Promise((resolve, reject) => {
+    if (typeof date !== "string")
+      reject("Strings are expected for all date parameters");
+
     const sql = "SELECT * FROM product WHERE end_date <= ?";
 
     db.all(sql, [date], (err, rows) => {
@@ -152,6 +161,10 @@ exports.getProductsToDate = (date) => {
 
 exports.getProductsBetweenDates = (startDate, endDate) => {
   return new Promise((resolve, reject) => {
+    if (typeof startDate !== "string" ||
+        typeof endDate !== "string")
+      reject("Strings are expected for all date parameters");
+
     const sql = "SELECT * FROM product WHERE start_date >= ? AND end_date <= ?";
 
     db.all(sql, [startDate, endDate], (err, rows) => {
