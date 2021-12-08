@@ -38,10 +38,10 @@
 }
 
 .product-img:hover {
-  scale: 1.25;
+  transform: scale(1.2);
 }
-
 .product-img {
+  transition: transform 0.5s ease;
   overflow: hidden;
   object-fit: cover;
   height: 175px;
