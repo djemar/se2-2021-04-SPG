@@ -1,29 +1,29 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import * as dayjs from 'dayjs';
 import MyShop from '../../components/common/MyShop/MyShop';
 import { BrowserRouter as Router } from 'react-router-dom';
+import * as dayjs from 'dayjs';
+
+jest.mock('dayjs');
 
 describe('Adding products alert', () => {
-  test('renders Alert when date does not match constraints', () => {
-    const currentDate = dayjs().toISOString();
-    const day = dayjs(currentDate).get('day');
-    const hour = dayjs(currentDate).get('hour');
-    let res;
+  test('render products adding when date match constraints', () => {
+    dayjs.toISOString.mockImplementationOnce(() => '2021-12-09T13:00:00.000Z'); // Thursday
     render(
       <Router>
         <MyShop />
       </Router>
     );
-    if (
-      (day === 2 && hour >= 9) ||
-      (day > 2 && day < 6) ||
-      (day === 6 && hour < 23)
-    ) {
-      res = /Insert product details/i;
-    } else {
-      res = /Wuoops!/i;
-    }
-    expect(screen.getByText(res)).toBeInTheDocument();
+    expect(screen.getByText(/Insert product details/i)).toBeInTheDocument();
+  });
+
+  test('render Alert when date does not match constraints', () => {
+    dayjs.toISOString.mockImplementationOnce(() => '2021-12-12T13:00:00.000Z'); // Sunday
+    render(
+      <Router>
+        <MyShop />
+      </Router>
+    );
+    expect(screen.getByText(/Wuoops!/i)).toBeInTheDocument();
   });
 });
