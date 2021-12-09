@@ -167,6 +167,11 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
             - `end_date`: ending date from when the product will be available
             };
     - response body content : JSON containing all the data from the product after the edit
+- POST `/api/set-pending-cancellation-order`
+    - Update the status order with `pending_cancellation`
+    - request parameters : none
+    - request body content : json containing the orderID
+    - responde body content : //
 
   ## Server Database
   - Table `USER` - it contains id, name, surname, email, password, Type, balance, address, phone, country, city, zip code and company name for a farmer.

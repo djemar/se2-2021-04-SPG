@@ -286,6 +286,16 @@ async function updateClientWallet(clientID, recharge) {
   }
 }
 
+async function setPendingCancellationOrder(orderID) {
+  let url = BASEURL + `/set-pending-cancellation-order/`;
+  try {
+    const res = await axios.post(url, { order_id: orderID });
+    return await res.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 // Functions exported by this API:
 const API = {
   getAllProducts,
@@ -302,5 +312,6 @@ const API = {
   logout,
   mapOrders,
   checkSession,
+  setPendingCancellationOrder,
 };
 export default API;
