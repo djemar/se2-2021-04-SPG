@@ -170,62 +170,62 @@ exports.insertUser = function (user) {
 exports.insertProduct = function (product) {
   return new Promise((resolve, reject) => {
     if (
-        typeof product.name !== "string" ||
-        typeof product.description !== "string" ||
-        typeof product.category !== "string" ||
-        typeof product.ref_farmer !== "number" ||
-        typeof product.price !== "number" ||
-        typeof product.availability !== "number" ||
-        typeof product.unit_of_measure !== "string" ||
-        typeof product.image_path !== "string" ||
-        typeof product.start_date !== "string" ||
-        typeof product.end_date !== "string"
+      typeof product.name !== "string" ||
+      typeof product.description !== "string" ||
+      typeof product.category !== "string" ||
+      typeof product.ref_farmer !== "number" ||
+      typeof product.price !== "number" ||
+      typeof product.availability !== "number" ||
+      typeof product.unit_of_measure !== "string" ||
+      typeof product.image_path !== "string" ||
+      typeof product.start_date !== "string" ||
+      typeof product.end_date !== "string"
     )
       reject(
-          "Parameter constraints must be respected"
+        "Parameter constraints must be respected"
       );
     else {
       const sql =
-          "INSERT INTO PRODUCT(name, description,category, ref_farmer, price, availability, unit_of_measure, image_path, start_date, end_date)" +
-          " VALUES (?,?,?,?,?,?,?,?,?,?)";
+        "INSERT INTO PRODUCT(name, description,category, ref_farmer, price, availability, unit_of_measure, image_path, start_date, end_date)" +
+        " VALUES (?,?,?,?,?,?,?,?,?,?)";
       //ID is not needed. It's added by the insert operation
       db.run(
-          sql,
-          [
-            product.name,
-            product.description,
-            product.category,
-            product.ref_farmer,
-            product.price,
-            product.availability,
-            product.unit_of_measure,
-            product.image_path,
-            product.start_date,
-            product.end_date,
-          ],
-          function (err) {
-            if (err) {
-              console.log(err);
-              reject(err);
-            } else {
-              let productID = this.lastID;
-              console.log("Product " + productID + " added successfully");
-              const p = {
-                product_id: productID,
-                name: product.name,
-                description: product.description,
-                category: product.category,
-                ref_farmer: product.ref_farmer,
-                price: product.price,
-                availability: product.availability,
-                unit_of_measure: product.unit_of_measure,
-                image_path: product.image_path,
-                start_date: product.start_date,
-                end_date: product.end_date,
-              };
-              resolve(p); // returning the product object
-            }
+        sql,
+        [
+          product.name,
+          product.description,
+          product.category,
+          product.ref_farmer,
+          product.price,
+          product.availability,
+          product.unit_of_measure,
+          product.image_path,
+          product.start_date,
+          product.end_date,
+        ],
+        function (err) {
+          if (err) {
+            console.log(err);
+            reject(err);
+          } else {
+            let productID = this.lastID;
+            console.log("Product " + productID + " added successfully");
+            const p = {
+              product_id: productID,
+              name: product.name,
+              description: product.description,
+              category: product.category,
+              ref_farmer: product.ref_farmer,
+              price: product.price,
+              availability: product.availability,
+              unit_of_measure: product.unit_of_measure,
+              image_path: product.image_path,
+              start_date: product.start_date,
+              end_date: product.end_date,
+            };
+            resolve(p); // returning the product object
           }
+        }
       );
     }
   });
@@ -235,71 +235,71 @@ exports.insertProduct = function (product) {
 exports.updateProduct = function (product) {
   return new Promise((resolve, reject) => {
     if (
-        typeof product.product_id !== "number" ||
-        typeof product.name !== "string" ||
-        typeof product.description !== "string" ||
-        typeof product.category !== "string" ||
-        typeof product.ref_farmer !== "number" ||
-        typeof product.price !== "number" ||
-        typeof product.availability !== "number" ||
-        typeof product.unit_of_measure !== "string" ||
-        typeof product.image_path !== "string" ||
-        typeof product.start_date !== "string" ||
-        typeof product.end_date !== "string"
+      typeof product.product_id !== "number" ||
+      typeof product.name !== "string" ||
+      typeof product.description !== "string" ||
+      typeof product.category !== "string" ||
+      typeof product.ref_farmer !== "number" ||
+      typeof product.price !== "number" ||
+      typeof product.availability !== "number" ||
+      typeof product.unit_of_measure !== "string" ||
+      typeof product.image_path !== "string" ||
+      typeof product.start_date !== "string" ||
+      typeof product.end_date !== "string"
     )
       reject(
-          "Parameter constraints must be respected"
+        "Parameter constraints must be respected"
       );
     else {
       const sql =
-          "UPDATE PRODUCT set name=?,description=?,category=?, " +
-          "ref_farmer=?, price=?, availability=?, unit_of_measure=?, " +
-          "image_path=?, start_date=?, end_date=? " +
-          "WHERE product_id = ?";
+        "UPDATE PRODUCT set name=?,description=?,category=?, " +
+        "ref_farmer=?, price=?, availability=?, unit_of_measure=?, " +
+        "image_path=?, start_date=?, end_date=? " +
+        "WHERE product_id = ?";
       //ID is now needed to edit the specific product
       db.run(
-          sql,
-          [
-            product.name,
-            product.description,
-            product.category,
-            product.ref_farmer,
-            product.price,
-            product.availability,
-            product.unit_of_measure,
-            product.image_path,
-            product.start_date,
-            product.end_date,
-            product.product_id,
-          ],
-          function (err, rows) {
-            if (err) {
-              console.log(err);
-              reject(err);
-            } else {
-              console.log("Product " + product.product_id + " added successfully");
-              const p = {
-                product_id: product.product_id,
-                name: product.name,
-                description: product.description,
-                category: product.category,
-                ref_farmer: product.ref_farmer,
-                price: product.price,
-                availability: product.availability,
-                unit_of_measure: product.unit_of_measure,
-                image_path: product.image_path,
-                start_date: product.start_date,
-                end_date: product.end_date,
-              };
-              resolve(p); // returning the product object
-            }
+        sql,
+        [
+          product.name,
+          product.description,
+          product.category,
+          product.ref_farmer,
+          product.price,
+          product.availability,
+          product.unit_of_measure,
+          product.image_path,
+          product.start_date,
+          product.end_date,
+          product.product_id,
+        ],
+        function (err, rows) {
+          if (err) {
+            console.log(err);
+            reject(err);
+          } else {
+            console.log("Product " + product.product_id + " added successfully");
+            const p = {
+              product_id: product.product_id,
+              name: product.name,
+              description: product.description,
+              category: product.category,
+              ref_farmer: product.ref_farmer,
+              price: product.price,
+              availability: product.availability,
+              unit_of_measure: product.unit_of_measure,
+              image_path: product.image_path,
+              start_date: product.start_date,
+              end_date: product.end_date,
+            };
+            resolve(p); // returning the product object
           }
+        }
       );
     }
   });
 };
 
-exports.removeProduct= function (productID) {
+exports.removeProduct = function (productID) {
   return new Promise((resolve, reject) => {
     if (typeof productID !== "number") reject("An integer is expected");
     else {
@@ -443,6 +443,37 @@ exports.getAllOrders = function () {
   });
 };
 
+exports.getOrdersAndWallets = function () {
+  return new Promise((resolve, reject) => {
+    const sql = "SELECT O.order_id, " +
+      "U.wallet_balance, SUM(P.price*O.quantity) AS orderCost " +
+      "FROM ORDERS AS O, USER AS U, PRODUCT AS P " +
+      "WHERE O.ref_user = U.user_id AND O.ref_product = P.product_id AND O.status=? " +
+      "GROUP BY O.order_id, U.wallet_balance";
+    db.all(sql, ["pending"], (err, rows) => {
+      if (err) reject(err);
+      else if (rows === undefined || rows.length === 0) {
+        reject(null);
+      } else {
+        rows = rows.filter((e) => e.orderCost > e.wallet_balance)
+        const orders = rows.map((e) => ({
+          order_id: e.order_id,
+          ref_product: e.ref_product,
+          ref_user: e.ref_user,
+          date_order: e.date_order,
+          quantity: e.quantity,
+          status: e.status,
+          wallet_balance: e.wallet_balance,
+          price: e.price,
+          orderCost: e.orderCost
+        }));
+        resolve(orders);
+      }
+    });
+  });
+};
+
+
 exports.getOrdersByClientId = function (clientID) {
   return new Promise((resolve, reject) => {
     const sql = "SELECT * from ORDERS where ref_user = ?";
@@ -537,6 +568,30 @@ exports.getUserById = (id) => {
         };
         resolve(user);
       }
+    });
+  });
+};
+
+/*
+exports.deleteAllPendingCancellation = function (id) {
+  return new Promise((resolve, reject) => {
+    const sql = "DELETE from ORDERS where status = ?";
+    db.run(sql, ["pending_cancellation"], (err) => {
+      if (err) {
+        reject(err);
+        console.log("Errore");
+      } else resolve(null);
+    });
+  });
+};
+*/
+
+exports.setPendingCancellationdOrder = function (orderID) {
+  return new Promise((resolve, reject) => {
+    const sql = "UPDATE ORDERS set status = ? where ORDERS.order_id = ?";
+    db.all(sql, ["pending_cancellation", orderID], (err, res) => {
+      if (err) reject(err);
+      else resolve(true);
     });
   });
 };

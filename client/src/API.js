@@ -286,6 +286,36 @@ async function updateClientWallet(clientID, recharge) {
   }
 }
 
+async function setAllPendingCancellationOrder() {
+  let url = BASEURL + `/set-all-pending-cancellation-order/`;
+  try {
+    const res = await axios.get(url);
+    return await res.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function deleteAllPendingOrder() {
+  let url = BASEURL + `/delete-all-pending-cancellation-order/`;
+  try {
+    const res = await axios.get(url);
+    return await res.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function setPendingCancellationOrder(orderID) {
+  let url = BASEURL + `/set-pending-cancellation-order/`;
+  try {
+    const res = await axios.post(url, { order_id: orderID });
+    return await res.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 // Functions exported by this API:
 const API = {
   getAllProducts,
@@ -302,5 +332,8 @@ const API = {
   logout,
   mapOrders,
   checkSession,
+  setPendingCancellationOrder,
+  setAllPendingCancellationOrder,
+  deleteAllPendingOrder,
 };
 export default API;

@@ -5,7 +5,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import dayjs from 'dayjs';
 import * as relativeTime from 'dayjs/plugin/relativeTime';
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { Card, ListGroup, Toast, ToastContainer } from 'react-bootstrap';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import '../../App.css';
@@ -13,6 +13,7 @@ import { TimeContext } from '../../context/TimeContext';
 import './../common/Sidebar/sidebar.css';
 import DateModal from './DateModal';
 import { UserContext } from '../../context/UserContext';
+import API from '../../API';
 
 //dayjs.extend(relativeTime);
 
@@ -22,6 +23,42 @@ export const Breadcrumbs = ({ ...props }) => {
   const [modalShow, setModalShow] = useState(false);
   const { dateState, setDateState } = useContext(TimeContext);
   const [now, setNow] = useState(dayjs());
+
+  useEffect(() => {
+    const pendingCancellation = async () => {
+      //console.log("it's monday monrning");
+      API.setAllPendingCancellationOrder();
+    };
+
+    const deletePending = async () => {
+      //console.log("it's monday evening");
+      API.deleteAllPendingOrder();
+    };
+
+    if (
+      dayjs(dateState).get('day') === 1 &&
+      dayjs(dateState).get('hour') === 9 &&
+      dayjs(dateState).get('minute') === 0
+    ) {
+      pendingCancellation().then(() => {
+        //console.log('success');
+      });
+    }
+
+    /*
+    // delete all at 21:00
+    // this has to be updated on the backend
+    if (
+      dayjs(dateState).get('day') === 1 &&
+      dayjs(dateState).get('hour') === 21 &&
+      dayjs(dateState).get('minute') === 0
+    ) {
+      deletePending().then(() => {
+        console.log('success');
+      });
+    }
+    */
+  }, [dateState]);
 
   setInterval(() => {
     if (alertBalance) {

@@ -111,3 +111,7 @@
 .order-pending {
   background-color: var(--warning);
 }
+
+.order-pending-cancellation{
+  background-color: var(--danger);
+}
