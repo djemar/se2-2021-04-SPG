@@ -396,7 +396,7 @@ describe("API Order", () => {
 
   test("setPendingCancellationOrderError", async () => {
     let ord = await dao.getAllOrders();
-    //await dao.setDeliveredOrder(ord[0].order_id); // not executing the status updating (on purpose)
+    //await dao.setPendingCancellationdOrder(ord[0].order_id); // not executing the status updating (on purpose)
     const ord2 = await dao.getAllOrders();
     const o = ord2.filter(order => order.order_id === ord[0].order_id);
     expect(o[0]).toHaveProperty('status', 'pending');
