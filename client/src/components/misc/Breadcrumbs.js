@@ -1,6 +1,7 @@
 import {
   faGreaterThan,
   faMoneyBillWaveAlt,
+  faCartPlus,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as dayjs from 'dayjs';
@@ -22,6 +23,8 @@ export const Breadcrumbs = ({ ...props }) => {
   const [modalShow, setModalShow] = useState(false);
   const { dateState, setDateState } = useContext(TimeContext);
   const [now, setNow] = useState(dayjs());
+  const { orderEnabled } = useContext(TimeContext);
+  const [toastOrder, setToastOrder] = useState(true);
 
   setInterval(() => {
     if (alertBalance) {
@@ -115,6 +118,24 @@ export const Breadcrumbs = ({ ...props }) => {
               You have orders pending but your{' '}
               <strong>balance is not enough</strong>! Top-up it!
             </Toast.Body>
+          </Toast>
+        </ToastContainer>
+      )}
+      {orderEnabled && (
+        <ToastContainer>
+          <Toast
+            bg="success"
+            show={toastOrder}
+            onClose={() => setToastOrder(false)}
+          >
+            <Toast.Header closeButton={true}>
+              <FontAwesomeIcon icon={faCartPlus} className={'mr-2 mb-0'} />
+              <strong className="me-auto">Order now!</strong>
+              <small>
+                You can place an order from Saturday 9AM to Sunday 11PM.
+              </small>
+            </Toast.Header>
+            <Toast.Body className="text-dark warning">Do it now!</Toast.Body>
           </Toast>
         </ToastContainer>
       )}
