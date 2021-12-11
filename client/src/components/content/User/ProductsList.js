@@ -1,6 +1,6 @@
 import { Card } from 'react-bootstrap';
 import Breadcrumbs from '../../misc/Breadcrumbs';
-import './Orders.css';
+//import './Orders.css';
 import Table from 'react-bootstrap/Table';
 import { useEffect, useState } from 'react';
 import API from '../../../API';

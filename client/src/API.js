@@ -83,7 +83,6 @@ async function getAllProductsByCategory(categoryProduct) {
 }
 
 async function insertProduct(
-  product_id,
   name,
   description,
   category,
@@ -97,20 +96,17 @@ async function insertProduct(
 ) {
   let url = BASEURL + '/new-product';
   let product = {
-    product_id: product_id,
     name: name,
     description: description,
     category: category,
     ref_farmer: ref_farmer,
-    price: price,
+    price: parseFloat(price),
     availability: availability,
     unit_of_measure: unit_of_measure,
     image_path: image_path,
     start_date: start_date,
     end_date: end_date,
   };
-
-  console.log(product);
 
   try {
     await axios.post(url, product);

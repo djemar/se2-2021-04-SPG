@@ -5,8 +5,6 @@ import { categories } from '../../fakedata';
 import './sidebar.css';
 
 export const Sidebar = ({ ...props }) => {
-  const { setDirty } = props;
-
   const mappedLink = categories.map((cat, index) => {
     if (cat.name !== 'All products') {
       return (
@@ -14,12 +12,7 @@ export const Sidebar = ({ ...props }) => {
           to={'/shop/' + cat.name.replaceAll(' ', '-')}
           key={index}
         >
-          <ListGroup.Item
-            action
-            title={cat.name}
-            className="text-black"
-            onClick={() => setDirty(true)}
-          >
+          <ListGroup.Item action title={cat.name} className="text-black">
             {cat.name}
           </ListGroup.Item>
         </LinkContainer>
@@ -27,28 +20,33 @@ export const Sidebar = ({ ...props }) => {
     } else {
       return (
         <LinkContainer exact to={'/shop'} key={index}>
-          <ListGroup.Item
-            action
-            title={cat.name}
-            className="text-black"
-            onClick={() => setDirty(true)}
-          >
+          <ListGroup.Item action title={cat.name} className="text-black">
             {cat.name}
           </ListGroup.Item>
         </LinkContainer>
       );
     }
   });
+
+  //console.log(categories);
   return (
-    <ListGroup
-      className="striped-list text-black shadow"
-      defaultActiveKey="All products"
-    >
-      <ListGroup.Item key={'cat'} className="font-bold">
-        Categories
-      </ListGroup.Item>
-      {mappedLink}
-    </ListGroup>
+    <>
+      {/* <Form.Select className="striped-list text-black shadow w-56" size="lg">
+        <option className="striped-list text-black shadow w-56">
+          All Categories
+        </option>
+      </Form.Select> */}
+
+      <ListGroup
+        className="striped-list text-black shadow w-52"
+        defaultActiveKey="All products"
+      >
+        <ListGroup.Item key={'cat'} className="font-bold ">
+          Categories
+        </ListGroup.Item>
+        {mappedLink}
+      </ListGroup>
+    </>
   );
 };
 

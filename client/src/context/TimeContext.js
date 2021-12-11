@@ -3,8 +3,6 @@ import dayjs from 'dayjs';
 
 export const TimeContext = createContext();
 
-//const { dateState, setDateState } = useContext(TimeContext);
-
 const TimeContextProvider = ({ ...props }) => {
   const { children } = props;
 
@@ -15,9 +13,6 @@ const TimeContextProvider = ({ ...props }) => {
   useEffect(() => {
     const today = dayjs(dateState).get('day');
     const hour = dayjs(dateState).get('hour');
-
-    //console.log('today: ', today);
-    //console.log('hour: ', hour);
 
     // saturday 9:00 < x < sunday 23:00
     if ((today === 6 && hour >= 9) || (today === 0 && hour < 23)) {

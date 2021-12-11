@@ -1,22 +1,22 @@
 import { createContext, useEffect, useState } from 'react';
-import dayjs from 'dayjs';
 import API from '../API';
+import { useContext } from 'react';
+import { TimeContext } from './TimeContext';
+import dayjs from 'dayjs';
 
 export const UserContext = createContext();
 
-//const { showAlertBalance, products, orders } = useContext(UserContext);
-
 const UserContextProvider = ({ ...props }) => {
   const { children } = props;
-
   const [alertBalance, setAlertBalance] = useState(false);
-
+  const { dateState } = useContext(TimeContext);
   const [products, setProducts] = useState([]);
+  const [dateProducts, setDateProducts] = useState([]);
   const [orders, setOrders] = useState([]);
   const [dirtyProd, setDirtyProd] = useState(true);
   const [dirty, setDirty] = useState(true);
   const [loadingProd, setLoadingProd] = useState(true);
-
+  const [users, setUsers] = useState([]);
   const [sessionCheck, setSessionCheck] = useState(true);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -57,14 +57,32 @@ const UserContextProvider = ({ ...props }) => {
       setProducts(products);
     };
 
-    if (dirtyProd) {
+    if (dirtyProd || dirty) {
       setLoadingProd(true);
       getAllProducts().then(() => {
         setLoadingProd(false);
         setDirtyProd(false);
       });
     }
-  }, [isLogged, dirtyProd]);
+  }, [dirtyProd, dirty]);
+
+  useEffect(() => {
+    const getAllProductsBetweenDate = async () => {
+      const dates = getTimeframe();
+      const newProducts = await API.getProductsBetweenDates(
+        dates.startDate,
+        dates.endDate
+      );
+      setDateProducts(newProducts);
+    };
+
+    setLoadingProd(true);
+    getAllProductsBetweenDate().then(() => {
+      setLoadingProd(false);
+      setDirty(false);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dateState, dirty, dirtyProd]);
 
   useEffect(() => {
     if (isLogged && user && products) {
@@ -92,6 +110,57 @@ const UserContextProvider = ({ ...props }) => {
     } else setAlertBalance(false);
   }, [isLogged, user, products, dirty, dirtyProd]);
 
+  useEffect(() => {
+    const getAllUsers = async () => {
+      const users = await API.getAllUsers();
+      setUsers(users);
+    };
+
+    if (dirty) {
+      getAllUsers().then(() => {
+        setDirty(false);
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLogged]);
+
+  function getTimeframe() {
+    let today = dayjs(dateState).get('day');
+    // db format: YYYY-MM-DD
+    // Saturday = 6, sunday = 0
+    // today will be equal to saturday, and end date sunday
+    let startDate;
+
+    switch (today) {
+      case 1:
+        startDate = dayjs(dateState).add(5, 'day').format('YYYY-MM-DD');
+        break;
+      case 2:
+        startDate = dayjs(dateState).add(4, 'day').format('YYYY-MM-DD');
+        break;
+      case 3:
+        startDate = dayjs(dateState).add(3, 'day').format('YYYY-MM-DD');
+        break;
+      case 4:
+        startDate = dayjs(dateState).add(2, 'day').format('YYYY-MM-DD');
+        break;
+      case 5:
+        startDate = dayjs(dateState).add(1, 'day').format('YYYY-MM-DD');
+        break;
+      case 6:
+        startDate = dayjs(dateState).format('YYYY-MM-DD');
+        break;
+      case 0:
+        startDate = dayjs(dateState).add(6, 'day').format('YYYY-MM-DD');
+        break;
+      default:
+        break;
+    }
+
+    let endDate = dayjs(startDate).add(1, 'day').format('YYYY-MM-DD');
+    const dates = { startDate, endDate };
+    return dates;
+  }
   return (
     <UserContext.Provider
       value={{
@@ -106,6 +175,9 @@ const UserContextProvider = ({ ...props }) => {
         products,
         dirty,
         setDirty,
+        loadingProd,
+        users,
+        dateProducts,
       }}
     >
       {children}

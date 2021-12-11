@@ -28,8 +28,8 @@ function mappingProducts(rows) {
     availability: e.availability,
     unit_of_measure: e.unit_of_measure,
     image_path: e.image_path,
-    start_date:  e.start_date,
-    end_date: e.end_date
+    start_date: e.start_date,
+    end_date: e.end_date,
   }));
 }
 
@@ -49,7 +49,7 @@ function mappingUsers(rows) {
     user_id: e.user_id,
     name: e.name,
     surname: e.surname,
-    company: e.company,
+    company_name: e.company_name,
     email: e.email,
     hash: e.password,
     Type: e.Type,
@@ -162,8 +162,7 @@ exports.getProductsToDate = (date) => {
 
 exports.getProductsBetweenDates = (startDate, endDate) => {
   return new Promise((resolve, reject) => {
-    if (typeof startDate !== "string" ||
-        typeof endDate !== "string")
+    if (typeof startDate !== "string" || typeof endDate !== "string")
       reject("Strings are expected for all date parameters");
 
     const sql = "SELECT * FROM product WHERE start_date >= ? AND end_date <= ?";
@@ -183,17 +182,20 @@ exports.getProductsBetweenDates = (startDate, endDate) => {
 
 exports.getAllProductsByCategoryAndDates = (category, startDate, endDate) => {
   return new Promise((resolve, reject) => {
-    if (typeof category !== "string" ||
-        typeof startDate !== "string" ||
-        typeof endDate !== "string")
+    if (
+      typeof category !== "string" ||
+      typeof startDate !== "string" ||
+      typeof endDate !== "string"
+    )
       reject("Strings are expected for all date parameters");
 
-    console.log(startDate)
-    console.log(endDate)
-    console.log(category)
-    const sql = "SELECT * FROM product WHERE start_date >= ? AND end_date <= ? AND category = ?";
+    console.log(startDate);
+    console.log(endDate);
+    console.log(category);
+    const sql =
+      "SELECT * FROM product WHERE start_date >= ? AND end_date <= ? AND category = ?";
 
-    console.log(sql)
+    console.log(sql);
 
     db.all(sql, [startDate, endDate, category], (err, rows) => {
       if (err) reject(err);
@@ -208,76 +210,58 @@ exports.getAllProductsByCategoryAndDates = (category, startDate, endDate) => {
   });
 };
 
-
 /************** Users **************/
 
 // Insert a new client:
 exports.insertUser = function (user) {
   return new Promise((resolve, reject) => {
-    if (
-      typeof user.name !== "string" ||
-      typeof user.surname !== "string" ||
-      typeof user.email !== "string" ||
-      typeof user.hash !== "string" ||
-      typeof user.Type !== "string" ||
-      typeof user.address !== "string" ||
-      typeof user.phone !== "string" || // Also phone number must be a string
-      typeof user.country !== "string" ||
-      typeof user.city !== "string" ||
-      typeof user.zip_code !== "number"
-    )
-      reject(
-        "Strings are expected for all parameters, except for zip_code which must be an Integer and company which could be null if Type is Client"
-      );
-    else {
-      const balance = user.Type === "Client" ? 0.0 : null;
-      const sql =
-        "INSERT INTO USER(name,surname,company,email,password,Type,wallet_balance,address,phone,country,city,zip_code)" +
-        " VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
-      //ID is not needed. It's added by the insert operation
-      db.run(
-        sql,
-        [
-          user.name,
-          user.surname,
-          user.company,
-          user.email,
-          user.hash, // password assumed to be already hashed by frontend
-          user.Type,
-          balance,
-          user.address,
-          user.phone,
-          user.country,
-          user.city,
-          user.zip_code,
-        ],
-        function (err) {
-          if (err) {
-            console.log(err);
-            reject(err);
-          } else {
-            let userID = this.lastID;
-            console.log("User " + userID + " added successfully");
-            const u = {
-              user_id: userID,
-              name: user.name,
-              surname: user.surname,
-              company: user.company,
-              email: user.email,
-              hash: user.hash,
-              Type: user.Type,
-              wallet_balance: balance,
-              address: user.address,
-              phone: user.phone,
-              country: user.country,
-              city: user.city,
-              zip_code: user.zip_code,
-            };
-            resolve(u); // returning the user object
-          }
+    const balance = user.Type === "Client" ? 0.0 : null;
+    const sql =
+      "INSERT INTO USER(name,surname,company_name,email,password,Type,wallet_balance,address,phone,country,city,zip_code)" +
+      " VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+    //ID is not needed. It's added by the insert operation
+    db.run(
+      sql,
+      [
+        user.name,
+        user.surname,
+        user.company,
+        user.email,
+        user.hash, // password assumed to be already hashed by frontend
+        user.Type,
+        balance,
+        user.address,
+        user.phone,
+        user.country,
+        user.city,
+        user.zip_code,
+      ],
+      function (err) {
+        if (err) {
+          console.log(err);
+          reject(err);
+        } else {
+          let userID = this.lastID;
+          console.log("User " + userID + " added successfully");
+          const u = {
+            user_id: userID,
+            name: user.name,
+            surname: user.surname,
+            company_name: user.company,
+            email: user.email,
+            hash: user.hash,
+            Type: user.Type,
+            wallet_balance: balance,
+            address: user.address,
+            phone: user.phone,
+            country: user.country,
+            city: user.city,
+            zip_code: user.zip_code,
+          };
+          resolve(u); // returning the user object
         }
-      );
-    }
+      }
+    );
   });
 };
 
@@ -295,11 +279,9 @@ exports.insertProduct = function (product) {
       typeof product.start_date !== "string" ||
       typeof product.end_date !== "string"
     )
-      reject(
-        "Parameter constraints must be respected"
-      );
+      reject("Parameter constraints must be respected");
     else {
-      console.log(product)
+      console.log(product);
       const sql =
         "INSERT INTO PRODUCT(name, description,category, ref_farmer, price, availability, unit_of_measure, image_path, start_date, end_date)" +
         " VALUES (?,?,?,?,?,?,?,?,?,?)";
@@ -346,7 +328,6 @@ exports.insertProduct = function (product) {
   });
 };
 
-
 exports.updateProduct = function (product) {
   return new Promise((resolve, reject) => {
     if (
@@ -362,9 +343,7 @@ exports.updateProduct = function (product) {
       typeof product.start_date !== "string" ||
       typeof product.end_date !== "string"
     )
-      reject(
-        "Parameter constraints must be respected"
-      );
+      reject("Parameter constraints must be respected");
     else {
       const sql =
         "UPDATE PRODUCT set name=?,description=?,category=?, " +
@@ -392,7 +371,9 @@ exports.updateProduct = function (product) {
             console.log(err);
             reject(err);
           } else {
-            console.log("Product " + product.product_id + " modified successfully");
+            console.log(
+              "Product " + product.product_id + " modified successfully"
+            );
             const p = {
               product_id: product.product_id,
               name: product.name,
@@ -560,7 +541,8 @@ exports.getAllOrders = function () {
 
 exports.getOrdersAndWallets = function () {
   return new Promise((resolve, reject) => {
-    const sql = "SELECT O.order_id, " +
+    const sql =
+      "SELECT O.order_id, " +
       "U.wallet_balance, SUM(P.price*O.quantity) AS orderCost " +
       "FROM ORDERS AS O, USER AS U, PRODUCT AS P " +
       "WHERE O.ref_user = U.user_id AND O.ref_product = P.product_id AND O.status=? " +
@@ -570,7 +552,7 @@ exports.getOrdersAndWallets = function () {
       else if (rows === undefined || rows.length === 0) {
         reject(null);
       } else {
-        rows = rows.filter((e) => e.orderCost > e.wallet_balance)
+        rows = rows.filter((e) => e.orderCost > e.wallet_balance);
         const orders = rows.map((e) => ({
           order_id: e.order_id,
           ref_product: e.ref_product,
@@ -580,14 +562,13 @@ exports.getOrdersAndWallets = function () {
           status: e.status,
           wallet_balance: e.wallet_balance,
           price: e.price,
-          orderCost: e.orderCost
+          orderCost: e.orderCost,
         }));
         resolve(orders);
       }
     });
   });
 };
-
 
 exports.getOrdersByClientId = function (clientID) {
   return new Promise((resolve, reject) => {

@@ -1,17 +1,15 @@
 import {
+  faBars,
   faHome,
-  faList,
   faPowerOff,
   faReceipt,
   faShoppingBasket,
   faStore,
   faUser,
   faUsers,
-  faWallet,
 } from '@fortawesome/free-solid-svg-icons';
-import { IoStorefrontOutline } from 'react-icons/io5';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import {
   Badge,
   Button as BSButton,
@@ -19,9 +17,10 @@ import {
   NavDropdown,
 } from 'react-bootstrap';
 import { Link, NavLink } from 'react-router-dom';
-import img from '../../../img/undraw_profile.svg';
-import { ReactComponent as CartLogo } from '../../../img/cart-logo.svg';
+import { UserContext } from '../../../context/UserContext';
 import { ReactComponent as CartLogoXmas } from '../../../img/cart-logo-xmas.svg';
+import { ReactComponent as CartLogo } from '../../../img/cart-logo.svg';
+import img from '../../../img/undraw_profile.svg';
 import { Button } from '../../misc/';
 import Basket from '../Basket/Basket';
 import './navbar.css';
@@ -38,6 +37,9 @@ export const Navbar = ({ ...props }) => {
   } = props;
   const [showBasket, setShowBasket] = useState(false);
 
+  const { users, loading } = useContext(UserContext);
+  const farmer = user ? users.find(u => u.user_id === user.id) : '';
+
   const handleClose = () => setShowBasket(false);
   const handleShow = () => setShowBasket(true);
 
@@ -47,11 +49,145 @@ export const Navbar = ({ ...props }) => {
         bg="success"
         expand="lg"
         fixed="top"
-        className="sticky navbar-light bg-white topbar mb-4 static-top shadow flex justify-between py-0 px-0 pl-4"
+        className="sticky navbar-light bg-white topbar mb-4 static-top shadow flex justify-between py-0 px-0"
         variant="dark"
       >
-        <div className="flex flex-grow justify-between items-center">
-          <NavbarBootstrap.Brand>
+        <div
+          className={`flex flex-grow ${
+            user ? 'justify-between' : 'justify-start lg:justify-between'
+          } items-center`}
+        >
+          <NavDropdown
+            align={'left'}
+            id="dropdown-menu-align-left"
+            className="no-arrow block lg:hidden"
+            title={
+              <Button type="outline-secondary">
+                <FontAwesomeIcon icon={faBars} />
+              </Button>
+            }
+          >
+            <NavDropdown.Item className="text-dark">
+              <NavLink
+                activeClassName="text-secondary"
+                className="text-dark no-underline"
+                exact
+                to="/"
+              >
+                <FontAwesomeIcon icon={faHome} className={'mr-2 mb-0 w-1/6'} />
+                <span className="w-5/6">Home</span>
+              </NavLink>
+            </NavDropdown.Item>
+            <NavDropdown.Item className="text-dark">
+              <NavLink
+                activeClassName="text-secondary"
+                className="text-dark no-underline"
+                to="/shop"
+              >
+                <FontAwesomeIcon
+                  icon={faShoppingBasket}
+                  className={'mr-2 mb-0 w-1/6'}
+                />
+                <span className="w-5/6">Shop</span>
+              </NavLink>
+            </NavDropdown.Item>
+            {user && user.userType === 'Employee' && (
+              <>
+                <NavDropdown.Item className="text-dark">
+                  <NavLink
+                    ac
+                    activeClassName="text-secondary"
+                    className="text-dark no-underline"
+                    to="/clients"
+                  >
+                    <FontAwesomeIcon
+                      icon={faUsers}
+                      className={'mr-2 mb-0 w-1/6'}
+                    />
+                    <span className="w-5/6">Clients</span>
+                  </NavLink>
+                </NavDropdown.Item>
+                <NavDropdown.Item className="text-dark">
+                  <NavLink
+                    activeClassName="text-secondary"
+                    className="text-dark no-underline"
+                    to="/orders"
+                  >
+                    <FontAwesomeIcon
+                      icon={faReceipt}
+                      className={'mr-2 mb-0 w-1/6'}
+                    />
+                    <span className="w-5/6">Orders</span>
+                  </NavLink>
+                </NavDropdown.Item>
+              </>
+            )}
+            {user && user.userType === 'Farmer' && (
+              <>
+                <NavDropdown.Item className="text-dark">
+                  <NavLink
+                    ac
+                    activeClassName="text-secondary"
+                    className="text-dark no-underline"
+                    to="/myShop"
+                  >
+                    <FontAwesomeIcon
+                      icon={faStore}
+                      className={'mr-2 mb-0 w-1/6'}
+                    />
+                    <span className="w-5/6">My Shop</span>
+                  </NavLink>
+                </NavDropdown.Item>
+                {/* <NavDropdown.Item className="text-dark">
+                  <NavLink
+                    activeClassName="text-secondary"
+                    className="text-dark no-underline"
+                    to="/myOrders"
+                  >
+                    <FontAwesomeIcon
+                      icon={faReceipt}
+                      className={'mr-2 mb-0 w-1/6'}
+                    />
+                    <span className="w-5/6">My Orders</span>
+                  </NavLink>
+                </NavDropdown.Item> */}
+              </>
+            )}
+
+            {!user && (
+              <>
+                <NavDropdown.Divider />
+                <NavDropdown.Item className="text-dark">
+                  <NavLink
+                    ac
+                    activeClassName="text-secondary"
+                    className="text-dark no-underline"
+                    to="/login"
+                  >
+                    <FontAwesomeIcon
+                      icon={faUsers}
+                      className={'mr-2 mb-0 w-1/6'}
+                    />
+                    <span className="w-5/6">Login</span>
+                  </NavLink>
+                </NavDropdown.Item>
+                <NavDropdown.Item className="text-dark">
+                  <NavLink
+                    activeClassName="text-secondary"
+                    className="text-dark no-underline"
+                    to="/register"
+                  >
+                    <FontAwesomeIcon
+                      icon={faReceipt}
+                      className={'mr-2 mb-0 w-1/6'}
+                    />
+                    <span className="w-5/6">Register</span>
+                  </NavLink>
+                </NavDropdown.Item>
+              </>
+            )}
+          </NavDropdown>
+          <NavbarBootstrap.Brand className="m-0 lg:ml-4 ">
             <Link
               id="navbar-logo"
               to="/"
@@ -61,7 +197,7 @@ export const Navbar = ({ ...props }) => {
               SolidarityBay
             </Link>
           </NavbarBootstrap.Brand>
-          <div className="m-0 p-0 d-flex align-items-center">
+          <div className="m-0 p-0 lg:flex align-items-center  hidden">
             <NavLink
               activeClassName="text-secondary"
               className="navbar-item-spg"
@@ -84,14 +220,6 @@ export const Navbar = ({ ...props }) => {
             </NavLink>
             {user && user.userType === 'Employee' && (
               <>
-                {/* <NavLink
-                  activeClassName="text-secondary"
-                  className="navbar-item-spg"
-                  to="/farmers"
-                >
-                  <FontAwesomeIcon icon={faStore} className={'mr-2 mb-0'} />
-                  Farmers
-                </NavLink> */}
                 <NavLink
                   activeClassName="text-secondary"
                   ariaLabel="nav-clients"
@@ -116,25 +244,17 @@ export const Navbar = ({ ...props }) => {
               <>
                 <NavLink
                   activeClassName="text-secondary"
-                  className="navbar-item-spg d-flex items-center"
+                  className="navbar-item-spg"
                   to="/myShop"
                 >
-                  <IoStorefrontOutline className={'mr-2 mb-0 text-lg'} />
+                  <FontAwesomeIcon icon={faStore} className={'mr-2 mb-0'} />
                   My Shop
-                </NavLink>
-                <NavLink
-                  activeClassName="text-secondary"
-                  className="navbar-item-spg"
-                  to="/myOrders"
-                >
-                  <FontAwesomeIcon icon={faReceipt} className={'mr-2 mb-0'} />
-                  My Orders
                 </NavLink>
               </>
             )}
           </div>
-          {!user ? (
-            <div className="flex items-center mr-4">
+          {!user && !loading ? (
+            <div className="hidden lg:flex items-center mr-4">
               <Button
                 type="warning"
                 ariaLabel="btn-register"
@@ -154,11 +274,17 @@ export const Navbar = ({ ...props }) => {
               align={'left'}
               id="dropdown-menu-align-left"
               aria-label="navdropdown"
-              className="nav-item dropdown no-arrow mr-4"
+              className="nav-item dropdown no-arrow sm:mr-4"
               title={
                 <>
                   <span className="mr-2 text-gray-500 small d-none d-sm-block uppercase">
-                    <strong>{user.name}</strong>
+                    <strong>
+                      {user && user.type === ('Client' || 'Employee')
+                        ? user.name
+                        : farmer
+                        ? farmer.company_name
+                        : ''}
+                    </strong>
                   </span>
                   <img
                     alt=""
@@ -189,25 +315,23 @@ export const Navbar = ({ ...props }) => {
         </div>
         <BSButton
           id="btn-basket"
-          className="d-flex flex-row justify-content-center align-items-center"
+          className="d-flex flex-row justify-content-center align-items-center px-6 md:px-10"
           onClick={handleShow}
         >
           <CartLogo
             id="basket-icon"
             className={
               animateBasket
-                ? 'logo-icon mr-3 anim-basket-icon'
-                : 'logo-icon mr-3'
+                ? 'logo-icon md:mr-3 anim-basket-icon'
+                : 'logo-icon md:mr-3'
             }
             onAnimationEnd={() => setAnimateBasket(false)}
           />
-          Your Basket
-          {basketProducts.length > 0 ? (
+          <span className="hidden md:block">Your Basket</span>
+          {basketProducts.length > 0 && (
             <Badge pill bg="light" text="dark" className="ml-3">
               {basketProducts.reduce((accum, item) => accum + item.quantity, 0)}
             </Badge>
-          ) : (
-            <></>
           )}
         </BSButton>
       </NavbarBootstrap>

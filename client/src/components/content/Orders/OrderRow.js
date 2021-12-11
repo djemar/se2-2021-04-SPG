@@ -1,7 +1,9 @@
+import { faCog, faList } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import ModalConfirmation from './ModalConfirmation';
 import ProductsModal from './ProductsModal';
-import { useState } from 'react';
 
 export const OrderRow = ({ ...props }) => {
   const {
@@ -29,7 +31,20 @@ export const OrderRow = ({ ...props }) => {
       <tr>
         <td className="text-center align-middle">{order_id}</td>
         <td className="text-center align-middle">{ref_user}</td>
-        <td className="text-center align-middle">{date_order}</td>
+        <td className="text-center align-middle lg:table-cell hidden">
+          {date_order}
+        </td>
+        <td className="text-center align-middle md:table-cell hidden">
+          € {tot_price}
+        </td>
+        <td className="text-center align-middle">
+          <span
+            className={`
+              h-6 w-6 xs:w-min xs:px-3 xs:py-0.5 inline-flex items-center xs:inline text-sm rounded-xl text-white ${styleFromStatus[status]}`}
+          >
+            <span className="xs:inline hidden">{status}</span>
+          </span>
+        </td>
         <td className="text-center align-middle">
           <Button
             className="buttons-order-details mx-1"
@@ -37,16 +52,9 @@ export const OrderRow = ({ ...props }) => {
             aria-label="button-details"
             onClick={() => setDetails(true)}
           >
-            See details
+            <FontAwesomeIcon icon={faList} className="mx-1 sm:hidden" />
+            <span className="sm:inline hidden">See details</span>
           </Button>
-        </td>
-        <td className="text-center align-middle">€ {tot_price}</td>
-        <td className="text-center align-middle">
-          <span
-            className={`text-white text-center px-3 py-0.5 order-status ${styleFromStatus[status]}`}
-          >
-            {status}
-          </span>
         </td>
         {isManager && (
           <td className="text-center align-middle">
@@ -58,7 +66,10 @@ export const OrderRow = ({ ...props }) => {
               onClick={() => setShow(true)}
               disabled={status === 'delivered'}
             >
-              Update Status
+              <FontAwesomeIcon icon={faCog} className="mx-1 md:hidden" />
+              <span className="md:inline hidden">
+                {status === 'delivered' ? 'Delivered' : 'Deliver'}
+              </span>
             </Button>
           </td>
         )}
@@ -78,6 +89,7 @@ export const OrderRow = ({ ...props }) => {
         date_order={date_order}
         products_and_qnt={products_and_qnt}
         status={status}
+        tot_price={tot_price}
       />
     </>
   );

@@ -1,18 +1,12 @@
-import { useContext, useEffect, useState } from 'react';
-import { Card } from 'react-bootstrap';
+import { useContext } from 'react';
 import Table from 'react-bootstrap/Table';
-import API from '../../../API';
 import { UserContext } from '../../../context/UserContext';
-import Breadcrumbs from '../../misc/Breadcrumbs';
+import Page from '../../misc/Page';
 import OrderRow from './OrderRow';
 import './Orders.css';
 
 export const Orders = ({ ...props }) => {
-  const { orders, products, loading, dirty, setDirty } =
-    useContext(UserContext);
-
-  const [dirtyProd, setDirtyProd] = useState(true);
-  const [loadingProd, setLoadingProd] = useState(true);
+  const { orders, loading, setDirty } = useContext(UserContext);
 
   const mappedOrders = orders.map((order, index) => (
     <OrderRow
@@ -28,79 +22,29 @@ export const Orders = ({ ...props }) => {
     />
   ));
 
-  /* useEffect(() => {
-    const getAllProducts = async () => {
-      const products = await API.getAllProducts();
-      setProducts(products);
-    };
-
-    if (dirtyProd) {
-      setLoadingProd(true);
-      getAllProducts().then(() => {
-        setLoadingProd(false);
-        setDirtyProd(false);
-      });
-    }
-  }, [dirtyProd]);
-
-  useEffect(() => {
-    const getAllOrders = async () => {
-      const orders = await API.getAllOrders();
-      if (!loadingProd && products && orders) {
-        const mappedOrders = API.mapOrders(orders, products);
-        setOrders(mappedOrders);
-      }
-    };
-
-    if (dirty || dirtyProd) {
-      setLoading(true);
-      getAllOrders().then(() => {
-        setLoading(false);
-        setDirty(false);
-      });
-    }
-  }, [dirtyProd, dirty]); */
-
   return (
-    <div className="flex flex-column justify-start">
-      <div className="flex flex-none justify-start pb-4">
-        <Breadcrumbs />
-      </div>
-      <div className="flex flex-grow justify-between">
-        <div className="flex w-100 h-100 px-3">
-          <Card className="spg-box shadow py-0">
-            <Card.Title className="flex items-center justify-center text-center w-100 text-3xl font-bold text-white spg-box-title">
-              Orders
-              <span className="font-normal text-xl flex items-end ml-2">
-                (#{orders ? orders.length : '0'})
-              </span>
-            </Card.Title>
-            <Card.Body className="w-100 h-100 p-0">
-              <Table borderless responsive="md" striped>
-                <thead>
-                  <tr>
-                    <th className="text-center">Order ID</th>
-                    <th className="text-center">Ordering user</th>
-                    <th className="text-center">Date</th>
-                    <th className="text-center">Ordered products</th>
-                    <th className="text-center">TOT price</th>
-                    <th className="text-center">Status</th>
-                    <th />
-                  </tr>
-                </thead>
-                <tbody>
-                  {loading ? (
-                    <h3>Please wait, we're loading your orders...</h3>
-                  ) : (
-                    mappedOrders
-                  )}
-                </tbody>
-              </Table>
-            </Card.Body>
-          </Card>
-        </div>
-      </div>
-    </div>
+    <Page title="Orders" subtitle={`(#${orders ? orders.length : '0'})`}>
+      <Table borderless responsive="md" striped>
+        <thead>
+          <tr>
+            <th className="text-center">Order ID</th>
+            <th className="text-center">Client</th>
+            <th className="text-center lg:table-cell hidden">Date</th>
+            <th className="text-center">Ordered products</th>
+            <th className="text-center md:table-cell hidden">TOT price</th>
+            <th className="text-center">Status</th>
+            <th />
+          </tr>
+        </thead>
+        <tbody>
+          {loading ? (
+            <h3>Please wait, we're loading your orders...</h3>
+          ) : (
+            mappedOrders
+          )}
+        </tbody>
+      </Table>
+    </Page>
   );
 };
 

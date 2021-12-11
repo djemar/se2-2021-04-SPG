@@ -11,11 +11,11 @@ import UserContextProvider from './context/UserContext';
 
 ReactDOM.render(
   <React.StrictMode>
-    <UserContextProvider>
-      <TimeContextProvider>
+    <TimeContextProvider>
+      <UserContextProvider>
         <App />
-      </TimeContextProvider>
-    </UserContextProvider>
+      </UserContextProvider>
+    </TimeContextProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

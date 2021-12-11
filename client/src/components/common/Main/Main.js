@@ -1,15 +1,12 @@
-import { useEffect, useState } from 'react';
-import Alert from 'react-bootstrap/Alert';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import API from '../../../API';
 import Clients from '../../content/Clients/Clients.js';
 import Orders from '../../content/Orders/Orders.js';
 import User from '../../content/User/User.js';
 import { categories } from '../../fakedata.js';
 import { Login } from '../Login';
+import MyShop from '../MyShop/MyShop';
 import Register from '../Register/Register.js';
 import Shop from '../Shop/Shop';
-import MyShop from '../MyShop/MyShop';
 
 export const Main = ({ ...props }) => {
   const {

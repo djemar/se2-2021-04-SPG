@@ -1,13 +1,13 @@
 import dayjs from 'dayjs';
 import { useContext, useEffect, useState } from 'react';
 import {
+  Alert,
   Button as ButtonBS,
   Card,
   Col,
   Form,
   Modal,
   Row,
-  Alert,
 } from 'react-bootstrap';
 import { IoAdd } from 'react-icons/io5';
 import { MdEdit } from 'react-icons/md';
@@ -16,7 +16,7 @@ import API from '../../../API.js';
 import { TimeContext } from '../../../context/TimeContext';
 import { UserContext } from '../../../context/UserContext';
 import { Spinner } from '../../misc';
-import Breadcrumbs from '../../misc/Breadcrumbs';
+import Page from '../../misc/Page';
 import ProductCard from '../ProductCard/ProductCard';
 import './myshop.css';
 
@@ -47,8 +47,8 @@ export const MyShop = ({ ...props }) => {
   const { products, user } = useContext(UserContext);
   const [show, setShow] = useState(0);
   const [myProduct, setMyProduct] = useState([]);
-  const { dateState, setDateState, addingProductsDays } =
-    useContext(TimeContext);
+  const { dateState, addingProductsDays } = useContext(TimeContext);
+  const { setDirty, loadingProd } = useContext(UserContext);
   const [start_date, setStart] = useState('');
   const [end_date, setEnd] = useState('');
 
@@ -56,7 +56,6 @@ export const MyShop = ({ ...props }) => {
 
   const insertProduct = () => {
     API.insertProduct(
-      addedProduct.pid,
       addedProduct.name,
       addedProduct.description,
       'Dairy',
@@ -67,8 +66,10 @@ export const MyShop = ({ ...props }) => {
       addedProduct.image_path,
       start_date,
       end_date
-    );
+    ).then(setDirty(true));
   };
+
+  //useEffect(() => {}, [loadingProd]);
 
   const handleClose = () => {
     API.editProduct(
@@ -83,7 +84,7 @@ export const MyShop = ({ ...props }) => {
       prod.img,
       start_date,
       end_date
-    );
+    ).then(setDirty(true));
     setShow(false);
   };
   const handleShow = () => setShow(true);
@@ -117,13 +118,12 @@ export const MyShop = ({ ...props }) => {
       case 0:
         startDate = dayjs(dateState).add(6, 'day').format('YYYY-MM-DD');
         break;
+      default:
+        break;
     }
 
     let endDate = dayjs(startDate).add(1, 'day').format('YYYY-MM-DD');
-
     const dates = { startDate, endDate };
-
-    console.log(dates);
     return dates;
   }
 
@@ -185,7 +185,8 @@ export const MyShop = ({ ...props }) => {
         )) ||
       [];
     setMyProduct(mappedProduct);
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loadingProd]);
 
   const handleChange = (value, attr, flag) => {
     let tmpProd;
@@ -342,14 +343,10 @@ export const MyShop = ({ ...props }) => {
           </ButtonBS>
         </Modal.Footer>
       </Modal>
-
-      <div className="flex flex-column justify-start">
-        <div className="flex flex-none justify-start pb-4">
-          <Breadcrumbs />
-        </div>
-        <>
-          {addingProductsDays ? (
-            <div className="flex flex-grow justify-between">
+      <Page title="My Shop">
+        {addingProductsDays ? (
+          <>
+            <div className="flex flex-grow justify-between pt-4">
               <div className="col-8">
                 <Card>
                   <Card.Body className="items-center">
@@ -494,10 +491,6 @@ export const MyShop = ({ ...props }) => {
                           />
                         </Form.Group>
                       </Row>
-
-                      {/*                 <Button variant="primary" type="submit">
-                  Submit
-                </Button> */}
                     </Form>
                   </Card.Body>
                 </Card>
@@ -506,7 +499,7 @@ export const MyShop = ({ ...props }) => {
                 <ProductCard
                   key={addedProduct.product_id}
                   pid={addedProduct.product_id}
-                  fid={addedProduct.ref_farmer}
+                  fid={user.id}
                   name={addedProduct.name}
                   price={addedProduct.price}
                   description={addedProduct.description}
@@ -528,33 +521,36 @@ export const MyShop = ({ ...props }) => {
                 </ButtonBS>
               </div>
             </div>
+          </>
+        ) : (
+          <div className="justify-content-center font-ibm mx-auto my-auto pt-4">
+            <Alert variant="warning" className="mx-4">
+              <strong>
+                <i>Wuoops!</i>
+              </strong>
+              <br />
+              Products for next week can not be added for now, come here{' '}
+              <strong>after Tuesday, 9 AM</strong>
+            </Alert>
+          </div>
+        )}
+      </Page>
+      <span className="mx-10 mt-10 text-4xl font-bold">Week Preview</span>
+      <span className="text-2xl ml-10">
+        {myProduct &&
+          `${myProduct.length || 0} Products available until ${dayjs(
+            getTimeframe().endDate
+          ).format('DD/MM/YYYY')}`}
+      </span>
+      <div className="col">
+        <div className="flex flex-none justify-start px-8 items-end">
+          {myProduct ? (
+            <Row>{myProduct}</Row>
           ) : (
-            <div className="justify-content-center font-ibm mx-auto my-auto">
-              <Alert variant="warning" className="mx-4">
-                <strong>
-                  <i>Wuoops!</i>
-                </strong>
-                <br />
-                Products for next week can not be added for now, come here{' '}
-                <strong>after Tuesday, 9 AM</strong>
-              </Alert>
+            <div className="vh-100 d-flex align-items-center">
+              <Spinner />
             </div>
           )}
-        </>
-        <span className="mx-10 mt-10 text-4xl font-bold">My Shop</span>
-        <span className="text-2xl ml-10">
-          {myProduct && `(${myProduct.length || 0} products available)`}
-        </span>
-        <div className="col">
-          <div className="flex flex-none justify-start px-8 items-end">
-            {myProduct ? (
-              <Row>{myProduct}</Row>
-            ) : (
-              <div className="vh-100 d-flex align-items-center">
-                <Spinner />
-              </div>
-            )}
-          </div>
         </div>
       </div>
     </>

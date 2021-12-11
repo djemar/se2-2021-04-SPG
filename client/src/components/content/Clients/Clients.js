@@ -4,6 +4,7 @@ import Breadcrumbs from '../../misc/Breadcrumbs';
 import { ClientRow } from '.';
 import './Clients.css';
 import API from '../../../API';
+import Page from '../../misc/Page';
 
 export const Clients = ({ ...props }) => {
   const [users, setUsers] = useState([]);
@@ -50,48 +51,36 @@ export const Clients = ({ ...props }) => {
   }, [dirty]);
 
   return (
-    <div className="flex flex-column justify-start">
-      <div className="flex flex-none justify-start pb-4">
-        <Breadcrumbs />
-      </div>
-      <div className="flex flex-grow justify-between">
-        <div className="flex w-100 h-100 px-3">
-          <Card className="spg-box shadow py-0">
-            <Card.Title className="flex items-center justify-center text-center w-100 text-3xl font-bold text-white spg-box-title">
-              Clients
-              <span className="font-normal text-xl flex items-end ml-2">
-                (#{users.length})
-              </span>
-            </Card.Title>
-            <Card.Body className="w-100 h-100 p-0">
-              <Table
-                borderless
-                responsive="md"
-                striped
-                className="table-auto text-center"
-              >
-                <thead>
-                  <tr>
-                    <th>Id</th>
-                    <th>Name</th>
-                    <th>Surname</th>
-                    <th>Email</th>
-                    <th>Wallet</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {loading ? (
-                    <h3>Please wait, we're loading your clients...</h3>
-                  ) : (
-                    mapClients()
-                  )}
-                </tbody>
-              </Table>
-            </Card.Body>
-          </Card>
-        </div>
-      </div>
-    </div>
+    <>
+      <Page
+        title="Clients"
+        subtitle={`(#${users.filter(u => u.Type === 'Client').length})`}
+      >
+        <Table
+          borderless
+          responsive="md"
+          striped
+          className="table-auto text-center"
+        >
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Name</th>
+              <th>Surname</th>
+              <th className="hidden md:table-cell">Email</th>
+              <th className="hidden sm:table-cell">Wallet</th>
+            </tr>
+          </thead>
+          <tbody>
+            {loading ? (
+              <h3>Please wait, we're loading your clients...</h3>
+            ) : (
+              mapClients()
+            )}
+          </tbody>
+        </Table>
+      </Page>
+    </>
   );
 };
 

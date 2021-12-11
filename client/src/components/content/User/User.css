@@ -9,7 +9,7 @@
   --success: #1cc88a;
   --info: #36b9cc;
   --warning: #f6c23e;
-  --danger: #fe7171;
+  --danger: #f03d3d;
   --light: #f8f9fc;
   --dark: #5a5c69;
   --breakpoint-xs: 0;
@@ -60,6 +60,26 @@
   box-shadow: 0 0 0 0.2rem rgba(156, 58, 16, 0.5);
 }
 
-.user-divider {
+.user-divider-left {
   border-left: 1px solid #e3e6f0;
+}
+
+.user-divider-top {
+  border-top: 1px solid #e3e6f0;
+}
+
+.order-delivered {
+  background-color: var(--success);
+}
+
+.order-approved {
+  background-color: var(--primary);
+}
+
+.order-pending {
+  background-color: var(--warning);
+}
+
+.order-pending-cancellation{
+  background-color: var(--danger);
 }

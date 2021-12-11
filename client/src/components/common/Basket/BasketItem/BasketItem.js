@@ -1,16 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Card } from 'react-bootstrap';
 import { BsTrashFill } from 'react-icons/bs';
 import { IoStorefrontOutline } from 'react-icons/io5';
+import API from '../../../../API';
 import '../../../../App.css';
 import QuantitySelector from '../../../misc/QuantitySelector';
 import './basketItem.css';
-import API from '../../../../API';
 
 const BasketItem = ({ ...props }) => {
-  const { product, basketProducts, setBasketProducts, addSinglePrice } = props;
-  const { pid, name, description, quantity, unit, price, availability, setAv } =
-    product;
+  const { product, basketProducts, setBasketProducts } = props;
+  const { pid, name, quantity, unit, price, availability } = product;
   const [totUnitPrice, setTotUnitPrice] = useState(price * quantity);
   const [qnt, setQnt] = useState(quantity);
   const [users, setUsers] = useState([]);
@@ -26,12 +25,14 @@ const BasketItem = ({ ...props }) => {
 
   useEffect(() => {
     setTotUnitPrice(price * qnt);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [basketProducts, qnt]);
 
   useEffect(() => {
     let p = basketProducts.find(x => x.pid === pid);
     if (p.orderQuantity === undefined) setQnt(quantity);
     else setQnt(p.orderQuantity);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [basketProducts]);
 
   useEffect(() => {
@@ -49,6 +50,7 @@ const BasketItem = ({ ...props }) => {
     users.forEach(x => {
       if (x.user_id === product.fid) setFarmerName(x.name);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dirty]);
   return (
     <>

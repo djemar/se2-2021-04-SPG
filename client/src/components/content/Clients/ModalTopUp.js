@@ -16,12 +16,13 @@ export const ModalTopUp = ({ ...props }) => {
 
   const handleSubmit = async event => {
     event.preventDefault();
-    let val = parseFloat(amount).toFixed(2);
+    //let val = parseFloat(amount).toFixed(2);
     try {
       const res = await API.updateClientWallet(props.user_id, amount);
-      console.log(res);
-      props.setDirty(true);
-      handleClose();
+      if (res) {
+        props.setDirty(true);
+        handleClose();
+      }
     } catch (err) {
       console.error(err.message);
     }
