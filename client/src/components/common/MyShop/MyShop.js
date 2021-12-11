@@ -44,52 +44,61 @@ export const MyShop = ({ ...props }) => {
   const [addedProduct, setAddedProduct] = useState(product);
   const { products, user } = useContext(UserContext);
   const [show, setShow] = useState(0);
-  useEffect(() => {
-    console.log(products);
-  }, []);
+  const [myProduct, setMyProduct] = useState([]);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const mappedProduct =
-    (products &&
-      products.map(
-        (
-          {
-            product_id,
-            ref_user,
-            name,
-            price,
-            description,
-            category,
-            unit_of_measure,
-            image_path,
-            availability,
-          },
-          index
-        ) => (
-          <Col key={index} className="pl-10 pr-0 pt-5 pb-5 flex-none w-auto">
-            <ProductCard
-              key={product_id}
-              pid={product_id}
-              fid={ref_user}
-              name={name}
-              price={price}
-              description={description}
-              category={category}
-              unit={unit_of_measure}
-              img={image_path}
-              availability={availability}
-              basketProducts={[]}
-              setBasketProducts={[]}
-              setAnimateBasket={0}
-              flagAddOrEdit={1}
-              handleShow={handleShow}
-            />
-          </Col>
-        )
-      )) ||
-    [];
+  useEffect(() => {
+    let prodF = [];
+    //console.log(products);
+    products.forEach(x => {
+      if (x.ref_farmer === user.id) {
+        prodF.push(x);
+      }
+    });
+    //console.log(prodF);
+    const mappedProduct =
+      (prodF &&
+        prodF.map(
+          (
+            {
+              product_id,
+              ref_user,
+              name,
+              price,
+              description,
+              category,
+              unit_of_measure,
+              image_path,
+              availability,
+            },
+            index
+          ) => (
+            <Col key={index} className="pl-10 pr-0 pt-5 pb-5 flex-none w-auto">
+              <ProductCard
+                key={product_id}
+                pid={product_id}
+                fid={ref_user}
+                name={name}
+                price={price}
+                description={description}
+                category={category}
+                unit={unit_of_measure}
+                img={image_path}
+                availability={availability}
+                basketProducts={[]}
+                setBasketProducts={[]}
+                setAnimateBasket={0}
+                flagAddOrEdit={1}
+                handleShow={handleShow}
+              />
+            </Col>
+          )
+        )) ||
+      [];
+    setMyProduct(mappedProduct);
+  }, []);
 
   const handleChange = (value, attr) => {
     let tmpProd = { ...addedProduct };
@@ -413,7 +422,7 @@ export const MyShop = ({ ...props }) => {
               img={addedProduct.image_path}
               availability={addedProduct.availability}
               basketProducts={[]}
-              preview={true}
+              preview={false}
               // setBasketProducts={()}
               //setAnimateBasket={()}
             />
@@ -425,12 +434,12 @@ export const MyShop = ({ ...props }) => {
         </div>
         <span className="mx-10 text-4xl font-bold">My Shop</span>
         <span className="text-2xl ml-10">
-          {mappedProduct && `(${mappedProduct.length || 0} products available)`}
+          {myProduct && `(${myProduct.length || 0} products available)`}
         </span>
         <div className="col">
           <div className="flex flex-none justify-start px-8 items-end"></div>
-          {mappedProduct ? (
-            <Row>{mappedProduct}</Row>
+          {myProduct ? (
+            <Row>{myProduct}</Row>
           ) : (
             <div className="vh-100 d-flex align-items-center">
               <Spinner />
