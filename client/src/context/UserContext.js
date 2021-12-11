@@ -70,20 +70,20 @@ const UserContextProvider = ({ ...props }) => {
     if (isLogged && user && products) {
       const getAllOrders = async () => {
         const orders = await API.getAllOrders();
-        const mappedOrders = API.mapOrders(
-          user.userType === 'Client'
-            ? orders.filter(o => o.ref_user === user.id)
-            : orders,
-          products
-        );
-        const sum = mappedOrders.reduce(
-          (total, o) => (total += o.tot_price),
-          0
-        );
-        setOrders(mappedOrders);
-        if (user.userType === 'Client' && sum > user.wallet_balance)
-          setAlertBalance(true);
-        else setAlertBalance(false);
+          const mappedOrders = API.mapOrders(
+            user.userType === 'Client'
+              ? orders.filter(o => o.ref_user === user.id)
+              : orders,
+            products
+          );
+          const sum = mappedOrders.reduce(
+            (total, o) => (total += o.tot_price),
+            0
+          );
+          setOrders(mappedOrders);
+          if (user.userType === 'Client' && sum > user.wallet_balance)
+            setAlertBalance(true);
+          else setAlertBalance(false);
       };
 
       getAllOrders().then(() => {

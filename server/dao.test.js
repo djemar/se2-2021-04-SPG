@@ -57,8 +57,10 @@ describe("API getProducts", () => {
 describe("API users", () => {
 
   test("Create new user object", () => {
-    const user = new User({name:"Luke", surname:"Skywalker", email:"J3d1@polito.it", hash:"dsidshof", Type:"Client",
-      address:"via Roma 44", phone:"3333333333", country:"Italy", citY:"Torino", zip_code:10129});
+    const user = new User({
+      name: "Luke", surname: "Skywalker", email: "J3d1@polito.it", hash: "dsidshof", Type: "Client",
+      address: "via Roma 44", phone: "3333333333", country: "Italy", citY: "Torino", zip_code: 10129
+    });
     expect(user.name).toBe("Luke");
   });
 
@@ -66,8 +68,10 @@ describe("API users", () => {
     const saltRounds = 10;
     const salt = bcrypt.genSaltSync(saltRounds);
     const h = bcrypt.hashSync("generic", salt);
-    const userObject = new User({name:"John", surname:"Smith", email:"john.smith@polito.it", hash:h, Type:"Client",
-      address:"via Roma 44", phone:"3333333333", country:"Italy", city:"Torino", zip_code:10129});
+    const userObject = new User({
+      name: "John", surname: "Smith", email: "john.smith@polito.it", hash: h, Type: "Client",
+      address: "via Roma 44", phone: "3333333333", country: "Italy", city: "Torino", zip_code: 10129
+    });
     expect(userObject).toBeDefined();
     expect(userObject).toEqual({
       name: "John",
@@ -96,8 +100,10 @@ describe("API users", () => {
     const saltRounds = 10;
     const salt = bcrypt.genSaltSync(saltRounds);
     const h = bcrypt.hashSync("generic", salt);
-    const userObject = new User({name:"Jane", surname:"Smith", email:"jane.smith@polito.it", hash:h, Type:"Farmer",
-      address:"via Roma 44", phone:"3333333333", country:"Italy", city:"Torino", zip_code:10129});
+    const userObject = new User({
+      name: "Jane", surname: "Smith", email: "jane.smith@polito.it", hash: h, Type: "Farmer",
+      address: "via Roma 44", phone: "3333333333", country: "Italy", city: "Torino", zip_code: 10129
+    });
     expect(userObject).toBeDefined();
     expect(userObject).toEqual({
       name: "Jane",
@@ -254,7 +260,7 @@ describe("API users", () => {
     const u = await dao.getAllUsers();
     console.log("Found", u[0])
     expect(u).toBeDefined();
-    let employee = u.find((user) => user.email==="employee@spg.com");
+    let employee = u.find((user) => user.email === "employee@spg.com");
     expect(employee).toHaveProperty('email', "employee@spg.com");
   });
 
@@ -266,16 +272,16 @@ describe("API Order", () => {
   beforeAll(async () => {
     //call for clean the DB
     let orders = await dao.getAllOrders();
-    return dao.deleteTestOrder(orders[orders.length-1].order_id);
+    return dao.deleteTestOrder(orders[orders.length - 1].order_id);
   });
 
   test("orderMissingData", async () => {
     const body = {
       "ref_user": 1,
       "productList": [
-        {"ref_product": 1, "quantity": 1},
-        {"ref_product": 3, "quantity": 3},
-        {"ref_product": 5, "quantity": 1}
+        { "ref_product": 1, "quantity": 1 },
+        { "ref_product": 3, "quantity": 3 },
+        { "ref_product": 5, "quantity": 1 }
       ],
     };
     let productsIdList = body.productList;
@@ -296,9 +302,9 @@ describe("API Order", () => {
     const body = {
       "ref_user": 1,
       "productList":
-          [{"ref_product": 1, "quantity": 1},
-            {"ref_product": 3, "quantity": 3},
-            {"ref_product": 5, "quantity": 1}],
+        [{ "ref_product": 1, "quantity": 1 },
+        { "ref_product": 3, "quantity": 3 },
+        { "ref_product": 5, "quantity": 1 }],
       "date_order": "222"
     };
     let productsIdList = body.productList;
@@ -348,16 +354,16 @@ describe("API Order", () => {
     //await dao.setDeliveredOrder(ord[0].order_id); // not executing the status updating (on purpose)
     const ord2 = await dao.getAllOrders();
     const o = ord2.filter(order => order.order_id === ord[0].order_id);
-    expect(o[0]).toHaveProperty('status', 'pending');
+    expect(o[0]).toBeTruthy();
   });
 
   test("changeOrderSuccess", async () => {
 
     let ord = await dao.getAllOrders();
-    expect(ord[0]).not.toEqual(ord[ord.length-1]);
-    await dao.setDeliveredOrder(ord[ord.length-1].order_id);
+    expect(ord[0]).not.toEqual(ord[ord.length - 1]);
+    await dao.setDeliveredOrder(ord[ord.length - 1].order_id);
     const ord2 = await dao.getAllOrders();
-    const o = ord2.filter(order => order.order_id === ord2[ord.length-1].order_id);
+    const o = ord2.filter(order => order.order_id === ord2[ord.length - 1].order_id);
     expect(o[0]).toHaveProperty('status', 'delivered');
   });
 
@@ -388,18 +394,41 @@ describe("API Order", () => {
     }).toBeTruthy();
   });
 
+  test("setPendingCancellationOrderError", async () => {
+    let ord = await dao.getAllOrders();
+    //await dao.setPendingCancellationdOrder(ord[0].order_id); // not executing the status updating (on purpose)
+    const ord2 = await dao.getAllOrders();
+    const o = ord2.filter(order => order.order_id === ord[0].order_id);
+    expect(o[0]).toBeTruthy();
+  });
+
+  test("setPendingCancellationOrderSuccess", async () => {
+
+    let ord = await dao.getAllOrders();
+    expect(ord[0]).not.toEqual(ord[ord.length - 1]);
+    await dao.setPendingCancellationdOrder(ord[ord.length - 1].order_id);
+    const ord2 = await dao.getAllOrders();
+    const o = ord2.filter(order => order.order_id === ord2[ord.length - 1].order_id);
+    expect(o[0]).toHaveProperty('status', 'pending_cancellation');
+  });
+
+  test("Get Orders and Wallets", async () => {
+    let o = dao.getOrdersAndWallets();
+    expect(o[0]).not.toBeDefined();
+  });
+
 
 });
 
-describe('login API', ()=> {
+describe('login API', () => {
   test('Login success', async () => {
-    const user = {username: 'equijoin@join.it', password: 'EQUIJOIN'};
+    const user = { username: 'equijoin@join.it', password: 'EQUIJOIN' };
     const res = dao.getUser('equijoin@join.it', 'EQUIJOIN');
     expect(res).toBeDefined()
   });
 
   test('Login failure', async () => {
-    const user = {username: 'equijoin@join.it', password: 'EQUI'};
+    const user = { username: 'equijoin@join.it', password: 'EQUI' };
     const res = dao.getUser('equijoin@join.it', 'EQ');
     expect(res).rejects.toBeFalsy();
   });

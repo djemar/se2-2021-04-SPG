@@ -414,287 +414,331 @@ app.post(
 );
 
 app.post(
-    "/api/new-user",
-    body("name")
-        .exists({ checkNull: true })
-        .bail()
-        .notEmpty()
-        .bail()
-        .isString()
-        .bail(),
-    body("surname")
-        .exists({ checkNull: true })
-        .bail()
-        .notEmpty()
-        .bail()
-        .isString()
-        .bail(),
-    body("email")
-        .exists({ checkNull: true })
-        .bail()
-        .notEmpty()
-        .bail()
-        .isEmail()
-        .bail(),
-    body("hash")
-        .exists({ checkNull: true })
-        .bail()
-        .notEmpty()
-        .bail()
-        .isString()
-        .bail(),
-    body("Type")
-        .exists({ checkNull: true })
-        .bail()
-        .notEmpty()
-        .bail()
-        .isString()
-        .bail()
-        .custom((value) => {
-            return !(
-                value !== "Client" &&
-                value !== "Farmer" &&
-                value !== "Employee" &&
-                value !== "Manager"
-            );
-        })
-        .bail(),
-    body("address")
-        .exists({ checkNull: true })
-        .bail()
-        .notEmpty()
-        .bail()
-        .isString()
-        .bail(),
-    body("phone")
-        .exists({ checkNull: true })
-        .bail()
-        .notEmpty()
-        .bail()
-        .isString()
-        .bail(),
-    body("country")
-        .exists({ checkNull: true })
-        .bail()
-        .notEmpty()
-        .bail()
-        .isString()
-        .bail(),
-    body("city")
-        .exists({ checkNull: true })
-        .bail()
-        .notEmpty()
-        .bail()
-        .isString()
-        .bail(),
-    body("zip_code")
-        .exists({ checkNull: true })
-        .bail()
-        .notEmpty()
-        .bail()
-        .isInt()
-        .bail(),
-    async (req, res) => {
-        const result = validationResult(req);
-        if (!result.isEmpty())
-            res.status(400).json({
-                info: "The server cannot process the request",
-                error: result.array()[0].msg,
-                valueReceived: result.array()[0].value,
-            });
-        else {
-            await dao
-                .insertUser(req.body)
-                .then((user) => res.json(user))
-                .catch((err) => res.status(503).json(dbErrorObj));
-        }
+  "/api/new-user",
+  body("name")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isString()
+    .bail(),
+  body("surname")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isString()
+    .bail(),
+  body("email")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isEmail()
+    .bail(),
+  body("hash")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isString()
+    .bail(),
+  body("Type")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isString()
+    .bail(),
+  body("address")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isString()
+    .bail(),
+  body("phone")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isString()
+    .bail(),
+  body("country")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isString()
+    .bail(),
+  body("city")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isString()
+    .bail(),
+  body("zip_code")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isInt()
+    .bail(),
+  async (req, res) => {
+    const result = validationResult(req);
+    if (!result.isEmpty())
+      res.status(400).json({
+        info: "The server cannot process the request",
+        error: result.array()[0].msg,
+        valueReceived: result.array()[0].value,
+      });
+    else {
+      await dao
+        .insertUser(req.body)
+        .then((user) => res.json(user))
+        .catch((err) => res.status(503).json(dbErrorObj));
     }
+  }
 );
 
 app.post(
-    "/api/new-product",
-    body("name")
-        .exists({ checkNull: true })
-        .bail()
-        .notEmpty()
-        .bail()
-        .isString()
-        .bail(),
-    body("description")
-        .exists({ checkNull: true })
-        .bail()
-        .notEmpty()
-        .bail()
-        .isString()
-        .bail(),
-    body("category")
-        .exists({ checkNull: true })
-        .bail()
-        .notEmpty()
-        .bail()
-        .isString()
-        .bail(),
-    body("ref_farmer")
-        .exists({ checkNull: true })
-        .bail()
-        .notEmpty()
-        .bail()
-        .isInt()
-        .bail(),
-    body("price")
-        .exists({ checkNull: true })
-        .bail()
-        .notEmpty()
-        .bail()
-        .isNumeric({ min: 0.0 })
-        .bail(),
-    body("availability")
-        .exists({ checkNull: true })
-        .bail()
-        .notEmpty()
-        .bail()
-        .isInt()
-        .bail(),
-    body("unit_of_measure")
-        .exists({ checkNull: true })
-        .bail()
-        .notEmpty()
-        .bail()
-        .isString()
-        .bail(),
-    body("image_path")
-        .exists({ checkNull: true })
-        .bail()
-        .notEmpty()
-        .bail()
-        .isString()
-        .bail(),
-    body("start_date")
-        .exists({ checkNull: true })
-        .bail()
-        .notEmpty()
-        .bail()
-        .isString()
-        .bail(),
-    body("end_date")
-        .exists({ checkNull: true })
-        .bail()
-        .notEmpty()
-        .bail()
-        .isString()
-        .bail(),
-    async (req, res) => {
-        const result = validationResult(req);
-        if (!result.isEmpty())
-            res.status(400).json({
-                info: "The server cannot process the request",
-                error: result.array(),
-                valueReceived: result.array(),
-            });
-        else {
-            await dao
-                .insertProduct(req.body)
-                .then((product) => res.json(product))
-                .catch((err) => res.status(503).json(dbErrorObj));
-        }
+  "/api/new-product",
+  body("name")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isString()
+    .bail(),
+  body("description")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isString()
+    .bail(),
+  body("category")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isString()
+    .bail(),
+  body("ref_farmer")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isInt()
+    .bail(),
+  body("price")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isNumeric({ min: 0.0 })
+    .bail(),
+  body("availability")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isInt()
+    .bail(),
+  body("unit_of_measure")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isString()
+    .bail(),
+  body("image_path")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isString()
+    .bail(),
+  body("start_date")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isString()
+    .bail(),
+  body("end_date")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isString()
+    .bail(),
+  async (req, res) => {
+    const result = validationResult(req);
+    if (!result.isEmpty())
+      res.status(400).json({
+        info: "The server cannot process the request",
+        error: result.array(),
+        valueReceived: result.array(),
+      });
+    else {
+      await dao
+        .insertProduct(req.body)
+        .then((product) => res.json(product))
+        .catch((err) => res.status(503).json(dbErrorObj));
     }
+  }
 );
 
 app.post(
-    "/api/update-product",
-    body("product_id")
-        .exists({ checkNull: true })
-        .bail()
-        .notEmpty()
-        .bail()
-        .isInt()
-        .bail(),
-    body("name")
-        .exists({ checkNull: true })
-        .bail()
-        .notEmpty()
-        .bail()
-        .isString()
-        .bail(),
-    body("description")
-        .exists({ checkNull: true })
-        .bail()
-        .notEmpty()
-        .bail()
-        .isString()
-        .bail(),
-    body("category")
-        .exists({ checkNull: true })
-        .bail()
-        .notEmpty()
-        .bail()
-        .isString()
-        .bail(),
-    body("ref_farmer")
-        .exists({ checkNull: true })
-        .bail()
-        .notEmpty()
-        .bail()
-        .isInt()
-        .bail(),
-    body("price")
-        .exists({ checkNull: true })
-        .bail()
-        .notEmpty()
-        .bail()
-        .isNumeric({ min: 0.0 })
-        .bail(),
-    body("availability")
-        .exists({ checkNull: true })
-        .bail()
-        .notEmpty()
-        .bail()
-        .isInt()
-        .bail(),
-    body("unit_of_measure")
-        .exists({ checkNull: true })
-        .bail()
-        .notEmpty()
-        .bail()
-        .isString()
-        .bail(),
-    body("image_path")
-        .exists({ checkNull: true })
-        .bail()
-        .notEmpty()
-        .bail()
-        .isString()
-        .bail(),
-    body("start_date")
-        .exists({ checkNull: true })
-        .bail()
-        .notEmpty()
-        .bail()
-        .isString()
-        .bail(),
-    body("end_date")
-        .exists({ checkNull: true })
-        .bail()
-        .notEmpty()
-        .bail()
-        .isString()
-        .bail(),
-    async (req, res) => {
-        const result = validationResult(req);
-        if (!result.isEmpty())
-            res.status(400).json({
-                info: "The server cannot process the request",
-                error: result.array(),
-                valueReceived: result.array(),
-            });
-        else {
-            await dao
-                .updateProduct(req.body)
-                .then((product) => res.json(product))
-                .catch((err) => res.status(503).json(dbErrorObj));
-        }
+  "/api/update-product",
+  body("product_id")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isInt()
+    .bail(),
+  body("name")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isString()
+    .bail(),
+  body("description")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isString()
+    .bail(),
+  body("category")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isString()
+    .bail(),
+  body("ref_farmer")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isInt()
+    .bail(),
+  body("price")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isNumeric({ min: 0.0 })
+    .bail(),
+  body("availability")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isInt()
+    .bail(),
+  body("unit_of_measure")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isString()
+    .bail(),
+  body("image_path")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isString()
+    .bail(),
+  body("start_date")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isString()
+    .bail(),
+  body("end_date")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isString()
+    .bail(),
+  async (req, res) => {
+    const result = validationResult(req);
+    if (!result.isEmpty())
+      res.status(400).json({
+        info: "The server cannot process the request",
+        error: result.array(),
+        valueReceived: result.array(),
+      });
+    else {
+      await dao
+        .updateProduct(req.body)
+        .then((product) => res.json(product))
+        .catch((err) => res.status(503).json(dbErrorObj));
     }
+  }
 );
+
+// POST /set-pending-cancellation-order
+// Request body: orderID
+// Response body: json containing the status of the request
+app.post(
+  "/api/set-pending-cancellation-order/",
+  body("order_id").exists({ checkNull: true }).bail().notEmpty().bail(),
+  async (req, res) => {
+    const validation = validationResult(req);
+    if (!validation.isEmpty()) {
+      console.log("Sanitizer-checks not passed.");
+      res.status(400).json({
+        info: "The server cannot process the request",
+        error: validation.array()[0].msg,
+        valueReceived: validation.array()[0].value,
+      });
+    } else {
+      await dao
+        .setPendingCancellationdOrder(req.body.order_id)
+        .then((result) => res.json(result))
+        .catch((err) => res.status(503).json(dbErrorObj));
+    }
+  }
+);
+
+app.get(
+  "/api/set-all-pending-cancellation-order/",
+  async (req, res) => {
+
+    // First, retrieve all the orders which are pending and 
+    // retrieve also the order cost as the SUM of quantity*price.
+    // Then, filter the array and maintain only orders where 
+    // wallet_balance > orderCost. 
+    // for simplicty, in an order cost is > wallet_balance,
+    // set as pending cancellation
+    await dao.getOrdersAndWallets()
+      .then((results) => {
+        // for each result, we now have to call
+        // setPendingCancellationdOrder for each order
+
+        for (const result of results) {
+          dao.setPendingCancellationdOrder(result.order_id);
+        }
+      }).then(() => res.json(true))
+      .catch((err) => res.status(503).json(dbErrorObj));
+  }
+);
+
+
+
+
+
+
 
 app.listen(port, () =>
   console.log(`Server app listening at http://localhost:${port}`)
