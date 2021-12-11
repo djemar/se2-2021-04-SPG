@@ -3,7 +3,7 @@ import {
   faMoneyBillWaveAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import * as relativeTime from 'dayjs/plugin/relativeTime';
 import { useContext, useState } from 'react';
 import { Card, ListGroup, Toast, ToastContainer } from 'react-bootstrap';
@@ -14,7 +14,7 @@ import './../common/Sidebar/sidebar.css';
 import DateModal from './DateModal';
 import { UserContext } from '../../context/UserContext';
 
-dayjs.extend(relativeTime);
+//dayjs.extend(relativeTime);
 
 export const Breadcrumbs = ({ ...props }) => {
   const { latestField } = props;

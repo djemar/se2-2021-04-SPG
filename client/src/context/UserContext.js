@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from 'react';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import API from '../API';
 
 export const UserContext = createContext();
@@ -103,6 +103,7 @@ const UserContextProvider = ({ ...props }) => {
         loading,
         user,
         orders,
+        products,
         setDirty,
       }}
     >

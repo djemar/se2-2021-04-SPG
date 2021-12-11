@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from 'react';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 
 export const TimeContext = createContext();
 

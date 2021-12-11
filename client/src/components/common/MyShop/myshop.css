@@ -24,39 +24,6 @@
     'Liberation Mono', 'Courier New', monospace;
 }
 
-.product-card {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 0px;
-  width: 240px;
-  /* height: 360px; */
-  z-index: 10;
-  border-radius: 12px;
-  overflow: hidden;
-  font-family: 'IBM Plex Sans', sans-serif;
-}
-
-.product-img:hover {
-  transform: scale(1.2);
-}
-.product-img {
-  transition: transform 0.5s ease;
-  overflow: hidden;
-  object-fit: cover;
-  height: 175px;
-}
-.product-img-div {
-  overflow: hidden;
-  object-fit: cover;
-  height: 175px;
-  width: 100%;
-}
-
-.product-title {
-  font-weight: 500;
-}
-
 .fg-primary {
   color: var(--primary);
 }
@@ -75,8 +42,24 @@
   box-shadow: 0 0 0 0.2rem rgba(156, 58, 16, 0.5);
 }
 
-.product-desc {
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
+.fg-secondary {
+  color: var(--secondary);
+}
+
+.bg-secondary {
+  background-color: var(--secondary) !important;
+  border-color: var(--secondary) !important;
+}
+
+.btn.bg-secondary:hover {
+  background-color: rgb(103, 151, 113) !important;
+}
+
+.btn.bg-secondary:focus {
+  background-color: rgb(49, 156, 16) !important;
+  box-shadow: 0 0 0 0.2rem rgb(39, 122, 13);
+}
+
+.font-ibmplex {
+  font-family: 'IBM Plex Sans', sans-serif;
 }

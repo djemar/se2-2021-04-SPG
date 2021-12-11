@@ -9,6 +9,7 @@ import { categories } from '../../fakedata.js';
 import { Login } from '../Login';
 import Register from '../Register/Register.js';
 import Shop from '../Shop/Shop';
+import MyShop from '../MyShop/MyShop';
 
 export const Main = ({ ...props }) => {
   const {
@@ -51,6 +52,13 @@ export const Main = ({ ...props }) => {
           {user ? <Redirect to="/" /> : <Register />}
           <Farmers />
         </Route> */}
+        <Route path="/myShop/">
+          {user && user.userType === 'Farmer' ? (
+            <MyShop />
+          ) : (
+            <Redirect to="/" />
+          )}
+        </Route>
         <Route path="/clients/">
           {user && user.userType === 'Employee' ? (
             <Clients />

@@ -3,8 +3,18 @@ import { render, screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../../App';
 import axios from 'axios';
+import MockDate from 'mockdate';
 
 jest.mock('axios');
+
+beforeEach(() => {
+  MockDate.set('2021-12-11T11:20:06.196Z');
+});
+
+afterEach(() => {
+  MockDate.reset();
+  jest.resetAllMocks();
+});
 
 describe('Basket', () => {
   beforeEach(() => jest.resetAllMocks());
@@ -30,11 +40,6 @@ describe('Basket', () => {
     const promise = Promise.resolve({ data: products });
     axios.get.mockImplementationOnce(() => promise);
     render(<App />);
-    await userEvent.click(
-      screen.getByRole('button', {
-        name: /explore-All products/i,
-      })
-    );
     await act(() => promise);
     //screen.debug();
     await userEvent.click(

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Modal, Button as ButtonBS, Form, Row, Col } from 'react-bootstrap';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 
 export const DateModal = ({ ...props }) => {
   const { setDateState } = props;
