@@ -23,6 +23,8 @@ export const ProductCard = ({ ...props }) => {
     setBasketProducts,
     setAnimateBasket,
     preview,
+    flagAddOrEdit,
+    handleShow,
   } = props;
   const [orderQuantity, setOrderQuantity] = useState(1);
   const [availableQuantity, setAvailableQuantity] = useState(availability);
@@ -104,15 +106,20 @@ export const ProductCard = ({ ...props }) => {
         </div>
       </Card.Body>
       <Card.Footer className="w-100 text-end bg-white border-0 pb-3">
-        <BSButton
-          className="bg-primary"
-          size="sm"
-          aria-label="btn-add-to-basket"
-          onClick={handleAddToBasket}
-          disabled={availableQuantity === 0 || preview}
-        >
-          Add to Basket
-        </BSButton>
+        {flagAddOrEdit ? (
+          <BSButton onClick={handleShow} className="bg-primary" size="sm">
+            Edit
+          </BSButton>
+        ) : (
+          <BSButton
+            className="bg-primary"
+            size="sm"
+            onClick={handleAddToBasket}
+            disabled={availableQuantity === 0 || preview}
+          >
+            Add to Basket
+          </BSButton>
+        )}
       </Card.Footer>
     </Card>
   );
