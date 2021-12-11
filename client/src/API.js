@@ -135,6 +135,29 @@ async function getProductsBetweenDates(startDate, endDate) {
   }
 }
 
+async function getAllProductsByCategoryAndDates(
+  categoryProduct,
+  startDate,
+  endDate
+) {
+  let url = BASEURL + '/products-between-dates-category';
+  let categoryWithSpaces;
+  if (categoryProduct !== undefined && categoryProduct !== '')
+    categoryWithSpaces = categoryProduct.replaceAll('-', ' ');
+
+  try {
+    const res = await axios.post(url, {
+      category: categoryProduct, //name of the category
+      startDate: startDate,
+      endDate: endDate,
+    });
+    //console.log(res);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 /************** Users **************/
 
 async function addUser(user_object) {
@@ -348,6 +371,7 @@ const API = {
   getProductsFromDate,
   getProductsToDate,
   getProductsBetweenDates,
+  getAllProductsByCategoryAndDates,
   addUser,
   getAllUsers,
   addOrder,

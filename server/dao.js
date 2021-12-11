@@ -180,6 +180,34 @@ exports.getProductsBetweenDates = (startDate, endDate) => {
   });
 };
 
+exports.getAllProductsByCategoryAndDates = (category, startDate, endDate) => {
+  return new Promise((resolve, reject) => {
+    if (typeof category !== "string" ||
+        typeof startDate !== "string" ||
+        typeof endDate !== "string")
+      reject("Strings are expected for all date parameters");
+
+    console.log(startDate)
+    console.log(endDate)
+    console.log(category)
+    const sql = "SELECT * FROM product WHERE start_date >= ? AND end_date <= ? AND category = ?";
+
+    console.log(sql)
+
+    db.all(sql, [startDate, endDate, category], (err, rows) => {
+      if (err) reject(err);
+      else if (rows === undefined || rows.length === 0) {
+        reject(err);
+        console.log("0 ROWS!");
+      } else {
+        const products = mappingProducts(rows);
+        resolve(products);
+      }
+    });
+  });
+};
+
+
 /************** Users **************/
 
 // Insert a new client:
