@@ -13,6 +13,7 @@ import { useContext, useState } from 'react';
 import { Button as ButtonBS, Card, Col, Form, Row } from 'react-bootstrap';
 import { IoAdd } from 'react-icons/io5';
 import Select from 'react-select';
+import { MdEdit } from 'react-icons/md';
 import { UserContext } from '../../../context/UserContext';
 import Breadcrumbs from '../../misc/Breadcrumbs';
 import ProductCard from '../ProductCard/ProductCard';
@@ -21,7 +22,7 @@ import { Spinner } from '../../misc';
 
 const product = {
   product_id: -1,
-  ref_user: -1,
+  ref_farmer: -1,
   name: 'Name',
   price: 0,
   description: 'Description',
@@ -53,7 +54,7 @@ export const MyShop = ({ ...props }) => {
     let prodF = [];
     //console.log(products);
     products.forEach(x => {
-      if (x.ref_farmer === user.id) {
+      if (x.fid === user.id) {
         prodF.push(x);
       }
     });
@@ -64,7 +65,7 @@ export const MyShop = ({ ...props }) => {
           (
             {
               product_id,
-              ref_user,
+              ref_farmer,
               name,
               price,
               description,
@@ -79,7 +80,7 @@ export const MyShop = ({ ...props }) => {
               <ProductCard
                 key={product_id}
                 pid={product_id}
-                fid={ref_user}
+                fid={ref_farmer}
                 name={name}
                 price={price}
                 description={description}
@@ -136,7 +137,8 @@ export const MyShop = ({ ...props }) => {
         onHide={handleClose}
       >
         <Modal.Header closeButton className="mx-3">
-          <Modal.Title>Edit your product</Modal.Title>
+          <MdEdit className="mr-2 text-lg font-medium"></MdEdit>
+          Edit your product
         </Modal.Header>
         <Modal.Body className="">
           <Form>
@@ -273,7 +275,7 @@ export const MyShop = ({ ...props }) => {
                         name="inventory"
                         getOptionValue={option => option.product_id}
                         getOptionLabel={option => `${option.name}`}
-                        options={products.filter(p => p.ref_farmer === user.id)}
+                        options={products.filter(p => p.fid === user.id)}
                       />
                       or add a new product below.
                     </div>
@@ -413,7 +415,7 @@ export const MyShop = ({ ...props }) => {
             <ProductCard
               key={addedProduct.product_id}
               pid={addedProduct.product_id}
-              fid={addedProduct.ref_user}
+              fid={addedProduct.ref_farmer}
               name={addedProduct.name}
               price={addedProduct.price}
               description={addedProduct.description}

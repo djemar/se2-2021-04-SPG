@@ -7,6 +7,8 @@ import {
 } from 'react-bootstrap';
 import QuantitySelector from '../../misc/QuantitySelector';
 import './productCard.css';
+import Badge from 'react-bootstrap/Badge';
+import { IoStorefrontOutline } from 'react-icons/io5';
 
 export const ProductCard = ({ ...props }) => {
   const {
@@ -31,6 +33,7 @@ export const ProductCard = ({ ...props }) => {
 
   useEffect(() => {
     const i = basketProducts.findIndex(item => item.pid === pid);
+    console.log(props);
     if (i !== -1) {
       setAvailableQuantity(availableQuantity - basketProducts[i].quantity);
     }
@@ -73,12 +76,16 @@ export const ProductCard = ({ ...props }) => {
     setAnimateBasket(true);
     setOrderQuantity(1);
   };
-
+  //<span class="position-absolute top-5 badge rounded-pill d-flex text-dark bg-light align-items-center">
   return (
     <Card className="product-card shadow-lg py-0 h-auto">
       <div className="product-img-div">
         <Card.Img className="product-img" variant="top" src={img} />
       </div>
+      <span class="position-absolute product-farmer badge rounded-pill d-flex text-dark bg-light align-items-center">
+        <IoStorefrontOutline className="mr-2 text-lg" />
+        {fid}
+      </span>
       <Card.Body className="p-3 w-100">
         <Card.Title className="font-medium text-black">{name}</Card.Title>
         <OverlayTrigger
