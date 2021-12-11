@@ -12,7 +12,6 @@ const BasketItem = ({ ...props }) => {
     product;
   const [totUnitPrice, setTotUnitPrice] = useState(price * quantity);
   const [qnt, setQnt] = useState(quantity);
-
   const handleRemoveItem = (pid, fid) => {
     let newBasket = [...basketProducts];
     newBasket = newBasket.filter(
@@ -52,7 +51,7 @@ const BasketItem = ({ ...props }) => {
           </Card.Title>
           <Card.Text className="d-flex justify-between mt-5 items-center">
             <div className="ml-9 d-flex items-center">
-              <IoStorefrontOutline className="mr-2 text-lg" /> Farmer
+              <IoStorefrontOutline className="mr-2 text-lg" /> {product.fid}
             </div>
             <QuantitySelector
               orderQuantity={qnt}

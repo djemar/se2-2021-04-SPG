@@ -49,7 +49,7 @@ export const Shop = ({ ...props }) => {
         (
           {
             product_id,
-            ref_user,
+            ref_farmer,
             name,
             price,
             description,
@@ -64,7 +64,7 @@ export const Shop = ({ ...props }) => {
             <ProductCard
               key={product_id}
               pid={product_id}
-              fid={ref_user}
+              fid={ref_farmer}
               name={name}
               price={price}
               description={description}
