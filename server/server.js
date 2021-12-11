@@ -276,6 +276,46 @@ app.post("/api/products-between-dates",
      }
 });
 
+app.post("/api/products-between-dates-category",
+    body("category")
+        .exists({ checkNull: true })
+        .bail()
+        .notEmpty()
+        .bail()
+        .isString()
+        .bail(),
+    body("startDate")
+        .exists({ checkNull: true })
+        .bail()
+        .notEmpty()
+        .bail()
+        .isString()
+        .bail(),
+    body("endDate")
+        .exists({ checkNull: true })
+        .bail()
+        .notEmpty()
+        .bail()
+        .isString()
+        .bail(),
+    async (req, res) => {
+        const result = validationResult(req);
+        if (!result.isEmpty())
+            res.status(400).json({
+                info: "The server cannot process the request",
+                error: result.array()[0].msg,
+                valueReceived: result.array()[0].value,
+            });
+        else {
+            await dao
+                .getAllProductsByCategoryAndDates(req.body.category, req.body.startDate, req.body.endDate)
+                .then((products) => res.json(products))
+                .catch((err) => res.status(503).json(dbErrorObj));
+        }
+    });
+
+
+
 /************** Users **************/
 
 // POST /new-user
