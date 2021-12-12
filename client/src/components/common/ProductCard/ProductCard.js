@@ -7,8 +7,8 @@ import {
 } from 'react-bootstrap';
 import QuantitySelector from '../../misc/QuantitySelector';
 import './productCard.css';
-import Badge from 'react-bootstrap/Badge';
 import { IoStorefrontOutline } from 'react-icons/io5';
+import API from '../../../API';
 
 export const ProductCard = ({ ...props }) => {
   const {
@@ -30,10 +30,11 @@ export const ProductCard = ({ ...props }) => {
   } = props;
   const [orderQuantity, setOrderQuantity] = useState(1);
   const [availableQuantity, setAvailableQuantity] = useState(availability);
-
+  const [users, setUsers] = useState([]);
+  const [dirty, setDirty] = useState(true);
+  const [farmerName, setFarmerName] = useState('');
   useEffect(() => {
     const i = basketProducts.findIndex(item => item.pid === pid);
-    console.log(props);
     if (i !== -1) {
       setAvailableQuantity(availableQuantity - basketProducts[i].quantity);
     }
@@ -46,6 +47,22 @@ export const ProductCard = ({ ...props }) => {
     }
   }, [basketProducts]);
 
+  useEffect(() => {
+    const getAllUsers = async () => {
+      const users = await API.getAllUsers();
+      setUsers(users);
+    };
+
+    if (dirty) {
+      getAllUsers().then(() => {
+        setDirty(false);
+      });
+    }
+
+    users.forEach(x => {
+      if (x.user_id === fid) setFarmerName(x.name);
+    });
+  }, [dirty]);
   const handleAddToBasket = () => {
     const i = basketProducts.findIndex(item => item.pid === pid);
     if (orderQuantity >= 1) {
@@ -76,6 +93,7 @@ export const ProductCard = ({ ...props }) => {
     setAnimateBasket(true);
     setOrderQuantity(1);
   };
+
   //<span class="position-absolute top-5 badge rounded-pill d-flex text-dark bg-light align-items-center">
   return (
     <Card className="product-card shadow-lg py-0 h-auto">
@@ -84,7 +102,7 @@ export const ProductCard = ({ ...props }) => {
       </div>
       <span class="position-absolute product-farmer badge rounded-pill d-flex text-dark bg-light align-items-center">
         <IoStorefrontOutline className="mr-2 text-lg" />
-        {fid}
+        {farmerName}
       </span>
       <Card.Body className="p-3 w-100">
         <Card.Title className="font-medium text-black">{name}</Card.Title>
