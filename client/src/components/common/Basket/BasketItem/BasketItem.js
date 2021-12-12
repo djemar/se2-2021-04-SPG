@@ -5,6 +5,7 @@ import { IoStorefrontOutline } from 'react-icons/io5';
 import '../../../../App.css';
 import QuantitySelector from '../../../misc/QuantitySelector';
 import './basketItem.css';
+import API from '../../../../API';
 
 const BasketItem = ({ ...props }) => {
   const { product, basketProducts, setBasketProducts, addSinglePrice } = props;
@@ -12,6 +13,9 @@ const BasketItem = ({ ...props }) => {
     product;
   const [totUnitPrice, setTotUnitPrice] = useState(price * quantity);
   const [qnt, setQnt] = useState(quantity);
+  const [users, setUsers] = useState([]);
+  const [dirty, setDirty] = useState(true);
+  const [farmerName, setFarmerName] = useState('');
   const handleRemoveItem = (pid, fid) => {
     let newBasket = [...basketProducts];
     newBasket = newBasket.filter(
@@ -30,6 +34,22 @@ const BasketItem = ({ ...props }) => {
     else setQnt(p.orderQuantity);
   }, [basketProducts]);
 
+  useEffect(() => {
+    const getAllUsers = async () => {
+      const users = await API.getAllUsers();
+      setUsers(users);
+    };
+
+    if (dirty) {
+      getAllUsers().then(() => {
+        setDirty(false);
+      });
+    }
+
+    users.forEach(x => {
+      if (x.user_id === product.fid) setFarmerName(x.name);
+    });
+  }, [dirty]);
   return (
     <>
       <Card className="card-basket-item m-2 mb-4">
@@ -51,7 +71,7 @@ const BasketItem = ({ ...props }) => {
           </Card.Title>
           <Card.Text className="d-flex justify-between mt-5 items-center">
             <div className="ml-9 d-flex items-center">
-              <IoStorefrontOutline className="mr-2 text-lg" /> {product.fid}
+              <IoStorefrontOutline className="mr-2 text-lg" /> {farmerName}
             </div>
             <QuantitySelector
               orderQuantity={qnt}
