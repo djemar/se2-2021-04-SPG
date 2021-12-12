@@ -7,6 +7,8 @@ import {
 } from 'react-bootstrap';
 import QuantitySelector from '../../misc/QuantitySelector';
 import './productCard.css';
+import { IoStorefrontOutline } from 'react-icons/io5';
+import API from '../../../API';
 
 export const ProductCard = ({ ...props }) => {
   const {
@@ -23,10 +25,15 @@ export const ProductCard = ({ ...props }) => {
     setBasketProducts,
     setAnimateBasket,
     preview,
+    flagAddOrEdit,
+    handleShow,
+    setProd,
   } = props;
   const [orderQuantity, setOrderQuantity] = useState(1);
   const [availableQuantity, setAvailableQuantity] = useState(availability);
-
+  const [users, setUsers] = useState([]);
+  const [dirty, setDirty] = useState(true);
+  const [farmerName, setFarmerName] = useState('');
   useEffect(() => {
     const i = basketProducts.findIndex(item => item.pid === pid);
     if (i !== -1) {
@@ -41,6 +48,22 @@ export const ProductCard = ({ ...props }) => {
     }
   }, [basketProducts]);
 
+  useEffect(() => {
+    const getAllUsers = async () => {
+      const users = await API.getAllUsers();
+      setUsers(users);
+    };
+
+    if (dirty) {
+      getAllUsers().then(() => {
+        setDirty(false);
+      });
+    }
+
+    users.forEach(x => {
+      if (x.user_id === fid) setFarmerName(x.name);
+    });
+  }, [dirty]);
   const handleAddToBasket = () => {
     const i = basketProducts.findIndex(item => item.pid === pid);
     if (orderQuantity >= 1) {
@@ -72,11 +95,20 @@ export const ProductCard = ({ ...props }) => {
     setOrderQuantity(1);
   };
 
+  function editClick() {
+    handleShow();
+    setProd(props);
+  }
+  //<span class="position-absolute top-5 badge rounded-pill d-flex text-dark bg-light align-items-center">
   return (
     <Card className="product-card shadow-lg py-0 h-auto">
       <div className="product-img-div">
         <Card.Img className="product-img" variant="top" src={img} />
       </div>
+      <span class="position-absolute product-farmer badge rounded-pill d-flex text-dark bg-light align-items-center">
+        <IoStorefrontOutline className="mr-2 text-lg" />
+        {farmerName}
+      </span>
       <Card.Body className="p-3 w-100">
         <Card.Title className="font-medium text-black">{name}</Card.Title>
         <OverlayTrigger
@@ -104,15 +136,20 @@ export const ProductCard = ({ ...props }) => {
         </div>
       </Card.Body>
       <Card.Footer className="w-100 text-end bg-white border-0 pb-3">
-        <BSButton
-          className="bg-primary"
-          size="sm"
-          aria-label="btn-add-to-basket"
-          onClick={handleAddToBasket}
-          disabled={availableQuantity === 0 || preview}
-        >
-          Add to Basket
-        </BSButton>
+        {flagAddOrEdit ? (
+          <BSButton onClick={editClick} className="bg-primary" size="sm">
+            Edit
+          </BSButton>
+        ) : (
+          <BSButton
+            className="bg-primary"
+            size="sm"
+            onClick={handleAddToBasket}
+            disabled={availableQuantity === 0 || preview}
+          >
+            Add to Basket
+          </BSButton>
+        )}
       </Card.Footer>
     </Card>
   );
