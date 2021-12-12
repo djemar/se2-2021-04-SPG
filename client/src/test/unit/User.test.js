@@ -1,11 +1,9 @@
 import { act, render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import axios from 'axios';
 import MockDate from 'mockdate';
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import API from '../../API';
-import ModalTopUp from '../../components/content/Clients/ModalTopUp';
+import User from '../../components/content/User/User';
 import TimeContextProvider from '../../context/TimeContext';
 import UserContextProvider from '../../context/UserContext';
 
@@ -20,8 +18,8 @@ afterEach(() => {
   jest.resetAllMocks();
 });
 
-describe('ModalTopUp', () => {
-  test('renders ModalTopUp component', async () => {
+describe('User', () => {
+  test('renders User component', async () => {
     const products = [
       {
         product_id: 0,
@@ -43,20 +41,11 @@ describe('ModalTopUp', () => {
     const promise = Promise.resolve({ data: products });
     axios.get.mockImplementationOnce(() => promise);
 
-    let api = jest
-      .spyOn(API, 'updateClientWallet')
-      .mockImplementationOnce(() => Promise.resolve(true));
-
     render(
       <Router>
         <UserContextProvider>
           <TimeContextProvider>
-            <ModalTopUp
-              show={true}
-              user_id={1}
-              setDirty={() => true}
-              setShow={() => true}
-            />
+            <User user={{ name: 'test' }} />
           </TimeContextProvider>
         </UserContextProvider>
       </Router>
@@ -64,7 +53,6 @@ describe('ModalTopUp', () => {
 
     await act(() => promise);
     // screen.debug();
-    expect(screen.getByText(/Wallet/i)).toBeInTheDocument();
-    userEvent.click(screen.getByLabelText(/submit-1/i));
+    expect(screen.getByText(/test/i)).toBeInTheDocument();
   });
 });
