@@ -15,6 +15,7 @@ import { Spinner } from '../../misc';
 import Breadcrumbs from '../../misc/Breadcrumbs';
 import ProductCard from '../ProductCard/ProductCard';
 import './myshop.css';
+import API from '../../../API.js';
 
 const product = {
   product_id: -1,
@@ -45,7 +46,22 @@ export const MyShop = ({ ...props }) => {
 
   const [prod, setProd] = useState('');
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    API.editProduct(
+      prod.pid,
+      prod.name,
+      prod.description,
+      prod.category,
+      prod.ref_farmer,
+      prod.price,
+      prod.aviability,
+      prod.unit_of_measure,
+      prod.image_path,
+      '',
+      ''
+    );
+    setShow(false);
+  };
   const handleShow = () => setShow(true);
 
   useEffect(() => {
@@ -100,8 +116,11 @@ export const MyShop = ({ ...props }) => {
     setMyProduct(mappedProduct);
   }, []);
 
-  const handleChange = (value, attr) => {
-    let tmpProd = { ...addedProduct };
+  const handleChange = (value, attr, flag) => {
+    let tmpProd;
+    if (flag === 0) tmpProd = { ...prod };
+    else tmpProd = { ...addedProduct };
+
     switch (attr) {
       case NEWVALUE.NAME:
         tmpProd.name = value;
@@ -124,7 +143,8 @@ export const MyShop = ({ ...props }) => {
       default:
         break;
     }
-    setAddedProduct(tmpProd);
+    if (flag === 0) setProd(tmpProd);
+    else setAddedProduct(tmpProd);
   };
 
   return (
@@ -148,7 +168,13 @@ export const MyShop = ({ ...props }) => {
                     <Form.Label className="font-medium font-ibmplex text-sm">
                       Product Name
                     </Form.Label>
-                    <Form.Control type="text" value={prod.name} />
+                    <Form.Control
+                      type="text"
+                      value={prod.name}
+                      onChange={e =>
+                        handleChange(e.target.value, NEWVALUE.NAME, 0)
+                      }
+                    />
                   </Form.Group>
 
                   <Form.Group as={Col} controlId="formGridPrice">
@@ -161,6 +187,9 @@ export const MyShop = ({ ...props }) => {
                       min={0}
                       step={0.05}
                       value={prod.price}
+                      onChange={e =>
+                        handleChange(e.target.value, NEWVALUE.PRICE, 0)
+                      }
                     />
                   </Form.Group>
                 </Row>
@@ -169,14 +198,26 @@ export const MyShop = ({ ...props }) => {
                     <Form.Label className="font-medium font-ibmplex text-sm">
                       Available pieces
                     </Form.Label>
-                    <Form.Control type="number" value={prod.availability} />
+                    <Form.Control
+                      type="number"
+                      value={prod.availability}
+                      onChange={e =>
+                        handleChange(e.target.value, NEWVALUE.AVAILABILITY, 0)
+                      }
+                    />
                   </Form.Group>
 
                   <Form.Group as={Col} controlId="formGridQuantity">
                     <Form.Label className="font-medium font-ibmplex text-sm">
                       Quantity per-piece
                     </Form.Label>
-                    <Form.Control type="text" value={prod.unit} />
+                    <Form.Control
+                      type="text"
+                      value={prod.unit}
+                      onChange={e =>
+                        handleChange(e.target.value, NEWVALUE.UNIT, 0)
+                      }
+                    />
                   </Form.Group>
                 </Row>
               </Col>
@@ -189,6 +230,9 @@ export const MyShop = ({ ...props }) => {
                     as="textarea"
                     type="text"
                     value={prod.description}
+                    onChange={e =>
+                      handleChange(e.target.value, NEWVALUE.DESCRIPTION, 0)
+                    }
                   />
                 </Form.Group>
               </Col>
@@ -199,7 +243,13 @@ export const MyShop = ({ ...props }) => {
                 <Form.Label className="font-medium font-ibmplex text-sm">
                   Image URL
                 </Form.Label>
-                <Form.Control type="text" value={prod.img} />
+                <Form.Control
+                  type="text"
+                  value={prod.img}
+                  onChange={e =>
+                    handleChange(e.target.value, NEWVALUE.IMAGE, 0)
+                  }
+                />
               </Form.Group>
             </Row>
 
@@ -271,7 +321,7 @@ export const MyShop = ({ ...props }) => {
                             aria-label="form-name"
                             value={addedProduct.name}
                             onChange={e =>
-                              handleChange(e.target.value, NEWVALUE.NAME)
+                              handleChange(e.target.value, NEWVALUE.NAME, 1)
                             }
                           />
                         </Form.Group>
@@ -288,7 +338,7 @@ export const MyShop = ({ ...props }) => {
                             step={0.05}
                             value={addedProduct.price}
                             onChange={e =>
-                              handleChange(e.target.value, NEWVALUE.PRICE)
+                              handleChange(e.target.value, NEWVALUE.PRICE, 1)
                             }
                           />
                         </Form.Group>
@@ -305,7 +355,8 @@ export const MyShop = ({ ...props }) => {
                             onChange={e =>
                               handleChange(
                                 e.target.value,
-                                NEWVALUE.AVAILABILITY
+                                NEWVALUE.AVAILABILITY,
+                                1
                               )
                             }
                           />
@@ -320,7 +371,7 @@ export const MyShop = ({ ...props }) => {
                             aria-label="form-quantity"
                             value={addedProduct.unit_of_measure}
                             onChange={e =>
-                              handleChange(e.target.value, NEWVALUE.UNIT)
+                              handleChange(e.target.value, NEWVALUE.UNIT, 1)
                             }
                           />
                         </Form.Group>
@@ -337,7 +388,11 @@ export const MyShop = ({ ...props }) => {
                           aria-label="form-description"
                           value={addedProduct.description}
                           onChange={e =>
-                            handleChange(e.target.value, NEWVALUE.DESCRIPTION)
+                            handleChange(
+                              e.target.value,
+                              NEWVALUE.DESCRIPTION,
+                              1
+                            )
                           }
                         />
                       </Form.Group>
@@ -354,7 +409,7 @@ export const MyShop = ({ ...props }) => {
                         aria-label="form-img"
                         value={addedProduct.image_path}
                         onChange={e =>
-                          handleChange(e.target.value, NEWVALUE.IMAGE)
+                          handleChange(e.target.value, NEWVALUE.IMAGE, 1)
                         }
                       />
                     </Form.Group>
