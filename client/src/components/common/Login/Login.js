@@ -61,6 +61,7 @@ export function Login({ ...props }) {
                         size="lg"
                         id="inputEmail"
                         type="email"
+                        aria-label="login-email"
                         placeholder="Email address"
                         autoFocus={true}
                         required
@@ -73,6 +74,7 @@ export function Login({ ...props }) {
                       <Form.Control
                         size="lg"
                         id="inputPassword"
+                        aria-label="login-password"
                         type="password"
                         placeholder="Password"
                         required
@@ -83,6 +85,7 @@ export function Login({ ...props }) {
                     <Form.Group className="flex justify-center">
                       <ButtonBootstrap
                         size="lg"
+                        aria-label="btn-login"
                         className="bg-primary d-flex align-items-center justify-content-center"
                         type="submit"
                         disabled={loading}

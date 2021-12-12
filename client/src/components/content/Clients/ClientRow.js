@@ -32,7 +32,7 @@ export const ClientRow = ({ ...props }) => {
           €{' '}
           <i
             id={'currAmount' + props.user_id}
-            ariaLabel={'currAmount' + props.user_id}
+            aria-label={'currAmount' + props.user_id}
           >
             {props.wallet_balance}
           </i>

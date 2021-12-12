@@ -67,7 +67,7 @@ export const ModalTopUp = ({ ...props }) => {
               <Col sm={6}>
                 <Form.Select
                   required
-                  aria-label="topup label"
+                  aria-label="topup-label"
                   onChange={ev => setAmount(ev.target.value)}
                 >
                   <option value="10">10 €</option>
