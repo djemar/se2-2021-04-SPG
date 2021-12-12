@@ -16,6 +16,8 @@ import Breadcrumbs from '../../misc/Breadcrumbs';
 import ProductCard from '../ProductCard/ProductCard';
 import './myshop.css';
 import API from '../../../API.js';
+import { TimeContext } from '../../../context/TimeContext';
+import dayjs from 'dayjs';
 
 const product = {
   product_id: -1,
@@ -43,8 +45,27 @@ export const MyShop = ({ ...props }) => {
   const { products, user } = useContext(UserContext);
   const [show, setShow] = useState(0);
   const [myProduct, setMyProduct] = useState([]);
+  const { dateState, setDateState } = useContext(TimeContext);
+  const [start_date, setStart] = useState('');
+  const [end_date, setEnd] = useState('');
 
   const [prod, setProd] = useState('');
+
+  const insertProduct = () => {
+    API.insertProduct(
+      addedProduct.pid,
+      addedProduct.name,
+      addedProduct.description,
+      'Dairy',
+      user.id,
+      addedProduct.price + 0,
+      addedProduct.availability,
+      addedProduct.unit_of_measure,
+      addedProduct.image_path,
+      start_date,
+      end_date
+    );
+  };
 
   const handleClose = () => {
     API.editProduct(
@@ -52,19 +73,62 @@ export const MyShop = ({ ...props }) => {
       prod.name,
       prod.description,
       prod.category,
-      prod.ref_farmer,
+      prod.fid,
       prod.price,
-      prod.aviability,
-      prod.unit_of_measure,
-      prod.image_path,
-      '',
-      ''
+      prod.availability,
+      prod.unit,
+      prod.img,
+      start_date,
+      end_date
     );
     setShow(false);
   };
   const handleShow = () => setShow(true);
 
+  function getTimeframe() {
+    let today = dayjs(dateState).get('day');
+    // db format: YYYY-MM-DD
+    // Saturday = 6, sunday = 0
+    // today will be equal to saturday, and end date sunday
+    let startDate;
+
+    switch (today) {
+      case 1:
+        startDate = dayjs(dateState).add(5, 'day').format('YYYY-MM-DD');
+        break;
+      case 2:
+        startDate = dayjs(dateState).add(4, 'day').format('YYYY-MM-DD');
+        break;
+      case 3:
+        startDate = dayjs(dateState).add(3, 'day').format('YYYY-MM-DD');
+        break;
+      case 4:
+        startDate = dayjs(dateState).add(2, 'day').format('YYYY-MM-DD');
+        break;
+      case 5:
+        startDate = dayjs(dateState).add(1, 'day').format('YYYY-MM-DD');
+        break;
+      case 6:
+        startDate = dayjs(dateState).format('YYYY-MM-DD');
+        break;
+      case 0:
+        startDate = dayjs(dateState).add(6, 'day').format('YYYY-MM-DD');
+        break;
+    }
+
+    let endDate = dayjs(startDate).add(1, 'day').format('YYYY-MM-DD');
+
+    const dates = { startDate, endDate };
+
+    console.log(dates);
+    return dates;
+  }
+
   useEffect(() => {
+    const dates = getTimeframe();
+    setStart(dates.startDate);
+    setEnd(dates.endDate);
+
     let prodF = [];
     //console.log(products);
     products.forEach(x => {
@@ -87,6 +151,8 @@ export const MyShop = ({ ...props }) => {
               unit_of_measure,
               image_path,
               availability,
+              start_date,
+              end_date,
             },
             index
           ) => (
@@ -102,6 +168,8 @@ export const MyShop = ({ ...props }) => {
                 unit={unit_of_measure}
                 img={image_path}
                 availability={availability}
+                start_date={dates.start_date}
+                end_date={dates.end_date}
                 basketProducts={[]}
                 setBasketProducts={[]}
                 setAnimateBasket={0}
@@ -439,7 +507,10 @@ export const MyShop = ({ ...props }) => {
               // setBasketProducts={()}
               //setAnimateBasket={()}
             />
-            <ButtonBS className="d-flex items-center my-10 shadow-lg bg-secondary">
+            <ButtonBS
+              className="d-flex items-center my-10 shadow-lg bg-secondary"
+              onClick={() => insertProduct()}
+            >
               <IoAdd className="text-white mr-3" />
               Add to My Shop
             </ButtonBS>
