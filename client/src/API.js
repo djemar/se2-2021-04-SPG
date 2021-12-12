@@ -81,6 +81,44 @@ async function getAllProductsByCategory(categoryProduct) {
   }
 }
 
+async function insertProduct(
+  product_id,
+  name,
+  description,
+  category,
+  ref_farmer,
+  price,
+  availability,
+  unit_of_measure,
+  image_path,
+  start_date,
+  end_date
+) {
+  let url = BASEURL + '/new-product';
+  let product = {
+    product_id: product_id,
+    name: name,
+    description: description,
+    category: category,
+    ref_farmer: ref_farmer,
+    price: price,
+    availability: availability,
+    unit_of_measure: unit_of_measure,
+    image_path: image_path,
+    start_date: start_date,
+    end_date: end_date,
+  };
+
+  console.log(product);
+
+  try {
+    await axios.post(url, product);
+    return true;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 async function editProduct(
   product_id,
   name,
@@ -88,7 +126,7 @@ async function editProduct(
   category,
   ref_farmer,
   price,
-  aviability,
+  availability,
   unit_of_measure,
   image_path,
   start_date,
@@ -102,7 +140,7 @@ async function editProduct(
     category: category,
     ref_farmer: ref_farmer,
     price: price,
-    aviability: aviability,
+    availability: availability,
     unit_of_measure: unit_of_measure,
     image_path: image_path,
     start_date: start_date,
@@ -383,5 +421,6 @@ const API = {
   deleteAllPendingOrder,
   deleteOrder,
   editProduct,
+  insertProduct,
 };
 export default API;

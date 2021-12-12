@@ -584,6 +584,7 @@ app.post(
         valueReceived: result.array(),
       });
     else {
+        console.log(req.body)
       await dao
         .insertProduct(req.body)
         .then((product) => res.json(product))
@@ -673,12 +674,15 @@ app.post(
     .bail(),
   async (req, res) => {
     const result = validationResult(req);
-    if (!result.isEmpty())
-      res.status(400).json({
-        info: "The server cannot process the request",
-        error: result.array(),
-        valueReceived: result.array(),
-      });
+
+    if (!result.isEmpty()) {
+        console.log(result)
+        res.status(400).json({
+            info: "The server cannot process the request",
+            error: result.array(),
+            valueReceived: result.array(),
+        });
+    }
     else {
       await dao
         .updateProduct(req.body)
