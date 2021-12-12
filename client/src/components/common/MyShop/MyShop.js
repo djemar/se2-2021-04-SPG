@@ -380,7 +380,7 @@ export const MyShop = ({ ...props }) => {
               img={addedProduct.image_path}
               availability={addedProduct.availability}
               basketProducts={[]}
-              preview={false}
+              preview={true}
               // setBasketProducts={()}
               //setAnimateBasket={()}
             />
