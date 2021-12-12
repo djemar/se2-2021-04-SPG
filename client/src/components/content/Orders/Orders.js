@@ -81,7 +81,7 @@ export const Orders = ({ ...props }) => {
                   <tr>
                     <th className="text-center">Order ID</th>
                     <th className="text-center">Ordering user</th>
-                    <th className="text-center">Date and time</th>
+                    <th className="text-center">Date</th>
                     <th className="text-center">Ordered products</th>
                     <th className="text-center">TOT price</th>
                     <th className="text-center">Status</th>

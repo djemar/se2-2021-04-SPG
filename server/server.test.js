@@ -363,7 +363,7 @@ describe('Set delivered order API', () => {
     })
 })
 
-/* describe('Delete Order API', () => {
+describe('Delete Order API', () => {
 
     test('Delete Order Success', async () => {
         const body = {
@@ -392,7 +392,12 @@ describe('Set delivered order API', () => {
         const response = await request.delete('/api/delete-order/')
         expect(response.status).toBe(404);
     })
-}) */
+
+    test('Delete Order Fail 2', async () => {
+        const response = await request.delete('/api/delete-order/' + "test")
+        expect(response.status).toBe(400);
+    })
+})
 
 describe('Get Orders by ClientID API', () => {
 
@@ -424,7 +429,7 @@ describe('Set pending cancellation order API', () => {
     })
 })
 
-describe ("Set all pending cancellation order API", () => {
+describe("Set all pending cancellation order API", () => {
     test('Set All Pending Cancellation Order API Success', async () => {
         const response = await request.get('/api/set-all-pending-cancellation-order/')
         expect(response.body).toBeTruthy()

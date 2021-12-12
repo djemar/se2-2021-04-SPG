@@ -416,7 +416,7 @@ function createInsertOrderPromise(order, id, quantity) {
   });
 }
 
-exports.deleteTestOrder = function (id) {
+exports.deleteOrder = function (id) {
   return new Promise((resolve, reject) => {
     const sql = "DELETE from ORDERS where order_id = ?";
     db.run(sql, [id], (err) => {

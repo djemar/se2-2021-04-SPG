@@ -450,6 +450,7 @@ app.post(
     .bail()
     .isString()
     .bail(),
+
   body("address")
     .exists({ checkNull: true })
     .bail()
@@ -705,6 +706,30 @@ app.post(
     } else {
       await dao
         .setPendingCancellationdOrder(req.body.order_id)
+        .then((result) => res.json(result))
+        .catch((err) => res.status(503).json(dbErrorObj));
+    }
+  }
+);
+
+// DELETE /delete-order/:orderID
+// Request body: none
+// Request paramters: order's id to be deleted
+// Response body: json containing the status of the request
+app.delete(
+  "/api/delete-order/:orderID",
+  param("orderID").exists({ checkNull: true }).bail().notEmpty().bail(),
+  async (req, res) => {
+    const validation = validationResult(req);
+    if (!validation.isEmpty()) {
+      console.log("Sanitizer-checks not passed.");
+      res.status(400).json({
+        info: "The server cannot process the request",
+        error: result.array()[0].msg,
+        valueReceived: result.array()[0].value,
+      });
+    } else {
+      await dao.deleteOrder(req.params.orderID)
         .then((result) => res.json(result))
         .catch((err) => res.status(503).json(dbErrorObj));
     }

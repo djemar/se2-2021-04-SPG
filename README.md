@@ -177,6 +177,11 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
     - request parameters : none
     - request body content : //
     - responde body content : True if the operation has been completed, otherwise error 503
+- DELETE `/api/delete-order/:orderID`
+    - Delete a specific order
+    - request parameters : order's id
+    - request body : none
+    - responde body content : //
 
   ## Server Database
   - Table `USER` - it contains id, name, surname, email, password, Type, balance, address, phone, country, city, zip code and company name for a farmer.
