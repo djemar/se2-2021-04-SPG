@@ -27,6 +27,7 @@ export const ProductCard = ({ ...props }) => {
     preview,
     flagAddOrEdit,
     handleShow,
+    setProd,
   } = props;
   const [orderQuantity, setOrderQuantity] = useState(1);
   const [availableQuantity, setAvailableQuantity] = useState(availability);
@@ -94,6 +95,10 @@ export const ProductCard = ({ ...props }) => {
     setOrderQuantity(1);
   };
 
+  function editClick() {
+    handleShow();
+    setProd(props);
+  }
   //<span class="position-absolute top-5 badge rounded-pill d-flex text-dark bg-light align-items-center">
   return (
     <Card className="product-card shadow-lg py-0 h-auto">
@@ -132,7 +137,7 @@ export const ProductCard = ({ ...props }) => {
       </Card.Body>
       <Card.Footer className="w-100 text-end bg-white border-0 pb-3">
         {flagAddOrEdit ? (
-          <BSButton onClick={handleShow} className="bg-primary" size="sm">
+          <BSButton onClick={editClick} className="bg-primary" size="sm">
             Edit
           </BSButton>
         ) : (

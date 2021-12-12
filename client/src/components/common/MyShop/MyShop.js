@@ -47,6 +47,8 @@ export const MyShop = ({ ...props }) => {
   const [show, setShow] = useState(0);
   const [myProduct, setMyProduct] = useState([]);
 
+  const [prod, setProd] = useState('');
+
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -54,7 +56,7 @@ export const MyShop = ({ ...props }) => {
     let prodF = [];
     //console.log(products);
     products.forEach(x => {
-      if (x.fid === user.id) {
+      if (x.ref_farmer === user.id) {
         prodF.push(x);
       }
     });
@@ -93,6 +95,7 @@ export const MyShop = ({ ...props }) => {
                 setAnimateBasket={0}
                 flagAddOrEdit={1}
                 handleShow={handleShow}
+                setProd={setProd}
               />
             </Col>
           )
@@ -130,6 +133,8 @@ export const MyShop = ({ ...props }) => {
 
   return (
     <>
+      {' '}
+      /*Form edit */
       <Modal
         dialogClassName="modal-40w"
         size="lg"
@@ -149,13 +154,7 @@ export const MyShop = ({ ...props }) => {
                     <Form.Label className="font-medium font-ibmplex text-sm">
                       Product Name
                     </Form.Label>
-                    <Form.Control
-                      type="text"
-                      value={addedProduct.name}
-                      onChange={e =>
-                        handleChange(e.target.value, NEWVALUE.NAME)
-                      }
-                    />
+                    <Form.Control type="text" value={prod.name} />
                   </Form.Group>
 
                   <Form.Group as={Col} controlId="formGridPrice">
@@ -167,10 +166,7 @@ export const MyShop = ({ ...props }) => {
                       pattern="[0-9]"
                       min={0}
                       step={0.05}
-                      value={addedProduct.price}
-                      onChange={e =>
-                        handleChange(e.target.value, NEWVALUE.PRICE)
-                      }
+                      value={prod.price}
                     />
                   </Form.Group>
                 </Row>
@@ -179,26 +175,14 @@ export const MyShop = ({ ...props }) => {
                     <Form.Label className="font-medium font-ibmplex text-sm">
                       Available pieces
                     </Form.Label>
-                    <Form.Control
-                      type="number"
-                      value={addedProduct.availability}
-                      onChange={e =>
-                        handleChange(e.target.value, NEWVALUE.AVAILABILITY)
-                      }
-                    />
+                    <Form.Control type="number" value={prod.availability} />
                   </Form.Group>
 
                   <Form.Group as={Col} controlId="formGridQuantity">
                     <Form.Label className="font-medium font-ibmplex text-sm">
                       Quantity per-piece
                     </Form.Label>
-                    <Form.Control
-                      type="text"
-                      value={addedProduct.unit_of_measure}
-                      onChange={e =>
-                        handleChange(e.target.value, NEWVALUE.UNIT)
-                      }
-                    />
+                    <Form.Control type="text" value={prod.unit} />
                   </Form.Group>
                 </Row>
               </Col>
@@ -210,10 +194,7 @@ export const MyShop = ({ ...props }) => {
                   <Form.Control
                     as="textarea"
                     type="text"
-                    value={addedProduct.description}
-                    onChange={e =>
-                      handleChange(e.target.value, NEWVALUE.DESCRIPTION)
-                    }
+                    value={prod.description}
                   />
                 </Form.Group>
               </Col>
@@ -224,11 +205,7 @@ export const MyShop = ({ ...props }) => {
                 <Form.Label className="font-medium font-ibmplex text-sm">
                   Image URL
                 </Form.Label>
-                <Form.Control
-                  type="text"
-                  value={addedProduct.image_path}
-                  onChange={e => handleChange(e.target.value, NEWVALUE.IMAGE)}
-                />
+                <Form.Control type="text" value={prod.img} />
               </Form.Group>
             </Row>
 
@@ -250,7 +227,6 @@ export const MyShop = ({ ...props }) => {
           </ButtonBS>
         </Modal.Footer>
       </Modal>
-
       <div className="flex flex-column justify-start">
         <div className="flex flex-none justify-start pb-4">
           <Breadcrumbs />
@@ -275,7 +251,7 @@ export const MyShop = ({ ...props }) => {
                         name="inventory"
                         getOptionValue={option => option.product_id}
                         getOptionLabel={option => `${option.name}`}
-                        options={products.filter(p => p.fid === user.id)}
+                        options={products.filter(p => p.ref_farmer === user.id)}
                       />
                       or add a new product below.
                     </div>
