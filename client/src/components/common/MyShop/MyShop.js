@@ -1,24 +1,20 @@
 import { useContext, useEffect, useState } from 'react';
 import {
+  Button as ButtonBS,
   Card,
   Col,
-  Modal,
   Form,
+  Modal,
   Row,
-  Button as ButtonBS,
 } from 'react-bootstrap';
-import Breadcrumbs from '../../misc/Breadcrumbs';
-import ProductCard from '../ProductCard/ProductCard';
-import { useContext, useState } from 'react';
-import { Button as ButtonBS, Card, Col, Form, Row } from 'react-bootstrap';
 import { IoAdd } from 'react-icons/io5';
-import Select from 'react-select';
 import { MdEdit } from 'react-icons/md';
+import Select from 'react-select';
 import { UserContext } from '../../../context/UserContext';
+import { Spinner } from '../../misc';
 import Breadcrumbs from '../../misc/Breadcrumbs';
 import ProductCard from '../ProductCard/ProductCard';
 import './myshop.css';
-import { Spinner } from '../../misc';
 
 const product = {
   product_id: -1,
@@ -321,6 +317,7 @@ export const MyShop = ({ ...props }) => {
                           </Form.Label>
                           <Form.Control
                             type="text"
+                            aria-label="form-quantity"
                             value={addedProduct.unit_of_measure}
                             onChange={e =>
                               handleChange(e.target.value, NEWVALUE.UNIT)
@@ -337,28 +334,10 @@ export const MyShop = ({ ...props }) => {
                         <Form.Control
                           as="textarea"
                           type="text"
-                          aria-label="form-quantity"
-                          value={addedProduct.unit_of_measure}
-                          onChange={e =>
-                            handleChange(e.target.value, NEWVALUE.DESCRIPTION)
-                          }
-                        />
-                      </Form.Group>
-                    </Col>
-                  </Row>
-
-                  <Row className="mb-3">
-                    <Col>
-                      <Form.Group as={Col} controlId="formGridImg">
-                        <Form.Label className="font-medium font-ibmplex text-sm">
-                          Image URL
-                        </Form.Label>
-                        <Form.Control
-                          type="text"
                           aria-label="form-description"
                           value={addedProduct.description}
                           onChange={e =>
-                            handleChange(e.target.value, NEWVALUE.IMAGE)
+                            handleChange(e.target.value, NEWVALUE.DESCRIPTION)
                           }
                         />
                       </Form.Group>
@@ -381,37 +360,37 @@ export const MyShop = ({ ...props }) => {
                     </Form.Group>
                   </Row>
 
-                  {/*                 <ButtonBS variant="primary" type="submit">
+                  {/*                 <Button variant="primary" type="submit">
                   Submit
-                </ButtonBS> */}
+                </Button> */}
                 </Form>
               </Card.Body>
             </Card>
           </div>
+          <div className="col d-flex flex-column justify-content-center items-center">
+            <ProductCard
+              key={addedProduct.product_id}
+              pid={addedProduct.product_id}
+              fid={addedProduct.ref_farmer}
+              name={addedProduct.name}
+              price={addedProduct.price}
+              description={addedProduct.description}
+              category={addedProduct.category}
+              unit={addedProduct.unit_of_measure}
+              img={addedProduct.image_path}
+              availability={addedProduct.availability}
+              basketProducts={[]}
+              preview={false}
+              // setBasketProducts={()}
+              //setAnimateBasket={()}
+            />
+            <ButtonBS className="d-flex items-center my-10 shadow-lg bg-secondary">
+              <IoAdd className="text-white mr-3" />
+              Add to My Shop
+            </ButtonBS>
+          </div>
         </div>
-        <div className="col d-flex flex-column justify-content-center items-center">
-          <ProductCard
-            key={addedProduct.product_id}
-            pid={addedProduct.product_id}
-            fid={addedProduct.ref_farmer}
-            name={addedProduct.name}
-            price={addedProduct.price}
-            description={addedProduct.description}
-            category={addedProduct.category}
-            unit={addedProduct.unit_of_measure}
-            img={addedProduct.image_path}
-            availability={addedProduct.availability}
-            basketProducts={[]}
-            preview={false}
-            // setBasketProducts={()}
-            //setAnimateBasket={()}
-          />
-          <ButtonBS className="d-flex items-center my-10 shadow-lg bg-secondary">
-            <IoAdd className="text-white mr-3" />
-            Add to My Shop
-          </ButtonBS>
-        </div>
-        <span className="mx-10 text-4xl font-bold">My Shop</span>
+        <span className="mx-10 mt-10 text-4xl font-bold">My Shop</span>
         <span className="text-2xl ml-10">
           {myProduct && `(${myProduct.length || 0} products available)`}
         </span>
