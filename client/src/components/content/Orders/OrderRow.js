@@ -34,6 +34,7 @@ export const OrderRow = ({ ...props }) => {
           <Button
             className="buttons-order-details mx-1"
             size="sm"
+            aria-label="button-details"
             onClick={() => setDetails(true)}
           >
             See details
@@ -52,6 +53,7 @@ export const OrderRow = ({ ...props }) => {
             <Button
               className="buttons-order mx-1 bg-primary"
               size="sm"
+              aria-label='button-change-status'
               onClick={() => setShow(true)}
               disabled={status === 'delivered'}
             >

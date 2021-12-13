@@ -23,7 +23,7 @@ export const ModalTopUp = ({ ...props }) => {
       props.setDirty(true);
       handleClose();
     } catch (err) {
-      alert(err.message);
+      //console.error(err.message);
     }
   };
 
@@ -67,7 +67,7 @@ export const ModalTopUp = ({ ...props }) => {
               <Col sm={6}>
                 <Form.Select
                   required
-                  aria-label="topup label"
+                  aria-label="topup-label"
                   onChange={ev => setAmount(ev.target.value)}
                 >
                   <option value="10">10 €</option>
@@ -86,7 +86,7 @@ export const ModalTopUp = ({ ...props }) => {
                 </Button>
                 <Button
                   className="bg-secondary"
-                  ariaLabel={'submit-' + props.user_id}
+                  aria-label={'submit-' + props.user_id}
                   type="onSubmit"
                 >
                   Top-up

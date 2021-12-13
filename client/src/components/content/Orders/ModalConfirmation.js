@@ -68,12 +68,13 @@ export const ModalConfirmation = ({ ...props }) => {
             </h6>
             <Modal.Footer className="justify-content-center ">
               <>
-                <Button variant="secondary" onClick={handleClose}>
+                <Button variant="secondary" onClick={handleClose}
+                  aria-label='form-cancel' >
                   Cancel
                 </Button>
                 <Button
                   className="bg-primary"
-                  ariaLabel={'change-status-' + order_id}
+                  aria-label={'change-status-' + order_id}
                   type="onSubmit"
                 >
                   Change the status
