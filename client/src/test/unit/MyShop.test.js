@@ -63,4 +63,274 @@ describe('MyShop', () => {
       screen.getByText(/Select a product from your inventory/i)
     ).toBeInTheDocument();
   });
+
+  test('renders MyShop component 2', async () => {
+    MockDate.set('2021-12-12T11:20:06.196Z');
+    const products = [
+      {
+        product_id: 0,
+        name: 'product0',
+        description: 'Lorem Ipsum',
+        availability: '10',
+        price: '5',
+        unit_of_measure: '1 kg',
+      },
+      {
+        product_id: 1,
+        name: 'product1',
+        description: 'Quousque tandem abutere',
+        availability: '15',
+        price: '6',
+        unit_of_measure: '1 kg',
+      },
+    ];
+    const promise = Promise.resolve({ data: products });
+    axios.get.mockImplementationOnce(() => promise);
+    let api = jest.spyOn(API, 'checkSession').mockImplementationOnce(() =>
+      Promise.resolve({
+        id: 2,
+        userType: 'Farmer',
+      })
+    );
+    render(
+      <Router>
+        <UserContextProvider>
+          <TimeContextProvider>
+            <MyShop />
+          </TimeContextProvider>
+        </UserContextProvider>
+      </Router>
+    );
+
+    await act(() => promise);
+    // screen.debug();
+    expect(
+      screen.getByText(/Select a product from your inventory/i)
+    ).toBeInTheDocument();
+  });
+
+  test('renders MyShop component 3', async () => {
+    MockDate.set('2021-12-13T11:20:06.196Z');
+    const products = [
+      {
+        product_id: 0,
+        name: 'product0',
+        description: 'Lorem Ipsum',
+        availability: '10',
+        price: '5',
+        unit_of_measure: '1 kg',
+      },
+      {
+        product_id: 1,
+        name: 'product1',
+        description: 'Quousque tandem abutere',
+        availability: '15',
+        price: '6',
+        unit_of_measure: '1 kg',
+      },
+    ];
+    const promise = Promise.resolve({ data: products });
+    axios.get.mockImplementationOnce(() => promise);
+    let api = jest.spyOn(API, 'checkSession').mockImplementationOnce(() =>
+      Promise.resolve({
+        id: 2,
+        userType: 'Farmer',
+      })
+    );
+    render(
+      <Router>
+        <UserContextProvider>
+          <TimeContextProvider>
+            <MyShop />
+          </TimeContextProvider>
+        </UserContextProvider>
+      </Router>
+    );
+
+    await act(() => promise);
+    // screen.debug();
+    expect(
+      screen.getByText(/Select a product from your inventory/i)
+    ).toBeInTheDocument();
+  });
+
+  test('renders MyShop component 4', async () => {
+    MockDate.set('2021-12-14T11:20:06.196Z');
+    const products = [
+      {
+        product_id: 0,
+        name: 'product0',
+        description: 'Lorem Ipsum',
+        availability: '10',
+        price: '5',
+        unit_of_measure: '1 kg',
+      },
+      {
+        product_id: 1,
+        name: 'product1',
+        description: 'Quousque tandem abutere',
+        availability: '15',
+        price: '6',
+        unit_of_measure: '1 kg',
+      },
+    ];
+    const promise = Promise.resolve({ data: products });
+    axios.get.mockImplementationOnce(() => promise);
+    let api = jest.spyOn(API, 'checkSession').mockImplementationOnce(() =>
+      Promise.resolve({
+        id: 2,
+        userType: 'Farmer',
+      })
+    );
+    render(
+      <Router>
+        <UserContextProvider>
+          <TimeContextProvider>
+            <MyShop />
+          </TimeContextProvider>
+        </UserContextProvider>
+      </Router>
+    );
+
+    await act(() => promise);
+    // screen.debug();
+    expect(
+      screen.getByText(/Select a product from your inventory/i)
+    ).toBeInTheDocument();
+  });
+
+  test('renders MyShop component 5', async () => {
+    MockDate.set('2021-12-15T11:20:06.196Z');
+    const products = [
+      {
+        product_id: 0,
+        name: 'product0',
+        description: 'Lorem Ipsum',
+        availability: '10',
+        price: '5',
+        unit_of_measure: '1 kg',
+      },
+      {
+        product_id: 1,
+        name: 'product1',
+        description: 'Quousque tandem abutere',
+        availability: '15',
+        price: '6',
+        unit_of_measure: '1 kg',
+      },
+    ];
+    const promise = Promise.resolve({ data: products });
+    axios.get.mockImplementationOnce(() => promise);
+    let api = jest.spyOn(API, 'checkSession').mockImplementationOnce(() =>
+      Promise.resolve({
+        id: 2,
+        userType: 'Farmer',
+      })
+    );
+    render(
+      <Router>
+        <UserContextProvider>
+          <TimeContextProvider>
+            <MyShop />
+          </TimeContextProvider>
+        </UserContextProvider>
+      </Router>
+    );
+
+    await act(() => promise);
+    // screen.debug();
+    expect(
+      screen.getByText(/Select a product from your inventory/i)
+    ).toBeInTheDocument();
+  });
+
+  test('renders MyShop component 6', async () => {
+    MockDate.set('2021-12-16T11:20:06.196Z');
+    const products = [
+      {
+        product_id: 0,
+        name: 'product0',
+        description: 'Lorem Ipsum',
+        availability: '10',
+        price: '5',
+        unit_of_measure: '1 kg',
+      },
+      {
+        product_id: 1,
+        name: 'product1',
+        description: 'Quousque tandem abutere',
+        availability: '15',
+        price: '6',
+        unit_of_measure: '1 kg',
+      },
+    ];
+    const promise = Promise.resolve({ data: products });
+    axios.get.mockImplementationOnce(() => promise);
+    let api = jest.spyOn(API, 'checkSession').mockImplementationOnce(() =>
+      Promise.resolve({
+        id: 2,
+        userType: 'Farmer',
+      })
+    );
+    render(
+      <Router>
+        <UserContextProvider>
+          <TimeContextProvider>
+            <MyShop />
+          </TimeContextProvider>
+        </UserContextProvider>
+      </Router>
+    );
+
+    await act(() => promise);
+    // screen.debug();
+    expect(
+      screen.getByText(/Select a product from your inventory/i)
+    ).toBeInTheDocument();
+  });
+
+  test('renders MyShop component 7', async () => {
+    MockDate.set('2021-12-17T11:20:06.196Z');
+    const products = [
+      {
+        product_id: 0,
+        name: 'product0',
+        description: 'Lorem Ipsum',
+        availability: '10',
+        price: '5',
+        unit_of_measure: '1 kg',
+      },
+      {
+        product_id: 1,
+        name: 'product1',
+        description: 'Quousque tandem abutere',
+        availability: '15',
+        price: '6',
+        unit_of_measure: '1 kg',
+      },
+    ];
+    const promise = Promise.resolve({ data: products });
+    axios.get.mockImplementationOnce(() => promise);
+    let api = jest.spyOn(API, 'checkSession').mockImplementationOnce(() =>
+      Promise.resolve({
+        id: 2,
+        userType: 'Farmer',
+      })
+    );
+    render(
+      <Router>
+        <UserContextProvider>
+          <TimeContextProvider>
+            <MyShop />
+          </TimeContextProvider>
+        </UserContextProvider>
+      </Router>
+    );
+
+    await act(() => promise);
+    // screen.debug();
+    expect(
+      screen.getByText(/Select a product from your inventory/i)
+    ).toBeInTheDocument();
+  });
 });
