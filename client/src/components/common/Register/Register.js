@@ -458,6 +458,7 @@ const Register = ({ ...props }) => {
                           <ButtonBootstrap
                             className="btn-register-again"
                             size="lg"
+                            aria-label="btn-back-to-registration"
                             onClick={() => handleBackToRegistration()}
                           >
                             Back to registration
