@@ -392,11 +392,6 @@ describe('Delete Order API', () => {
         const response = await request.delete('/api/delete-order/')
         expect(response.status).toBe(404);
     })
-
-    test('Delete Order Fail 2', async () => {
-        const response = await request.delete('/api/delete-order/' + "test")
-        expect(response.status).toBe(400);
-    })
 })
 
 describe('Get Orders by ClientID API', () => {
