@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import API from '../../../API';
@@ -6,42 +6,95 @@ import { Spinner } from '../../misc';
 import Breadcrumbs from '../../misc/Breadcrumbs';
 import ProductCard from '../ProductCard/ProductCard';
 import Sidebar from '../Sidebar/Sidebar';
+import { TimeContext } from '../../../context/TimeContext';
+import dayjs from 'dayjs';
 
 export const Shop = ({ ...props }) => {
   const { basketProducts, setBasketProducts, setAnimateBasket } = props;
   const [products, setProducts] = useState([]);
   const [dirty, setDirty] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { dateState, setDateState } = useContext(TimeContext);
 
   const { category } = useParams();
 
+  function getTimeframe() {
+    let today = dayjs(dateState).get('day');
+    // db format: YYYY-MM-DD
+    // Saturday = 6, sunday = 0
+    // today will be equal to saturday, and end date sunday
+    let startDate;
+
+    switch (today) {
+      case 1:
+        startDate = dayjs(dateState).add(5, 'day').format('YYYY-MM-DD');
+        break;
+      case 2:
+        startDate = dayjs(dateState).add(4, 'day').format('YYYY-MM-DD');
+        break;
+      case 3:
+        startDate = dayjs(dateState).add(3, 'day').format('YYYY-MM-DD');
+        break;
+      case 4:
+        startDate = dayjs(dateState).add(2, 'day').format('YYYY-MM-DD');
+        break;
+      case 5:
+        startDate = dayjs(dateState).add(1, 'day').format('YYYY-MM-DD');
+        break;
+      case 6:
+        startDate = dayjs(dateState).format('YYYY-MM-DD');
+        break;
+      case 0:
+        startDate = dayjs(dateState).add(6, 'day').format('YYYY-MM-DD');
+        break;
+    }
+
+    let endDate = dayjs(startDate).add(1, 'day').format('YYYY-MM-DD');
+
+    const dates = { startDate, endDate };
+
+    console.log(dates);
+    return dates;
+  }
+
   useEffect(() => {
     //useEffect è un hook che permette di usare i lyfecycle del component. Equivale alla componentDidMount, componentDidUpdate, componentWillUnmount.
-    const getAllProducts = async () => {
-      const newProducts = await API.getAllProducts();
+    const getAllProductsBetweenDate = async () => {
+      const dates = getTimeframe();
+
+      const newProducts = await API.getProductsBetweenDates(
+        dates.startDate,
+        dates.endDate
+      );
       setProducts(newProducts);
     };
 
-    const getAllProductsByCategory = async idCategory => {
-      const newProducts = await API.getAllProductsByCategory(idCategory);
+    const getAllProductsByCategoryBetweenDates = async idCategory => {
+      const dates = getTimeframe();
+
+      const newProducts = await API.getAllProductsByCategoryAndDates(
+        idCategory,
+        dates.startDate,
+        dates.endDate
+      );
       setProducts(newProducts);
     };
 
     if (category) {
       const idClean = category.replaceAll('-', ' ');
       setLoading(true);
-      getAllProductsByCategory(idClean).then(() => {
+      getAllProductsByCategoryBetweenDates(idClean).then(() => {
         setLoading(false);
         //setDirty(false);
       });
     } else {
       setLoading(true);
-      getAllProducts().then(() => {
+      getAllProductsBetweenDate().then(() => {
         setLoading(false);
         //setDirty(false);
       });
     }
-  }, [category]);
+  }, [category, dateState]);
 
   const mappedProduct =
     (products &&

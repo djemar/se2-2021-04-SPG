@@ -1,4 +1,5 @@
 import axios from 'axios';
+
 const bcrypt = require('bcryptjs');
 
 // UTILS
@@ -15,8 +16,6 @@ const getHashedPWD = pwd => {
 */
 
 const BASEURL = '/api';
-
-/************** Products **************/
 
 async function login(credentials) {
   let jsonCred = JSON.stringify(credentials);
@@ -53,6 +52,8 @@ async function checkSession() {
     throw userInfo; // an object with the error coming from the server
   }
 }
+
+/************** Products **************/
 
 async function getAllProducts() {
   let url = BASEURL + `/products`;
@@ -119,6 +120,59 @@ async function insertProduct(
   }
 }
 
+async function getProductsByDate(date) {
+  let url = BASEURL + `/products-by-date`;
+  try {
+    const res = await axios.post(url, {
+      date: date,
+    });
+    return await res.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function getProductsFromDate(date) {
+  let url = BASEURL + `/products-from-date`;
+  try {
+    const res = await axios.post(url, {
+      date: date,
+    });
+    return await res.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function getProductsToDate(date) {
+  let url = BASEURL + `/products-to-date`;
+  try {
+    const res = await axios.post(url, {
+      date: date,
+    });
+    return await res.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function getProductsBetweenDates(startDate, endDate) {
+  let url = BASEURL + `/products-between-dates`;
+  if (endDate < startDate) {
+    console.log('endDate cannot come before than startDate.');
+    return { error: 'endDate cannot come before than startDate' };
+  }
+  try {
+    const res = await axios.post(url, {
+      startDate: startDate,
+      endDate: endDate,
+    });
+    return await res.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 async function editProduct(
   product_id,
   name,
@@ -150,6 +204,29 @@ async function editProduct(
   try {
     await axios.post(url, product);
     return true;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function getAllProductsByCategoryAndDates(
+  categoryProduct,
+  startDate,
+  endDate
+) {
+  let url = BASEURL + '/products-between-dates-category';
+  let categoryWithSpaces;
+  if (categoryProduct !== undefined && categoryProduct !== '')
+    categoryWithSpaces = categoryProduct.replaceAll('-', ' ');
+
+  try {
+    const res = await axios.post(url, {
+      category: categoryProduct, //name of the category
+      startDate: startDate,
+      endDate: endDate,
+    });
+    //console.log(res);
+    return res.data;
   } catch (error) {
     console.log(error);
   }
@@ -404,6 +481,11 @@ async function deleteOrder(orderID) {
 const API = {
   getAllProducts,
   getAllProductsByCategory,
+  getProductsByDate,
+  getProductsFromDate,
+  getProductsToDate,
+  getProductsBetweenDates,
+  getAllProductsByCategoryAndDates,
   addUser,
   getAllUsers,
   addOrder,
