@@ -52,6 +52,12 @@
   height: 175px;
   width: 100%;
 }
+.product-img-div {
+  overflow: hidden;
+  object-fit: cover;
+  height: 175px;
+  width: 100%;
+}
 
 .product-title {
   font-weight: 500;

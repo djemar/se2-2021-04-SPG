@@ -144,35 +144,6 @@ async function getProductsFromDate(date) {
   }
 }
 
-async function getProductsToDate(date) {
-  let url = BASEURL + `/products-to-date`;
-  try {
-    const res = await axios.post(url, {
-      date: date,
-    });
-    return await res.data;
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-async function getProductsBetweenDates(startDate, endDate) {
-  let url = BASEURL + `/products-between-dates`;
-  if (endDate < startDate) {
-    console.log('endDate cannot come before than startDate.');
-    return { error: 'endDate cannot come before than startDate' };
-  }
-  try {
-    const res = await axios.post(url, {
-      startDate: startDate,
-      endDate: endDate,
-    });
-    return await res.data;
-  } catch (error) {
-    console.log(error);
-  }
-}
-
 async function editProduct(
   product_id,
   name,
@@ -227,6 +198,35 @@ async function getAllProductsByCategoryAndDates(
     });
     //console.log(res);
     return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function getProductsToDate(date) {
+  let url = BASEURL + `/products-to-date`;
+  try {
+    const res = await axios.post(url, {
+      date: date,
+    });
+    return await res.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function getProductsBetweenDates(startDate, endDate) {
+  let url = BASEURL + `/products-between-dates`;
+  if (endDate < startDate) {
+    console.log('endDate cannot come before than startDate.');
+    return { error: 'endDate cannot come before than startDate' };
+  }
+  try {
+    const res = await axios.post(url, {
+      startDate: startDate,
+      endDate: endDate,
+    });
+    return await res.data;
   } catch (error) {
     console.log(error);
   }
