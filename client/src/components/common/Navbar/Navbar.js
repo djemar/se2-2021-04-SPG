@@ -141,6 +141,7 @@ export const Navbar = ({ ...props }) => {
             <NavDropdown
               align={'left'}
               id="dropdown-menu-align-left"
+              aria-label="navdropdown"
               className="nav-item dropdown no-arrow mr-4"
               title={
                 <>
@@ -164,6 +165,7 @@ export const Navbar = ({ ...props }) => {
                 </NavDropdown.Item>
               )}
               <NavDropdown.Item
+                aria-label="navdropdown-item"
                 className="text-danger"
                 onClick={() => logout()}
               >
