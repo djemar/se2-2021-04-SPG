@@ -23,7 +23,7 @@ export const ModalTopUp = ({ ...props }) => {
       props.setDirty(true);
       handleClose();
     } catch (err) {
-      console.error(err.message);
+      //console.error(err.message);
     }
   };
 
