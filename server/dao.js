@@ -185,6 +185,7 @@ exports.insertProduct = function (product) {
         "Parameter constraints must be respected"
       );
     else {
+      console.log(product)
       const sql =
         "INSERT INTO PRODUCT(name, description,category, ref_farmer, price, availability, unit_of_measure, image_path, start_date, end_date)" +
         " VALUES (?,?,?,?,?,?,?,?,?,?)";
@@ -277,7 +278,7 @@ exports.updateProduct = function (product) {
             console.log(err);
             reject(err);
           } else {
-            console.log("Product " + product.product_id + " added successfully");
+            console.log("Product " + product.product_id + " modified successfully");
             const p = {
               product_id: product.product_id,
               name: product.name,

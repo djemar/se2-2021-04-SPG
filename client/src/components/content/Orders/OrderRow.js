@@ -53,7 +53,7 @@ export const OrderRow = ({ ...props }) => {
             <Button
               className="buttons-order mx-1 bg-primary"
               size="sm"
-              aria-label='button-change-status'
+              aria-label="button-change-status"
               onClick={() => setShow(true)}
               disabled={status === 'delivered'}
             >
