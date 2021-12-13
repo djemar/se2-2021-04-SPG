@@ -49,6 +49,7 @@ function mappingUsers(rows) {
     user_id: e.user_id,
     name: e.name,
     surname: e.surname,
+    company: e.company,
     email: e.email,
     hash: e.password,
     Type: e.Type,
@@ -226,19 +227,20 @@ exports.insertUser = function (user) {
       typeof user.zip_code !== "number"
     )
       reject(
-        "Strings are expected for all parameters, except for zip_code which must be an Integer"
+        "Strings are expected for all parameters, except for zip_code which must be an Integer and company which could be null if Type is Client"
       );
     else {
       const balance = user.Type === "Client" ? 0.0 : null;
       const sql =
-        "INSERT INTO USER(name,surname,email,password,Type,wallet_balance,address,phone,country,city,zip_code)" +
-        " VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+        "INSERT INTO USER(name,surname,company,email,password,Type,wallet_balance,address,phone,country,city,zip_code)" +
+        " VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
       //ID is not needed. It's added by the insert operation
       db.run(
         sql,
         [
           user.name,
           user.surname,
+          user.company,
           user.email,
           user.hash, // password assumed to be already hashed by frontend
           user.Type,
@@ -260,6 +262,7 @@ exports.insertUser = function (user) {
               user_id: userID,
               name: user.name,
               surname: user.surname,
+              company: user.company,
               email: user.email,
               hash: user.hash,
               Type: user.Type,

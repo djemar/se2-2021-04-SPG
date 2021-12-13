@@ -51,6 +51,7 @@ export const OrderRow = ({ ...props }) => {
         {isManager && (
           <td className="text-center align-middle">
             <Button
+              ariaLabel={'btn-update-status-' + order_id}
               className="buttons-order mx-1 bg-primary"
               size="sm"
               aria-label="button-change-status"

@@ -5,7 +5,7 @@ import { Button, Col, Form, Modal, Row } from 'react-bootstrap';
 import API from '../../../API';
 
 export const ModalTopUp = ({ ...props }) => {
-  const [amount, setAmount] = useState(0.0);
+  const [amount, setAmount] = useState(10);
   const { currAmount, user_id, name, surname } = props;
 
   const handleClose = () => {

@@ -8,26 +8,24 @@ jest.mock('axios');
 
 describe('Client', () => {
   beforeEach(() => jest.resetAllMocks());
-  test('Add client', async () => {
+  test('Add client error', async () => {
     const promise = Promise.resolve({ data: 5 });
     //axios.post.mockImplementationOnce(() => Promise.resolve({ data: 5 }));
     render(<App />);
     await userEvent.click(
-      screen.getByRole('link', {
-        name: /nav-create-client/i,
+      screen.getByRole('button', {
+        name: /btn-register/i,
       })
     );
+
     //screen.debug();
 
+    await userEvent.type(screen.getByLabelText(/reg-surname/i), 'Skywalker');
     await userEvent.type(
-      screen.getByLabelText(/reg-client-surname/i),
-      'Skywalker'
-    );
-    await userEvent.type(
-      screen.getByLabelText(/reg-client-email/i),
+      screen.getByLabelText(/reg-email/i),
       'luke@tatooine.com'
     );
-    await userEvent.type(screen.getByLabelText(/reg-client-psw/i), 'leila99');
+    await userEvent.type(screen.getByLabelText(/reg-psw/i), 'leila99');
 
     await userEvent.click(
       screen.getByRole('button', {
