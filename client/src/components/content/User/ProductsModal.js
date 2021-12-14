@@ -2,14 +2,7 @@ import { Col, Modal, Row } from 'react-bootstrap';
 import ProductsList from './ProductsList';
 
 export const ProductsModal = ({ ...props }) => {
-  const {
-    order_id,
-    ref_user,
-    date_order,
-    products_and_qnt,
-    status,
-    tot_price,
-  } = props;
+  const { order_id, date_order, products_and_qnt, status, tot_price } = props;
 
   const styleFromStatus = {
     pending: 'order-pending',
@@ -34,13 +27,10 @@ export const ProductsModal = ({ ...props }) => {
         </Modal.Header>
         <Modal.Body style={{ textAlign: 'center' }}>
           <Row>
-            <Col className="mb-4" xs={12} sm={6} lg={3}>
-              <b>Client:</b> {ref_user}
+            <Col className="mb-4" xs={12} sm={6} lg={4}>
+              <b>Date and time:</b> {date_order}
             </Col>
-            <Col className="mb-4" xs={12} sm={6} lg={3}>
-              <b>Date:</b> {date_order}
-            </Col>
-            <Col className="mb-4" xs={12} sm={6} lg={3}>
+            <Col className="mb-4" xs={12} sm={6} lg={4}>
               <b>Status:</b>{' '}
               <span
                 className={`w-min px-3 py-0.5 inline text-sm rounded-xl text-white ${styleFromStatus[status]}`}
@@ -48,7 +38,7 @@ export const ProductsModal = ({ ...props }) => {
                 {status}
               </span>
             </Col>
-            <Col className="mb-4" xs={12} sm={6} lg={3}>
+            <Col className="mb-4" xs={12} sm={6} lg={4}>
               <b>Total Price:</b> € {tot_price}
             </Col>
           </Row>

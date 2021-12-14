@@ -9,7 +9,7 @@
   --success: #1cc88a;
   --info: #36b9cc;
   --warning: #f6c23e;
-  --danger: #fe7171;
+  --danger: #ee4040;
   --light: #f8f9fc;
   --dark: #5a5c69;
   --breakpoint-xs: 0;
@@ -42,20 +42,20 @@
   background-color: var(--secondary);
 }
 
-.fg-primary {
-  color: var(--primary);
+.fg-secondary {
+  color: var(--secondary);
 }
 
-.bg-primary {
-  background-color: var(--primary) !important;
-  border-color: var(--primary) !important;
+.bg-secondary {
+  background-color: var(--secondary) !important;
+  border-color: var(--secondary) !important;
 }
 
-.btn.bg-primary:hover {
+.btn.bg-secondary:hover {
   background-color: rgb(156, 58, 16) !important;
 }
 
-.btn.bg-primary:focus {
+.btn.bg-secondary:focus {
   background-color: rgb(156, 58, 16) !important;
   box-shadow: 0 0 0 0.2rem rgba(156, 58, 16, 0.5);
 }

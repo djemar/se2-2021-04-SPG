@@ -1,20 +1,19 @@
 import {
   faGreaterThan,
   faMoneyBillWaveAlt,
-  faCartPlus,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import dayjs from 'dayjs';
-import * as relativeTime from 'dayjs/plugin/relativeTime';
-import { useContext, useState, useEffect } from 'react';
+//import * as relativeTime from 'dayjs/plugin/relativeTime';
+import { useContext, useEffect, useState } from 'react';
 import { Card, ListGroup, Toast, ToastContainer } from 'react-bootstrap';
 import { Link, NavLink, useLocation } from 'react-router-dom';
+import API from '../../API';
 import '../../App.css';
 import { TimeContext } from '../../context/TimeContext';
+import { UserContext } from '../../context/UserContext';
 import './../common/Sidebar/sidebar.css';
 import DateModal from './DateModal';
-import { UserContext } from '../../context/UserContext';
-import API from '../../API';
 
 //dayjs.extend(relativeTime);
 
@@ -24,8 +23,6 @@ export const Breadcrumbs = ({ ...props }) => {
   const [modalShow, setModalShow] = useState(false);
   const { dateState, setDateState } = useContext(TimeContext);
   const [now, setNow] = useState(dayjs());
-  const { orderEnabled } = useContext(TimeContext);
-  const [toastOrder, setToastOrder] = useState(true);
 
   useEffect(() => {
     const pendingCancellation = async () => {
@@ -33,10 +30,10 @@ export const Breadcrumbs = ({ ...props }) => {
       API.setAllPendingCancellationOrder();
     };
 
-    const deletePending = async () => {
+    /* const deletePending = async () => {
       //console.log("it's monday evening");
       API.deleteAllPendingOrder();
-    };
+    }; */
 
     if (
       dayjs(dateState).get('day') === 1 &&
@@ -47,20 +44,6 @@ export const Breadcrumbs = ({ ...props }) => {
         //console.log('success');
       });
     }
-
-    /*
-    // delete all at 21:00
-    // this has to be updated on the backend
-    if (
-      dayjs(dateState).get('day') === 1 &&
-      dayjs(dateState).get('hour') === 21 &&
-      dayjs(dateState).get('minute') === 0
-    ) {
-      deletePending().then(() => {
-        console.log('success');
-      });
-    }
-    */
   }, [dateState]);
 
   setInterval(() => {
@@ -124,11 +107,34 @@ export const Breadcrumbs = ({ ...props }) => {
 
   return (
     <div
-      className={`vw-100 px-3 d-flex justify-between items-center ${
-        !alertBalance ? 'py-8' : ''
+      className={`md:w-full flex-columns md:flex justify-between items-center ${
+        !alertBalance ? 'md:py-8' : ''
       }`}
     >
-      <ListGroup className="striped-list text-black shadow">
+      <ToastContainer className="md:m-0 w-80 md:hidden">
+        <Toast
+          bg="warning"
+          show={alertBalance}
+          onClose={() => setAlertBalance(false)}
+        >
+          <Toast.Header closeButton={true}>
+            <FontAwesomeIcon
+              icon={faMoneyBillWaveAlt}
+              className={'mr-2 mb-0'}
+            />
+            <strong className="me-auto">Insufficient Balance</strong>
+          </Toast.Header>
+          <Toast.Body className="text-dark warning">
+            You have orders pending but your{' '}
+            <strong>balance is not enough</strong>! Top-up it!
+          </Toast.Body>
+        </Toast>
+      </ToastContainer>
+      <ListGroup
+        className={`striped-list text-black shadow ${
+          alertBalance ? 'mt-4 md:mt-0' : ''
+        }`}
+      >
         <ListGroup.Item key="home" className="text-dark flex">
           <Link to="/" className="breadcrumbs">
             Home
@@ -137,7 +143,7 @@ export const Breadcrumbs = ({ ...props }) => {
         </ListGroup.Item>
       </ListGroup>
       {alertBalance && (
-        <ToastContainer>
+        <ToastContainer className="mt-4 md:m-0 w-80 hidden md:block">
           <Toast
             bg="warning"
             show={alertBalance}
@@ -149,7 +155,6 @@ export const Breadcrumbs = ({ ...props }) => {
                 className={'mr-2 mb-0'}
               />
               <strong className="me-auto">Insufficient Balance</strong>
-              <small>{dayjs(now).to(dayjs(dateState))}</small>
             </Toast.Header>
             <Toast.Body className="text-dark warning">
               You have orders pending but your{' '}
@@ -158,26 +163,8 @@ export const Breadcrumbs = ({ ...props }) => {
           </Toast>
         </ToastContainer>
       )}
-      {orderEnabled && (
-        <ToastContainer>
-          <Toast
-            bg="success"
-            show={toastOrder}
-            onClose={() => setToastOrder(false)}
-          >
-            <Toast.Header closeButton={true}>
-              <FontAwesomeIcon icon={faCartPlus} className={'mr-2 mb-0'} />
-              <strong className="me-auto">Order now!</strong>
-              <small>
-                You can place an order from Saturday 9AM to Sunday 11PM.
-              </small>
-            </Toast.Header>
-            <Toast.Body className="text-dark warning">Do it now!</Toast.Body>
-          </Toast>
-        </ToastContainer>
-      )}
       <Card
-        className="striped-list breadcrumbs px-3 py-2 shadow cursor-pointer"
+        className="striped-list breadcrumbs px-3 py-2 shadow cursor-pointer mt-4 md:m-0"
         onClick={() => setModalShow(true)}
       >
         {dayjs(dateState).format('HH:mm, dddd, DD/MM/YYYY')}

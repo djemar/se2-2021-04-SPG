@@ -47,10 +47,9 @@ export const Basket = ({ ...props }) => {
     if (result) {
       // clear basket
       setBasketProducts([]);
-      setClientId('');
       setDirty(true);
       setShowOrderAlert(true);
-      window.setTimeout(() => {
+      setTimeout(() => {
         setShowOrderAlert(false);
       }, 4000);
     }
@@ -114,8 +113,26 @@ export const Basket = ({ ...props }) => {
               {somma + ' €'}
             </div>
           </div>
-          <Alert show={!orderEnabled} variant="warning" className="mx-4">
-            Orders are available from Saturday 9AM to Sunday 11PM
+          <Alert
+            show={
+              clientId === '' || basketProducts.length === 0 || !orderEnabled
+            }
+            variant="warning"
+            className="mx-4"
+          >
+            Orders are not Available:
+            <ul class="list-disc list-inside">
+              {user && user.userType === 'Farmer' && (
+                <li>Farmers can't create orders</li>
+              )}
+              {clientId === '' && <li>Client ID is not defined</li>}
+              {!orderEnabled && (
+                <li>Orders are available from Saturday 9AM to Sunday 11PM</li>
+              )}
+              {!basketProducts.length && (
+                <li>Basket is empty, fill it with something</li>
+              )}
+            </ul>
           </Alert>
           <div className="d-flex justify-between mx-5 my-5">
             <Button
@@ -124,7 +141,6 @@ export const Basket = ({ ...props }) => {
               onClick={() => setModalShow(true)}
               disabled={basketProducts.length === 0}
             />
-
             <Button
               text={'Confirm Order'}
               type={'success'}
@@ -132,8 +148,6 @@ export const Basket = ({ ...props }) => {
               onClick={handleAddOrder}
               disabled={
                 clientId === '' || basketProducts.length === 0 || !orderEnabled
-                  ? true
-                  : false
               }
             />
           </div>

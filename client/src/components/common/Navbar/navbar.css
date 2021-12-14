@@ -50,7 +50,6 @@ a.text-secondary:focus {
 #btn-basket {
   background-color: var(--secondary);
   height: inherit;
-  width: 200px;
   border: none;
   border-radius: 0;
 }

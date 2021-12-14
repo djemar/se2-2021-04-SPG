@@ -164,157 +164,169 @@ app.post("/api/products", [check("category").isString()], async (req, res) => {
 // POST /products-by-date
 // Request body: specific date
 // Response body: json containing all the products that can be sold at that date and time
-app.post("/api/products-by-date",
-    body("date")
-        .exists({ checkNull: true })
-        .bail()
-        .notEmpty()
-        .bail()
-        .isString()
-        .bail(),
-    async (req, res) => {
-        const result = validationResult(req);
-        if (!result.isEmpty())
-            res.status(400).json({
-                info: "The server cannot process the request",
-                error: result.array()[0].msg,
-                valueReceived: result.array()[0].value,
-            });
-        else {
-            await dao
-                .getProductsByDate(req.body.date)
-                .then((products) => res.json(products))
-                .catch((err) => res.status(503).json(dbErrorObj));
-        }
-});
+app.post(
+  "/api/products-by-date",
+  body("date")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isString()
+    .bail(),
+  async (req, res) => {
+    const result = validationResult(req);
+    if (!result.isEmpty())
+      res.status(400).json({
+        info: "The server cannot process the request",
+        error: result.array()[0].msg,
+        valueReceived: result.array()[0].value,
+      });
+    else {
+      await dao
+        .getProductsByDate(req.body.date)
+        .then((products) => res.json(products))
+        .catch((err) => res.status(503).json(dbErrorObj));
+    }
+  }
+);
 
 // POST /products-from-date
 // Request body: starting date
 // Response body: json containing all the products that can be sold from that date and time
-app.post("/api/products-from-date",
-    body("date")
-        .exists({ checkNull: true })
-        .bail()
-        .notEmpty()
-        .bail()
-        .isString()
-        .bail(),
-    async (req, res) => {
-        const result = validationResult(req);
-        if (!result.isEmpty())
-            res.status(400).json({
-                info: "The server cannot process the request",
-                error: result.array()[0].msg,
-                valueReceived: result.array()[0].value,
-            });
-        else {
-            await dao
-                .getProductsFromDate(req.body.date)
-                .then((products) => res.json(products))
-                .catch((err) => res.status(503).json(dbErrorObj));
-        }
-});
+app.post(
+  "/api/products-from-date",
+  body("date")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isString()
+    .bail(),
+  async (req, res) => {
+    const result = validationResult(req);
+    if (!result.isEmpty())
+      res.status(400).json({
+        info: "The server cannot process the request",
+        error: result.array()[0].msg,
+        valueReceived: result.array()[0].value,
+      });
+    else {
+      await dao
+        .getProductsFromDate(req.body.date)
+        .then((products) => res.json(products))
+        .catch((err) => res.status(503).json(dbErrorObj));
+    }
+  }
+);
 
 // POST /products-to-date
 // Request body: ending date
 // Response body: json containing all the products that can be sold until that date and time
-app.post("/api/products-to-date",
-    body("date")
-        .exists({ checkNull: true })
-        .bail()
-        .notEmpty()
-        .bail()
-        .isString()
-        .bail(),
-    async (req, res) => {
-        const result = validationResult(req);
-        if (!result.isEmpty())
-            res.status(400).json({
-                info: "The server cannot process the request",
-                error: result.array()[0].msg,
-                valueReceived: result.array()[0].value,
-            });
-        else {
-            await dao
-                .getProductsToDate(req.body.date)
-                .then((products) => res.json(products))
-                .catch((err) => res.status(503).json(dbErrorObj));
-        }
-});
+app.post(
+  "/api/products-to-date",
+  body("date")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isString()
+    .bail(),
+  async (req, res) => {
+    const result = validationResult(req);
+    if (!result.isEmpty())
+      res.status(400).json({
+        info: "The server cannot process the request",
+        error: result.array()[0].msg,
+        valueReceived: result.array()[0].value,
+      });
+    else {
+      await dao
+        .getProductsToDate(req.body.date)
+        .then((products) => res.json(products))
+        .catch((err) => res.status(503).json(dbErrorObj));
+    }
+  }
+);
 
 // POST /products-between-dates
 // Request body: starting date and ending date
 // Response body: json containing all the products that can be sold from starting date to ending date
-app.post("/api/products-between-dates",
-    body("startDate")
-        .exists({ checkNull: true })
-        .bail()
-        .notEmpty()
-        .bail()
-        .isString()
-        .bail(),
-    body("endDate")
-        .exists({ checkNull: true })
-        .bail()
-        .notEmpty()
-        .bail()
-        .isString()
-        .bail(),
- async (req, res) => {
-     const result = validationResult(req);
-     if (!result.isEmpty())
-         res.status(400).json({
-             info: "The server cannot process the request",
-             error: result.array()[0].msg,
-             valueReceived: result.array()[0].value,
-         });
-     else {
-         await dao
-             .getProductsBetweenDates(req.body.startDate, req.body.endDate)
-             .then((products) => res.json(products))
-             .catch((err) => res.status(503).json(dbErrorObj));
-     }
-});
+app.post(
+  "/api/products-between-dates",
+  body("startDate")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isString()
+    .bail(),
+  body("endDate")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isString()
+    .bail(),
+  async (req, res) => {
+    const result = validationResult(req);
+    if (!result.isEmpty())
+      res.status(400).json({
+        info: "The server cannot process the request",
+        error: result.array()[0].msg,
+        valueReceived: result.array()[0].value,
+      });
+    else {
+      await dao
+        .getProductsBetweenDates(req.body.startDate, req.body.endDate)
+        .then((products) => res.json(products))
+        .catch((err) => res.status(503).json(dbErrorObj));
+    }
+  }
+);
 
-app.post("/api/products-between-dates-category",
-    body("category")
-        .exists({ checkNull: true })
-        .bail()
-        .notEmpty()
-        .bail()
-        .isString()
-        .bail(),
-    body("startDate")
-        .exists({ checkNull: true })
-        .bail()
-        .notEmpty()
-        .bail()
-        .isString()
-        .bail(),
-    body("endDate")
-        .exists({ checkNull: true })
-        .bail()
-        .notEmpty()
-        .bail()
-        .isString()
-        .bail(),
-    async (req, res) => {
-        const result = validationResult(req);
-        if (!result.isEmpty())
-            res.status(400).json({
-                info: "The server cannot process the request",
-                error: result.array()[0].msg,
-                valueReceived: result.array()[0].value,
-            });
-        else {
-            await dao
-                .getAllProductsByCategoryAndDates(req.body.category, req.body.startDate, req.body.endDate)
-                .then((products) => res.json(products))
-                .catch((err) => res.status(503).json(dbErrorObj));
-        }
-    });
-
-
+app.post(
+  "/api/products-between-dates-category",
+  body("category")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isString()
+    .bail(),
+  body("startDate")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isString()
+    .bail(),
+  body("endDate")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isString()
+    .bail(),
+  async (req, res) => {
+    const result = validationResult(req);
+    if (!result.isEmpty())
+      res.status(400).json({
+        info: "The server cannot process the request",
+        error: result.array()[0].msg,
+        valueReceived: result.array()[0].value,
+      });
+    else {
+      await dao
+        .getAllProductsByCategoryAndDates(
+          req.body.category,
+          req.body.startDate,
+          req.body.endDate
+        )
+        .then((products) => res.json(products))
+        .catch((err) => res.status(503).json(dbErrorObj));
+    }
+  }
+);
 
 /************** Users **************/
 
@@ -739,7 +751,7 @@ app.post(
         valueReceived: result.array(),
       });
     else {
-        console.log(req.body)
+      console.log(req.body);
       await dao
         .insertProduct(req.body)
         .then((product) => res.json(product))
@@ -831,14 +843,13 @@ app.post(
     const result = validationResult(req);
 
     if (!result.isEmpty()) {
-        console.log(result)
-        res.status(400).json({
-            info: "The server cannot process the request",
-            error: result.array(),
-            valueReceived: result.array(),
-        });
-    }
-    else {
+      console.log(result);
+      res.status(400).json({
+        info: "The server cannot process the request",
+        error: result.array(),
+        valueReceived: result.array(),
+      });
+    } else {
       await dao
         .updateProduct(req.body)
         .then((product) => res.json(product))
@@ -888,41 +899,34 @@ app.delete(
         valueReceived: result.array()[0].value,
       });
     } else {
-      await dao.deleteOrder(req.params.orderID)
+      await dao
+        .deleteOrder(req.params.orderID)
         .then((result) => res.json(result))
         .catch((err) => res.status(503).json(dbErrorObj));
     }
   }
 );
 
-app.get(
-  "/api/set-all-pending-cancellation-order/",
-  async (req, res) => {
+app.get("/api/set-all-pending-cancellation-order/", async (req, res) => {
+  // First, retrieve all the orders which are pending and
+  // retrieve also the order cost as the SUM of quantity*price.
+  // Then, filter the array and maintain only orders where
+  // wallet_balance > orderCost.
+  // for simplicty, in an order cost is > wallet_balance,
+  // set as pending cancellation
+  await dao
+    .getOrdersAndWallets()
+    .then((results) => {
+      // for each result, we now have to call
+      // setPendingCancellationdOrder for each order
 
-    // First, retrieve all the orders which are pending and 
-    // retrieve also the order cost as the SUM of quantity*price.
-    // Then, filter the array and maintain only orders where 
-    // wallet_balance > orderCost. 
-    // for simplicty, in an order cost is > wallet_balance,
-    // set as pending cancellation
-    await dao.getOrdersAndWallets()
-      .then((results) => {
-        // for each result, we now have to call
-        // setPendingCancellationdOrder for each order
-
-        for (const result of results) {
-          dao.setPendingCancellationdOrder(result.order_id);
-        }
-      }).then(() => res.json(true))
-      .catch((err) => res.status(503).json(dbErrorObj));
-  }
-);
-
-
-
-
-
-
+      for (const result of results) {
+        dao.setPendingCancellationdOrder(result.order_id);
+      }
+    })
+    .then(() => res.json(true))
+    .catch((err) => res.status(503).json(dbErrorObj));
+});
 
 app.listen(port, () =>
   console.log(`Server app listening at http://localhost:${port}`)

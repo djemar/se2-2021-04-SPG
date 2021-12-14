@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 
 export const Button = ({ ...props }) => {
-  const { text, type, disabled, onClick, url, ariaLabel } = props;
+  const { text, type, disabled, onClick, url, ariaLabel, children } = props;
   return url ? (
     <Link to={url}>
       <button
@@ -9,7 +9,8 @@ export const Button = ({ ...props }) => {
         disabled={disabled}
         aria-label={ariaLabel}
       >
-        <span className="text">{text}</span>
+        {text && <span className="text">{text}</span>}
+        {children}
       </button>
     </Link>
   ) : (
@@ -20,7 +21,8 @@ export const Button = ({ ...props }) => {
       onClick={onClick}
       aria-label={ariaLabel}
     >
-      <span className="text">{text}</span>
+      {text && <span className="text">{text}</span>}
+      {children}
     </button>
   );
 };

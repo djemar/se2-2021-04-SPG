@@ -1,14 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import {
   Button as BSButton,
   Card,
   OverlayTrigger,
   Tooltip,
 } from 'react-bootstrap';
+import { IoStorefrontOutline } from 'react-icons/io5';
+import { UserContext } from '../../../context/UserContext';
 import QuantitySelector from '../../misc/QuantitySelector';
 import './productCard.css';
-import { IoStorefrontOutline } from 'react-icons/io5';
-import API from '../../../API';
 
 export const ProductCard = ({ ...props }) => {
   const {
@@ -29,41 +29,33 @@ export const ProductCard = ({ ...props }) => {
     handleShow,
     setProd,
   } = props;
+  const { loadingProd, users } = useContext(UserContext);
   const [orderQuantity, setOrderQuantity] = useState(1);
   const [availableQuantity, setAvailableQuantity] = useState(availability);
-  const [users, setUsers] = useState([]);
-  const [dirty, setDirty] = useState(true);
+
   const [farmerName, setFarmerName] = useState('');
   useEffect(() => {
     const i = basketProducts.findIndex(item => item.pid === pid);
     if (i !== -1) {
       setAvailableQuantity(availableQuantity - basketProducts[i].quantity);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    const farmer = users.find(u => u.user_id === fid);
+    setFarmerName(farmer ? farmer.company_name : '');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [users]);
 
   useEffect(() => {
     const i = basketProducts.findIndex(item => item.pid === pid);
     if (i === -1) {
       setAvailableQuantity(availability);
     }
-  }, [basketProducts]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [basketProducts, loadingProd]);
 
-  useEffect(() => {
-    const getAllUsers = async () => {
-      const users = await API.getAllUsers();
-      setUsers(users);
-    };
-
-    if (dirty) {
-      getAllUsers().then(() => {
-        setDirty(false);
-      });
-    }
-
-    users.forEach(x => {
-      if (x.user_id === fid) setFarmerName(x.name);
-    });
-  }, [dirty]);
   const handleAddToBasket = () => {
     const i = basketProducts.findIndex(item => item.pid === pid);
     if (orderQuantity >= 1) {
@@ -99,6 +91,7 @@ export const ProductCard = ({ ...props }) => {
     handleShow();
     setProd(props);
   }
+
   //<span class="position-absolute top-5 badge rounded-pill d-flex text-dark bg-light align-items-center">
   return (
     <Card className="product-card shadow-lg py-0 h-auto">
