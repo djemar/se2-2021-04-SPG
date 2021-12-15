@@ -13,44 +13,41 @@ import userEvent from '@testing-library/user-event';
 jest.mock('axios');
 
 beforeEach(() => {
-    MockDate.set('2021-12-13T08:00:00.196Z');
+  MockDate.set('2021-12-13T08:00:00.196Z');
 });
 
 afterEach(() => {
-    MockDate.reset();
+  MockDate.reset();
 });
 
 describe('Breadcumbs', () => {
+  test('renders Breadcumbs component', async () => {
+    //const promise = Promise.resolve({ data: products });
+    //axios.get.mockImplementationOnce(() => promise);
 
-    test('renders Breadcumbs component', async () => {
-        //const promise = Promise.resolve({ data: products });
-        //axios.get.mockImplementationOnce(() => promise);
-
-        /* let api = jest
+    /* let api = jest
             .spyOn(API, 'addOrder')
             .mockImplementationOnce(() => Promise.resolve(true)); */
-        render(
-            <Router>
-                <UserContextProvider>
-                    <TimeContextProvider>
-                        <Breadcumbs></Breadcumbs>
-                    </TimeContextProvider>
-                </UserContextProvider>
-            </Router>
-        );
+    render(
+      <Router>
+        <TimeContextProvider>
+          <UserContextProvider>
+            <Breadcumbs></Breadcumbs>
+          </UserContextProvider>
+        </TimeContextProvider>
+      </Router>
+    );
 
-        //await act(async () => promise);
+    //await act(async () => promise);
 
-        expect(screen.getByText(/Home/i)).toBeInTheDocument();
-        expect(screen.getByText("09:00, Monday, 13/12/2021")).toBeInTheDocument();
-        screen.debug();
+    expect(screen.getByText(/Home/i)).toBeInTheDocument();
+    expect(screen.getByText('09:00, Monday, 13/12/2021')).toBeInTheDocument();
+    screen.debug();
 
-        /* userEvent.click(
+    /* userEvent.click(
             screen.getByRole('button', {
                 name: /btn-confirm-order/i,
             })
         ); */
-
-    })
-
-})
+  });
+});

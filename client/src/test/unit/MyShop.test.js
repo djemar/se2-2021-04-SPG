@@ -49,11 +49,11 @@ describe('MyShop', () => {
     );
     render(
       <Router>
-        <UserContextProvider>
-          <TimeContextProvider>
+        <TimeContextProvider>
+          <UserContextProvider>
             <MyShop />
-          </TimeContextProvider>
-        </UserContextProvider>
+          </UserContextProvider>
+        </TimeContextProvider>
       </Router>
     );
 

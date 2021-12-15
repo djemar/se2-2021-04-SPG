@@ -46,6 +46,7 @@ export const UserOrderRow = ({ ...props }) => {
           <Button
             className="buttons-order-details mx-1"
             size="sm"
+            aria-label="button-details"
             onClick={() => setDetails(true)}
           >
             <FontAwesomeIcon icon={faList} className="mx-1 sm:hidden" />

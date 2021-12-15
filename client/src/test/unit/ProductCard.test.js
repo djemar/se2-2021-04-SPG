@@ -1,8 +1,10 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-
+import TimeContextProvider from '../../context/TimeContext';
+import UserContextProvider from '../../context/UserContext';
 import ProductCard from '../../components/common/ProductCard/ProductCard';
 import { BrowserRouter as Router } from 'react-router-dom';
+import userEvent from '@testing-library/user-event';
 
 describe('ProductCard', () => {
   test('renders ProductCard component not for preview', () => {
@@ -17,24 +19,30 @@ describe('ProductCard', () => {
     };
     render(
       <Router>
-        <ProductCard
-          key={addedProduct.product_id}
-          pid={addedProduct.product_id}
-          fid={addedProduct.ref_famer}
-          name={addedProduct.name}
-          price={addedProduct.price}
-          description={addedProduct.description}
-          //   category={addedProduct.category}
-          unit={addedProduct.unit_of_measure}
-          //   img={addedProduct.image_path}
-          availability={addedProduct.availability}
-          basketProducts={[]}
-          preview={false}
-        />
+        <TimeContextProvider>
+          <UserContextProvider>
+            <ProductCard
+              key={addedProduct.product_id}
+              pid={addedProduct.product_id}
+              fid={addedProduct.ref_famer}
+              name={addedProduct.name}
+              price={addedProduct.price}
+              description={addedProduct.description}
+              //   category={addedProduct.category}
+              unit={addedProduct.unit_of_measure}
+              //   img={addedProduct.image_path}
+              availability={addedProduct.availability}
+              basketProducts={[]}
+              preview={false}
+            />
+          </UserContextProvider>
+        </TimeContextProvider>
       </Router>
     );
 
+    screen.debug()
     expect(screen.getByText(/product0/i)).toBeInTheDocument();
+    userEvent.click(screen.getByLabelText(/btn-add/i));
   });
 
   test('renders ProductCard component for preview', () => {
@@ -62,10 +70,13 @@ describe('ProductCard', () => {
           availability={addedProduct.availability}
           basketProducts={[]}
           preview={true}
+          flagAddOrEdit={true}
         />
       </Router>
     );
 
+    screen.debug()
     expect(screen.getByText(/product0/i)).toBeInTheDocument();
+    userEvent.click(screen.getByLabelText(/btn-edit/i));
   });
 });

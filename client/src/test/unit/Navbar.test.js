@@ -1,16 +1,14 @@
-import React from 'react';
-import { render, screen, act } from '@testing-library/react';
-import UserContextProvider from '../../context/UserContext';
-import TimeContextProvider from '../../context/TimeContext';
-import MockDate from 'mockdate';
-import API from '../../API';
-import axios from 'axios';
+import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import axios from 'axios';
+import React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import API from '../../API';
+import Navbar from '../../components/common/Navbar/Navbar';
+import TimeContextProvider from '../../context/TimeContext';
+import UserContextProvider from '../../context/UserContext';
 
 jest.mock('axios');
-
-import Navbar from '../../components/common/Navbar/Navbar';
-import { BrowserRouter as Router } from 'react-router-dom';
 
 describe('Navbar', () => {
   test('renders Navbar component', async () => {
@@ -40,17 +38,16 @@ describe('Navbar', () => {
       .mockImplementationOnce(() => Promise.resolve(true));
     render(
       <Router>
-        <UserContextProvider>
-          <TimeContextProvider>
+        <TimeContextProvider>
+          <UserContextProvider>
             <Navbar
               user={user}
               basketProducts={products}
-              logout={() => ""}
+              logout={() => false}
               isLogged={true}
-
             />
-          </TimeContextProvider>
-        </UserContextProvider>
+          </UserContextProvider>
+        </TimeContextProvider>
       </Router>
     );
 
@@ -64,6 +61,5 @@ describe('Navbar', () => {
 
     await userEvent.click(screen.getByLabelText(/navdropdown/i));
     //await userEvent.click(screen.getByLabelText(/navdropdown-item/i));
-
   });
 });

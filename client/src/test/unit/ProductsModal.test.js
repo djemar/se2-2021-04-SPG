@@ -10,35 +10,27 @@ import TimeContextProvider from '../../context/TimeContext';
 import UserContextProvider from '../../context/UserContext';
 import ProductsModal from '../../components/content/Orders/ProductsModal';
 
-describe("ProductsModal", () => {
+describe('ProductsModal', () => {
+  test('render ProductsModal', async () => {
+    render(
+      <Router>
+        <TimeContextProvider>
+          <UserContextProvider>
+            <ProductsModal
+              order_id={2}
+              ref_user={2}
+              date_order={22}
+              products_and_qnt={2}
+              status={'pending'}
+              show={true}
+            />
+          </UserContextProvider>
+        </TimeContextProvider>
+      </Router>
+    );
 
-    test("render ProductsModal", async () => {
+    expect(screen.getByText(/Order ID:/i)).toBeInTheDocument();
 
-        render(
-            <Router>
-                <UserContextProvider>
-                    <TimeContextProvider>
-                        <ProductsModal
-                            order_id={2}
-                            ref_user={2}
-                            date_order={22}
-                            products_and_qnt={2}
-                            status={'pending'}
-                            show={true}
-                        />
-                    </TimeContextProvider>
-                </UserContextProvider>
-            </Router>
-        );
-
-        expect(
-            screen.getByText(/Order ID:/i)
-        ).toBeInTheDocument();
-
-        //userEvent.click(screen.getByLabelText(/button-details/i))
-    })
-
-})
-
-
-
+    //userEvent.click(screen.getByLabelText(/button-details/i))
+  });
+});

@@ -12,50 +12,43 @@ import userEvent from '@testing-library/user-event';
 jest.mock('axios');
 
 beforeEach(() => {
-    MockDate.set('2021-12-11T11:20:06.196Z');
+  MockDate.set('2021-12-11T11:20:06.196Z');
 });
 
 afterEach(() => {
-    MockDate.reset();
+  MockDate.reset();
 });
 
 describe('Date Modal', () => {
+  test('renders DateModal component', async () => {
+    //const promise = Promise.resolve({ data: products });
+    //axios.get.mockImplementationOnce(() => promise);
 
-    test('renders DateModal component', async () => {
-        //const promise = Promise.resolve({ data: products });
-        //axios.get.mockImplementationOnce(() => promise);
-
-        /* let api = jest
+    /* let api = jest
             .spyOn(API, 'addOrder')
             .mockImplementationOnce(() => Promise.resolve(true)); */
-        render(
-            <Router>
-                <UserContextProvider>
-                    <TimeContextProvider>
-                        <DateModal show={true}
-                        title={'Set a new date'}
-                        
-                        ></DateModal>
-                    </TimeContextProvider>
-                </UserContextProvider>
-            </Router>
-        );
+    render(
+      <Router>
+        <TimeContextProvider>
+          <UserContextProvider>
+            <DateModal show={true} title={'Set a new date'}></DateModal>
+          </UserContextProvider>
+        </TimeContextProvider>
+      </Router>
+    );
 
-        //await act(async () => promise);
+    //await act(async () => promise);
 
-        expect(screen.getByText(/Set a new date/i)).toBeInTheDocument();
-        expect(screen.getByText(/Invalid date/i)).toBeInTheDocument();
-        expect(screen.getAllByRole('button')[0]
-        ).toBeInTheDocument();
-        
-        screen.debug();
+    expect(screen.getByText(/Set a new date/i)).toBeInTheDocument();
+    expect(screen.getByText(/Invalid date/i)).toBeInTheDocument();
+    expect(screen.getAllByRole('button')[0]).toBeInTheDocument();
 
-        /* userEvent.click(
+    screen.debug();
+
+    /* userEvent.click(
             screen.getByRole('button', {
                 name: /btn-confirm-order/i,
             })
         ); */
-
-    })
-
-})
+  });
+});

@@ -130,13 +130,14 @@ export const ProductCard = ({ ...props }) => {
       </Card.Body>
       <Card.Footer className="w-100 text-end bg-white border-0 pb-3">
         {flagAddOrEdit ? (
-          <BSButton onClick={editClick} className="bg-primary">
+          <BSButton onClick={editClick} aria-label="btn-edit" className="bg-primary" size="sm">
             Edit
           </BSButton>
         ) : (
           <BSButton
             className="bg-primary"
             onClick={handleAddToBasket}
+            aria-label="btn-add"
             disabled={availableQuantity === 0 || preview}
           >
             Add to Basket

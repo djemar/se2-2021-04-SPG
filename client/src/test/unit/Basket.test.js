@@ -47,8 +47,8 @@ describe('Basket', () => {
       .mockImplementationOnce(() => Promise.resolve(true));
     render(
       <Router>
-        <UserContextProvider>
-          <TimeContextProvider>
+        <TimeContextProvider>
+          <UserContextProvider>
             <Basket
               user={user}
               show={true}
@@ -78,8 +78,8 @@ describe('Basket', () => {
                 },
               ]}
             />
-          </TimeContextProvider>
-        </UserContextProvider>
+          </UserContextProvider>
+        </TimeContextProvider>
       </Router>
     );
     await act(() => promise);

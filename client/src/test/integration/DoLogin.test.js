@@ -52,11 +52,11 @@ describe('Login', () => {
 
     render(
       <Router>
-        <UserContextProvider>
-          <TimeContextProvider>
+        <TimeContextProvider>
+          <UserContextProvider>
             <Login />
-          </TimeContextProvider>
-        </UserContextProvider>
+          </UserContextProvider>
+        </TimeContextProvider>
       </Router>
     );
 

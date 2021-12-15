@@ -43,11 +43,11 @@ describe('User', () => {
 
     render(
       <Router>
-        <UserContextProvider>
-          <TimeContextProvider>
+        <TimeContextProvider>
+          <UserContextProvider>
             <User user={{ name: 'test' }} />
-          </TimeContextProvider>
-        </UserContextProvider>
+          </UserContextProvider>
+        </TimeContextProvider>
       </Router>
     );
 
