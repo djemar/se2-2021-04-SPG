@@ -11,6 +11,10 @@ Using `podman`:
 ```
 podman build --format=docker -t wilmore/se2-2021-04-spg:tag .
 ```
+Using `docker`:
+```
+docker build -t wilmore/se2-2021-04-spg:tag .
+```
 
 ### Run
 
@@ -19,8 +23,13 @@ Using `podman`:
 ```
 podman run -d -p  3001:3001 --name spg se2-2021-04-spg:tag
 ```
+Using `docker`:
+```
+docker run -d -p  3001:3001 --name spg se2-2021-04-spg:tag
+```
 
-### Deploy on Heroku
+### Deploy on Heroku *
+\* _Heroku CLI is needed_
 
 First, tag the built image for Heroku.
 Using `podman`:
@@ -28,12 +37,16 @@ Using `podman`:
 ```
 podman tag wilmore/se2-2021-04-spg:tag registry.heroku.com/spg04/web
 ```
-
+Using `docker`:
+```
+docker tag wilmore/se2-2021-04-spg:tag registry.heroku.com/spg04/web
+```
 Publish the image:
 
 ```
 heroku container:release web
 ```
+
 
 ## Built with
 
