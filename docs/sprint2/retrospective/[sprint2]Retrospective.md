@@ -32,7 +32,7 @@ Our Definition of Done:
 | 7     | 4       | 8      | 9h         | 12h 50m      |
 | 8     | 2       | 5      | 5h         | 2h 15m       |
 
-- Hours per task (average, standard deviation): 2.5h avg per task, ~ 1.9 standard deviation
+- Hours per task (average, standard deviation): 2.5h avg per task, ~ 1.9h standard deviation
 - Total task estimation error ratio: sum of total hours estimation / sum of total hours spent from previous table: 113/115 = 0.98
 
 ## QUALITY MEASURES
