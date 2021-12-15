@@ -10,7 +10,6 @@ Using `podman`:
 
 ```
 podman build --format=docker -t wilmore/se2-2021-04-spg:tag .
-
 ```
 
 ### Run
