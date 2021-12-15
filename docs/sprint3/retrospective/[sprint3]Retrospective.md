@@ -58,24 +58,27 @@ Our Definition of Done:
 
 - What caused your errors in estimation (if any)?
 
-#TODO
+  - Unexpected trouble
+  - We under-estimated the tecnical debt
 
 - What lessons did you learn (both positive and negative) in this sprint?
 
-#TODO
+  - We need to have the final version of the code a bit earlier
 
 - Which improvement goals set in the previous retrospective were you able to achieve?
 
-#TODO
+  - Documentation have been updated
 
 - Which ones you were not able to achieve? Why?
 
-#TODO
+  - Do more test because coverage is not at 80% yet
 
 - Improvement goals for the next sprint and how to achieve them (technical tasks, team coordination, etc.)
 
-#TODO
+  - Improve team communication about the tasks on-going
+  - Do more team's meeting
 
 ### What we are proud of
 
-#TODO
+- We commited all the story
+- We improve with YouTrack
