@@ -18,7 +18,6 @@ Our Definition of Done:
 - Code review completed
 - Code present on VCS
 - End-to-End tests performed
-- Sonar Quality Gate passing
 
 ### Detailed statistics
 
@@ -40,11 +39,11 @@ Our Definition of Done:
   - Nr of automated unit test cases: 46 + 94 = 140
   - Coverage (if available): 74.9%
 - E2E testing:
-  - Total hours estimated: #TODO h
+  - Total hours estimated: 4h 30m
   - Total hours spent: 4h
 - Code review
-  - Total hours estimated: #TODO
-  - Total hours spent: #TODO
+  - Total hours estimated: 1h 40m
+  - Total hours spent: 1h 35m
 - Technical Debt management:
   - Total hours estimated: 7h + 32h = 39h
   - Total hours spent: 5h 30m + 32h = 37h 30m
