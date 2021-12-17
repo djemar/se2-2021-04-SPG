@@ -402,6 +402,16 @@ async function getAllOrders() {
   }
 }
 
+async function getAllOrdersUnretrieved() {
+  let url = BASEURL + `/orders/unretrieved`;
+  try {
+    const res = await axios.get(url);
+    return await res.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 async function getClientOrders(clientID) {
   let url = BASEURL + `/client-orders/` + clientID;
   try {
@@ -498,6 +508,7 @@ const API = {
   addOrder,
   getHashedPWD,
   getAllOrders,
+  getAllOrdersUnretrieved,
   getClientOrders,
   setDeliveredOrder,
   updateClientWallet,

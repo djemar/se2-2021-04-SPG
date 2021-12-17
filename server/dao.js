@@ -540,6 +540,21 @@ exports.getAllOrders = function () {
   });
 };
 
+exports.getAllOrdersUnretrieved = function () {
+  return new Promise((resolve, reject) => {
+    const sql = "SELECT * from ORDERS WHERE status = 'unretrieved'";
+    db.all(sql, [], (err, rows) => {
+      if (err) reject(err);
+      else if (rows === undefined || rows.length === 0) {
+        reject(null);
+      } else {
+        const orders = mappingOrders(rows);
+        resolve(orders);
+      }
+    });
+  });
+};
+
 exports.getOrdersAndWallets = function () {
   return new Promise((resolve, reject) => {
     const sql =

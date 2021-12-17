@@ -115,3 +115,7 @@
 .order-pending-cancellation{
   background-color: var(--danger);
 }
+
+.order-unretrieved{
+  background-color: var(--info);
+}

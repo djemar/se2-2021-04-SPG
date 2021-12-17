@@ -110,6 +110,14 @@ describe('Get orders API', () => {
         expect(response.body).toBeTruthy()
     });
 
+    test('Get unretrieved orders method', async () => {
+        const response = await request.get('/api/orders/unretrieved')
+
+        expect(response.status).toBe(200)
+        expect(response.body).toBeTruthy()
+        expect(response.body[0]).toHaveProperty('status','unretrieved');
+    });
+
     test('Get orders for a client, expected success', async () => {
         const response = await request.get('/api/client-orders/6')
 

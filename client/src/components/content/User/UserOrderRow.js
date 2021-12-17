@@ -22,6 +22,7 @@ export const UserOrderRow = ({ ...props }) => {
     pending: 'order-pending',
     delivered: 'order-delivered',
     approved: 'order-approved',
+    unretrieved: 'order-unretrieved',
   };
 
   return (

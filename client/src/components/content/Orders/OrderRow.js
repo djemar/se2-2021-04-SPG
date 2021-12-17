@@ -24,6 +24,7 @@ export const OrderRow = ({ ...props }) => {
     delivered: 'order-delivered',
     approved: 'order-approved',
     pending_cancellation: 'order-pending-cancellation',
+    unretrieved: 'order-unretrieved',
   };
 
   return (

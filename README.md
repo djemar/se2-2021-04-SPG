@@ -168,6 +168,17 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
             - `date_order`: date and time of the order instantiation,
             - `quantity`: quantity of the ordered products,
             - `status`: current status of the order (which can be "pending", "approved" or "delivered") {...}];
+- GET `/api/orders/unretrieved`
+    - Retrieves all the orders with status "unretrieved".
+    - request parameters and request body content: //
+    - response body content:
+        - orders = [{
+            - `order_id`: id of the order,
+            - `ref_product`: id of the ordered product,
+            - `ref_user`: id of the client who made the order,
+            - `date_order`: date and time of the order instantiation,
+            - `quantity`: quantity of the ordered products,
+            - `status`: current status of the order (which can be "pending", "approved" or "delivered") {...}]
 - GET `/api/client-orders/:clientID`
     - Retrieves all the orders made by a specific client.
     - request parameters: `clientID`
