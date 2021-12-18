@@ -251,6 +251,11 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
     - request parameters : none
     - request body content : //
     - responde body content : True if the operation has been completed, otherwise error 503
+- GET `/api/delete-all-pending-cancellation-order`
+    - Delete all orders with `pending_cancellation`
+    - request parameters : none
+    - request body content : //
+    - responde body content : True if the operation has been completed, otherwise error 503
 - DELETE `/api/delete-order/:orderID`
     - Delete a specific order
     - request parameters : order's id
