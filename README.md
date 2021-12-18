@@ -261,6 +261,45 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
   - Table `USER` - it contains id, name, surname, email, password, Type, balance, address, phone, country, city, zip code and company name for a farmer.
   - Table `PRODUCT` - it contains id, name, description, category, farmer's id, price, availability,unit of measure, path for images, start date and end date
   - Table `ORDERS` - it contains id, product's id, user's id, date, quantity and status.
+  
+  ### Triggers
+  - `update_availability`
+    - This trigger is used to update the availability value on products.
+    
+      CREATE TRIGGER update_availability
+  
+      AFTER INSERT ON ORDERS
+      FOR EACH ROW
+  
+      BEGIN
+  
+      UPDATE PRODUCT SET availability = availability - new.quantity 
+  
+      WHERE product_id = new.ref_product;
+  
+      END 
+  - `cancellation_update_availability`
+    - This trigger is used to restore the availability value on products after a pending cancellation order is deleted.
+    
+      CREATE TRIGGER cancellation_update_availability
+  
+      AFTER DELETE ON ORDERS
+      FOR EACH ROW
+    
+      WHEN OLD.status = 'pending_cancellation'
+  
+      BEGIN
+  
+      UPDATE PRODUCT
+  
+      SET availability = availability + OLD.quantity
+    
+      WHERE product_id = OLD.ref_product;
+      END
+
+  ## Workflow orders
+    - At Monday 9 AM, the orders for each users are checked and eventually put on pending cancellation.
+    - At Monday 9 PM, all the orders still in pending cancellation are deleted.
   ## Built with
   - [React](https://github.com/facebook/react) 
   - [React-Bootstrap](https://react-bootstrap.github.io/)

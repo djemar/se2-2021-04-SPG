@@ -570,6 +570,19 @@ exports.getOrdersAndWallets = function () {
   });
 };
 
+exports.deletePendingCancellation = function () {
+  return new Promise((resolve, reject) => {
+    const sql =
+        "DELETE FROM ORDERS WHERE status=?";
+    db.all(sql, ['pending_cancellation'], (err) => {
+      if (err) reject(err);
+      else {
+        resolve(true);
+      }
+    });
+  });
+};
+
 exports.getOrdersByClientId = function (clientID) {
   return new Promise((resolve, reject) => {
     const sql = "SELECT * from ORDERS where ref_user = ?";

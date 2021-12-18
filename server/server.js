@@ -928,6 +928,19 @@ app.get("/api/set-all-pending-cancellation-order/", async (req, res) => {
     .catch((err) => res.status(503).json(dbErrorObj));
 });
 
+app.get("/api/delete-all-pending-cancellation-order/", async (req, res) => {
+    // First, retrieve all the orders which are pending and
+    // retrieve also the order cost as the SUM of quantity*price.
+    // Then, filter the array and maintain only orders where
+    // wallet_balance > orderCost.
+    // for simplicty, in an order cost is > wallet_balance,
+    // set as pending cancellation
+    await dao
+        .deletePendingCancellation()
+        .then(() => res.json(true))
+        .catch((err) => res.status(503).json(dbErrorObj));
+});
+
 app.listen(port, () =>
   console.log(`Server app listening at http://localhost:${port}`)
 );

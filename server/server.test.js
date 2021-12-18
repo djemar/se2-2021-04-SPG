@@ -111,7 +111,7 @@ describe('Get orders API', () => {
     });
 
     test('Get orders for a client, expected success', async () => {
-        const response = await request.get('/api/client-orders/6')
+        const response = await request.get('/api/client-orders/1')
 
         expect(response.status).toBe(200)
         expect(response.body).toBeTruthy()
@@ -493,5 +493,43 @@ describe("Set all pending cancellation order API", () => {
     test('Set All Pending Cancellation Order API Success', async () => {
         const response = await request.get('/api/set-all-pending-cancellation-order/')
         expect(response.body).toBeTruthy()
+    })
+})
+
+describe("Set all pending cancellation order API", () => {
+    test('Set All Pending Cancellation Order API Success', async () => {
+        const response = await request.get('/api/set-all-pending-cancellation-order/')
+        expect(response.body).toBeTruthy()
+    })
+})
+
+describe('Delete all pending cancellation orders API', () =>  {
+    test('Delete all pending cancellation order API success', async () => {
+        const order = {
+            "ref_user": 1,
+            "productList":
+                [{ "ref_product": 122, "quantity": 10 }],
+            "date_order": "222"
+        };
+        const products = await request.get('/api/products');
+        const caponata = products.body.filter(x => x.product_id === 122);
+
+
+        const response1 = await request.post('/api/order').send(order);
+        expect(response1.status).toBe(200);
+        expect(response1.body).toBeTruthy();
+
+        const response2 = await request.get('/api/set-all-pending-cancellation-order/')
+        expect(response2.body).toBeTruthy();
+
+
+        const response3 = await request.get('/api/delete-all-pending-cancellation-order/')
+        expect(response3.body).toBeTruthy();
+
+        const products2 = await request.get('/api/products');
+        const caponata2 = products2.body.filter(x => x.product_id === 122);
+        expect(caponata2.availability).toEqual(caponata.availability);
+
+
     })
 })
