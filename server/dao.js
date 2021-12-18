@@ -490,7 +490,7 @@ exports.insertOrder = async function (order, id_array, quantity_array) {
 function createInsertOrderPromise(order, id, quantity) {
   return new Promise((resolve, reject) => {
     const sql =
-      "INSERT INTO ORDERS (order_id, ref_product, ref_user, date_order, quantity, status) VALUES (?, ?, ?,?,?,?)";
+      "INSERT INTO ORDERS (order_id, ref_product, ref_user, date_order, quantity, status,total) VALUES (?, ?, ?,?,?,?,?)";
     db.run(
       sql,
       [
@@ -500,6 +500,7 @@ function createInsertOrderPromise(order, id, quantity) {
         order.date_order,
         quantity,
         "pending",
+        order.total
       ],
       function (err) {
         if (err) {

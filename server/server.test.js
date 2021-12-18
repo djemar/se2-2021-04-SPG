@@ -30,49 +30,49 @@ describe('Get products by category API', () => {
 
 describe('Get products by dates API', () => {
     test('Get products by date success', async () => {
-        const date = {date: '2021-12-18'}
+        const date = { date: '2021-12-18' }
         const response = await request.post('/api/products-by-date').send(date)
 
         expect(response.status).toBe(200)
         expect(response.body).toBeTruthy()
     });
     test('Get products by date failure', async () => {
-        const date = {a: "b"}
+        const date = { a: "b" }
         const response = await request.post('/api/products-by-date').send(date)
 
         expect(response.status).toBe(400)
     });
 
     test('Get products from date success', async () => {
-        const date = {date: '2021-12-18'}
+        const date = { date: '2021-12-18' }
         const response = await request.post('/api/products-from-date').send(date)
 
         expect(response.status).toBe(200)
         expect(response.body).toBeTruthy()
     });
     test('Get products from date failure', async () => {
-        const date = {a: "b"}
+        const date = { a: "b" }
         const response = await request.post('/api/products-from-date').send(date)
 
         expect(response.status).toBe(400)
     });
 
     test('Get products until date success', async () => {
-        const date = {date: '2021-12-20'}
+        const date = { date: '2021-12-20' }
         const response = await request.post('/api/products-to-date').send(date)
 
         expect(response.status).toBe(200)
         expect(response.body).toBeTruthy()
     });
     test('Get products until date failure', async () => {
-        const date = {a: "b"}
+        const date = { a: "b" }
         const response = await request.post('/api/products-to-date').send(date)
 
         expect(response.status).toBe(400)
     });
 
     test('Get products between dates success', async () => {
-        const dates = {startDate:"2021-12-18", endDate:'2021-12-19'};
+        const dates = { startDate: "2021-12-18", endDate: '2021-12-19' };
         const response = await request.post('/api/products-between-dates').send(dates)
 
         expect(response.status).toBe(200)
@@ -80,13 +80,13 @@ describe('Get products by dates API', () => {
     });
 
     test('Get products between dates-category success', async () => {
-        const body = {category: 'Dairy', startDate:"2021-12-18", endDate:'2021-12-18'};
+        const body = { category: 'Dairy', startDate: "2021-12-18", endDate: '2021-12-18' };
         const response = await request.post('/api/products-between-dates-category').send(body)
 
         expect(response.body).toBeTruthy()
     });
     test('Get products from date failure', async () => {
-        const dates = {a: "b", c: "d"}
+        const dates = { a: "b", c: "d" }
         const response = await request.post('/api/products-between-dates').send(dates)
 
         expect(response.status).toBe(400)
@@ -392,7 +392,8 @@ describe('Insert Order API', () => {
                 [{ "ref_product": 1, "quantity": 1 },
                 { "ref_product": 3, "quantity": 3 },
                 { "ref_product": 5, "quantity": 1 }],
-            "date_order": "222"
+            "date_order": "222",
+            "total": 22
         };
         const response = await request.post('/api/order').send(order);
         expect(response.status).toBe(200);

@@ -154,7 +154,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
         "ref_product": product's id,
         "quantity": product's quantity 
         }],
-      - "date_order": order's date }
+      - "date_order": order's date
+      - "total": total amount }
   - response body content : none
 - GET `/api/orders`
     - Retrieves all the orders.
