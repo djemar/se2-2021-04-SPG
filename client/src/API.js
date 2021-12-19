@@ -474,6 +474,16 @@ async function deleteOrder(orderID) {
   }
 }
 
+async function setUnretrievedOrder(orderID) {
+  let url = BASEURL + `/set-unretrieved-order/`;
+  try {
+    const res = await axios.post(url, { order_id: orderID });
+    return await res.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 // Functions exported by this API:
 const API = {
   getAllProducts,
@@ -501,5 +511,6 @@ const API = {
   deleteOrder,
   editProduct,
   insertProduct,
+  setUnretrievedOrder,
 };
 export default API;

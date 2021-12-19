@@ -257,6 +257,11 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
     - request parameters : order's id
     - request body : none
     - responde body content : //
+- POST `/api/set-unretrieved-order`
+    - Update the status order with `unretrieved`
+    - request parameters : none
+    - request body content : json containing the orderID
+    - response body content : //
 
   ## Server Database
   - Table `USER` - it contains id, name, surname, email, password, Type, balance, address, phone, country, city, zip code and company name for a farmer.

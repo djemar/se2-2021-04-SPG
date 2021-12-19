@@ -496,3 +496,19 @@ describe("Set all pending cancellation order API", () => {
         expect(response.body).toBeTruthy()
     })
 })
+
+describe('Set un-retrieved order API', () => {
+
+    test('Set Un-retrieved Order API Success', async () => {
+        const body = { "order_id": 1 }
+        const response = await request.post('/api/set-unretrieved-order/').send(body)
+        expect(response.status).toBe(200)
+        expect(response.body).toBeTruthy()
+    })
+
+    test('Set Un-retrieved Order API Wrong', async () => {
+        const body = { "order_id": "" };
+        const response = await request.post('/api/set-unretrieved-order/').send(body)
+        expect(response.status).toBe(400)
+    })
+})

@@ -487,6 +487,22 @@ describe("API Order", () => {
     expect(o[0]).not.toBeDefined();
   });
 
+  test("Un-retrieved Order Error", async () => {
+    let ord = await dao.getAllOrders();
+    //await dao.setUnretrievedOrder(ord[0].order_id); // not executing the status updating (on purpose)
+    const ord2 = await dao.getAllOrders();
+    const o = ord2.filter(order => order.order_id === ord[0].order_id);
+    expect(o[0]).toBeTruthy();
+  });
+
+  test("Un-retrieved Order Success", async () => {
+    let ord = await dao.getAllOrders();
+    expect(ord[0]).not.toEqual(ord[ord.length - 1]);
+    await dao.setUnretrievedOrder(ord[ord.length - 1].order_id);
+    const ord2 = await dao.getAllOrders();
+    const o = ord2.filter(order => order.order_id === ord2[ord.length - 1].order_id);
+    expect(o[0]).toHaveProperty('status', 'unretrieved');
+  });
 
 
 });
