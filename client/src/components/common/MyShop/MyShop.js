@@ -392,7 +392,12 @@ export const MyShop = ({ ...props }) => {
                               <Form.Control
                                 type="text"
                                 aria-label="form-name"
-                                value={addedProduct.name}
+                                placeholder={addedProduct.name}
+                                value={
+                                  addedProduct.name != product.name
+                                    ? addedProduct.name
+                                    : ''
+                                }
                                 onChange={e =>
                                   handleChange(e.target.value, NEWVALUE.NAME, 1)
                                 }
@@ -446,7 +451,13 @@ export const MyShop = ({ ...props }) => {
                               <Form.Control
                                 type="text"
                                 aria-label="form-quantity"
-                                value={addedProduct.unit_of_measure}
+                                placeholder={addedProduct.unit_of_measure}
+                                value={
+                                  addedProduct.unit_of_measure !=
+                                  product.unit_of_measure
+                                    ? addedProduct.unit_of_measure
+                                    : ''
+                                }
                                 onChange={e =>
                                   handleChange(e.target.value, NEWVALUE.UNIT, 1)
                                 }
@@ -463,7 +474,12 @@ export const MyShop = ({ ...props }) => {
                               as="textarea"
                               type="text"
                               aria-label="form-description"
-                              value={addedProduct.description}
+                              placeholder={addedProduct.description}
+                              value={
+                                addedProduct.description != product.description
+                                  ? addedProduct.description
+                                  : ''
+                              }
                               onChange={e =>
                                 handleChange(
                                   e.target.value,
