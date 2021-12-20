@@ -98,7 +98,7 @@ export const ProductCard = ({ ...props }) => {
       <div className="product-img-div">
         <Card.Img className="product-img" variant="top" src={img} />
       </div>
-      <span class="position-absolute product-farmer badge rounded-pill d-flex text-dark bg-light align-items-center">
+      <span class="position-absolute product-farmer badge rounded-pill d-flex text-dark text-sm bg-light align-items-center">
         <IoStorefrontOutline className="mr-2 text-lg" />
         {farmerName}
       </span>
@@ -118,25 +118,24 @@ export const ProductCard = ({ ...props }) => {
             location={'ProductCard'}
             preview={preview}
           />
-          <div className="text-xs">
+          <div className="text-sm">
             {availableQuantity} piece{availableQuantity > 1 ? 's' : ''}{' '}
             available
           </div>
         </div>
         <div className="pt-5 d-flex flex-row align-items-center">
           <div className="fg-primary font-medium text-lg mr-2">{price} €</div>
-          <div className="font-light text-sm">{unit}</div>
+          <div className="font-light">{unit}</div>
         </div>
       </Card.Body>
       <Card.Footer className="w-100 text-end bg-white border-0 pb-3">
         {flagAddOrEdit ? (
-          <BSButton onClick={editClick} className="bg-primary" size="sm">
+          <BSButton onClick={editClick} className="bg-primary">
             Edit
           </BSButton>
         ) : (
           <BSButton
             className="bg-primary"
-            size="sm"
             onClick={handleAddToBasket}
             disabled={availableQuantity === 0 || preview}
           >
