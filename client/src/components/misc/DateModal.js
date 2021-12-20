@@ -1,5 +1,13 @@
 import { useState } from 'react';
-import { Modal, Button as ButtonBS, Form, Row, Col } from 'react-bootstrap';
+import {
+  Modal,
+  Button as ButtonBS,
+  Form,
+  Row,
+  Col,
+  OverlayTrigger,
+  Tooltip,
+} from 'react-bootstrap';
 import dayjs from 'dayjs';
 
 export const DateModal = ({ ...props }) => {
@@ -44,15 +52,28 @@ export const DateModal = ({ ...props }) => {
         <ButtonBS variant="danger" className="mr-5" onClick={props.onHide}>
           Close
         </ButtonBS>
-        <ButtonBS
-          variant="success"
-          onClick={() => {
-            setDateState(dayjs(`${valueDate}T${valueTime}`).toISOString());
-            props.onHide();
-          }}
+        <OverlayTrigger
+          overlay={
+            !dayjs(`${valueDate}T${valueTime}`).isValid() ? (
+              <Tooltip id="tooltip-disabled">Select a valid date</Tooltip>
+            ) : (
+              <></>
+            )
+          }
         >
-          Set Date
-        </ButtonBS>
+          <span className="d-inline-block">
+            <ButtonBS
+              variant="success"
+              disabled={!dayjs(`${valueDate}T${valueTime}`).isValid()}
+              onClick={() => {
+                setDateState(dayjs(`${valueDate}T${valueTime}`).toISOString());
+                props.onHide();
+              }}
+            >
+              Set Date
+            </ButtonBS>
+          </span>
+        </OverlayTrigger>
       </Modal.Footer>
     </Modal>
   );
