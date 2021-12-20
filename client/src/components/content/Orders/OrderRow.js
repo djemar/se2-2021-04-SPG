@@ -35,17 +35,6 @@ export const OrderRow = ({ ...props }) => {
         <td className="text-center align-middle lg:table-cell hidden">
           {date_order}
         </td>
-        <td className="text-center align-middle md:table-cell hidden">
-          € {tot_price}
-        </td>
-        <td className="text-center align-middle">
-          <span
-            className={`
-              h-6 w-6 xs:w-min xs:px-3 xs:py-0.5 inline-flex items-center xs:inline text-sm rounded-xl text-white ${styleFromStatus[status]}`}
-          >
-            <span className="xs:inline hidden">{status}</span>
-          </span>
-        </td>
         <td className="text-center align-middle">
           <Button
             className="buttons-order-details mx-1"
@@ -56,6 +45,17 @@ export const OrderRow = ({ ...props }) => {
             <FontAwesomeIcon icon={faList} className="mx-1 sm:hidden" />
             <span className="sm:inline hidden">See details</span>
           </Button>
+        </td>
+        <td className="text-center align-middle md:table-cell hidden">
+          € {tot_price}
+        </td>
+        <td className="text-center align-middle">
+          <span
+            className={`
+              h-6 w-6 xs:w-min xs:px-3 xs:py-0.5 inline-flex items-center xs:inline text-sm rounded-xl text-white ${styleFromStatus[status]}`}
+          >
+            <span className="xs:inline hidden">{status}</span>
+          </span>
         </td>
         {isManager && (
           <td className="text-center align-middle">
