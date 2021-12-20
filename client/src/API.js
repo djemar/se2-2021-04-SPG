@@ -347,9 +347,9 @@ async function getAllClients() {
   });
 } */
 
-async function addOrder(ref_user, productList, date_order) {
+async function addOrder(ref_user, productList, date_order, total) {
   let url = BASEURL + '/order';
-  let order = { ref_user, productList, date_order };
+  let order = { ref_user, productList, date_order, total };
 
   try {
     await axios.post(url, order);

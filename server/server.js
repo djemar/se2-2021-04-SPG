@@ -457,6 +457,7 @@ app.post(
     .isNumeric(),
   body("date_order").exists({ checkNull: true }).bail().notEmpty().bail(),
   body("productList").exists({ checkNull: true }).bail().notEmpty().bail(),
+  body("total").exists({ checkNull: true }).bail().notEmpty().bail(),
   async (req, res) => {
     const validation = validationResult(req);
     if (!validation.isEmpty()) {

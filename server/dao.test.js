@@ -341,7 +341,8 @@ describe("API Order", () => {
         [{ "ref_product": 1, "quantity": 1 },
         { "ref_product": 3, "quantity": 3 },
         { "ref_product": 5, "quantity": 1 }],
-      "date_order": "222"
+      "date_order": "222",
+      "total": 22
     };
     let productsIdList = body.productList;
     var id_array = [], quantity_array = [];

@@ -43,7 +43,7 @@ export const Basket = ({ ...props }) => {
 
   const handleAddOrder = async () => {
     const date = dayjs(dateState).format('DD/MM/YYYY');
-    const result = await API.addOrder(clientId, basketProducts, date);
+    const result = await API.addOrder(clientId, basketProducts, date, somma);
     if (result) {
       // clear basket
       setBasketProducts([]);
