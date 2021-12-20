@@ -263,6 +263,11 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
     - request parameters : none
     - request body content : //
     - responde body content : True if the operation has been completed, otherwise error 503
+- GET `/api/delete-all-pending-cancellation-order`
+    - Delete all orders with `pending_cancellation` or reset the status if the wallet has been updated
+    - request parameters : none
+    - request body content : //
+    - responde body content : True if the operation has been completed, otherwise error 503
 - DELETE `/api/delete-order/:orderID`
     - Delete a specific order
     - request parameters : order's id
@@ -298,7 +303,67 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
   ## Server Database
   - Table `USER` - it contains id, name, surname, email, password, Type, balance, address, phone, country, city, zip code and company name for a farmer.
   - Table `PRODUCT` - it contains id, name, description, category, farmer's id, price, availability,unit of measure, path for images, start date and end date
-  - Table `ORDERS` - it contains id, product's id, user's id, date, quantity, status, address, country, city, zip_code, schedule_date, schedule_time.
+  - Table `ORDERS` - it contains id, product's id, user's id, date, quantity and status.
+
+  ### Triggers
+  - `update_availability`
+      - This trigger is used to update the availability value on products.
+
+        CREATE TRIGGER update_availability
+
+        AFTER INSERT ON ORDERS
+        FOR EACH ROW
+
+        BEGIN
+
+        UPDATE PRODUCT SET availability = availability - new.quantity
+
+        WHERE product_id = new.ref_product;
+
+        END
+  - `cancellation_update_availability`
+      - This trigger is used to restore the availability value on products after a pending cancellation order is deleted.
+
+        CREATE TRIGGER cancellation_update_availability
+
+        AFTER DELETE ON ORDERS
+        FOR EACH ROW
+
+        WHEN OLD.status = 'pending_cancellation'
+
+        BEGIN
+
+        UPDATE PRODUCT
+
+        SET availability = availability + OLD.quantity
+
+        WHERE product_id = OLD.ref_product;
+        END
+  - `update_wallet`
+    - This trigger is used to update the user wallet when an order is accepted.
+      
+      CREATE TRIGGER update_wallet
+    
+      AFTER UPDATE ON ORDERS
+      FOR EACH ROW
+      WHEN NEW.status = 'approved'
+    
+      BEGIN
+    
+      UPDATE USER
+    
+      SET wallet_balance = wallet_balance -
+    
+      (SELECT price*NEW.quantity 
+    
+      FROM PRODUCT WHERE product_id = NEW.ref_product)
+      
+      WHERE user_id = NEW.ref_user;
+     
+      END;
+  ## Workflow notes
+    - At Monday 9 AM, the orders for each users are checked and eventually put on pending cancellation.
+    - At Monday 9 PM, all the orders still in pending cancellation are deleted.
   ## Built with
   - [React](https://github.com/facebook/react) 
   - [React-Bootstrap](https://react-bootstrap.github.io/)

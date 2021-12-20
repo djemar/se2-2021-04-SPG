@@ -39,7 +39,7 @@ describe("API getProducts", () => {
   });
 
   test("productsByDateSuccess", async () => {
-    const p = await dao.getProductsByDate("2021-12-19");
+    const p = await dao.getProductsByDate("2022-01-08");
     await expect(p).toBeDefined();
     await expect(p[0]).toHaveProperty('name', 'Apples');
   });
@@ -56,7 +56,7 @@ describe("API getProducts", () => {
   });
 
   test("productsToDateSuccess", async () => {
-    const p = await dao.getProductsToDate("2021-12-31");
+    const p = await dao.getProductsToDate("2022-12-12");
     await expect(p).toBeDefined();
   });
   test("productsToDateError", async () => {
@@ -64,7 +64,7 @@ describe("API getProducts", () => {
   });
 
   test("productsBetweenDatesSuccess", async () => {
-    const p = await dao.getProductsBetweenDates("2021-12-18", "2021-12-19");
+    const p = await dao.getProductsBetweenDates("2022-01-08", "2022-01-09");
     await expect(p).toBeDefined();
   });
   test("productsBetweenDatesError", async () => {
@@ -333,7 +333,7 @@ describe("API Order", () => {
   });
 
   // This should be the last one since it adds order in DB
-  // Remember that it will fail if the data are already in the DB 
+  // Remember that it will fail if the data are already in the DB
   test("orderSuccess", async () => {
     const body = {
       "ref_user": 1,
@@ -508,10 +508,32 @@ describe("API Order", () => {
 
     let ord = await dao.getAllOrders();
     expect(ord[0]).not.toEqual(ord[ord.length - 1]);
-    await dao.setPendingCancellationdOrder(ord[ord.length - 1].order_id);
+    await dao.setPendingCancellationOrder(ord[ord.length - 1].order_id);
     const ord2 = await dao.getAllOrders();
     const o = ord2.filter(order => order.order_id === ord2[ord.length - 1].order_id);
     expect(o[0]).toHaveProperty('status', 'pending_cancellation');
+  });
+
+  test("setApprovedOrderSuccess", async () => {
+
+    let ord = await dao.getAllOrders();
+    expect(ord[0]).not.toEqual(ord[ord.length - 1]);
+    await dao.setApprovedOrder(ord[ord.length - 1].order_id);
+    const ord2 = await dao.getAllOrders();
+    const o = ord2.filter(order => order.order_id === ord2[ord.length - 1].order_id);
+    expect(o[0]).toHaveProperty('status', 'approved');
+  });
+
+
+  test("deletePendingCancellationOrderSuccess", async () => {
+
+    let ord = await dao.getAllOrders();
+    expect(ord[0]).not.toEqual(ord[ord.length - 1]);
+    await dao.setPendingCancellationOrder(ord[ord.length - 1].order_id);
+    const ord2 = await dao.getAllOrders();
+    const o = ord2.filter(order => order.order_id === ord2[ord.length - 1].order_id);
+    expect(o[0]).toHaveProperty('status', 'pending_cancellation');
+    await dao.deletePendingCancellationOrder(ord[ord.length - 1].order_id);
   });
 
   test("deleteOrderSuccess", async () => {

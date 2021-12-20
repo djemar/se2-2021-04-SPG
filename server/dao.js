@@ -44,6 +44,18 @@ function mappingOrders(rows) {
   }));
 }
 
+function mappingOrdersWallets(rows) {
+
+  return rows.map((e) => (
+      {
+        order_id: e.order_id,
+        user_id: e.user_id,
+        date_order: e.date_order,
+        wallet_balance: e.wallet_balance,
+        total: e.total
+      }));
+}
+
 function mappingUsers(rows) {
   return rows.map((e) => ({
     user_id: e.user_id,
@@ -559,27 +571,41 @@ exports.getOrdersAndWallets = function () {
   return new Promise((resolve, reject) => {
     const sql =
       "SELECT O.order_id, " +
-      "U.wallet_balance, SUM(P.price*O.quantity) AS orderCost " +
-      "FROM ORDERS AS O, USER AS U, PRODUCT AS P " +
-      "WHERE O.ref_user = U.user_id AND O.ref_product = P.product_id AND O.status=? " +
-      "GROUP BY O.order_id, U.wallet_balance";
+      "U.wallet_balance, U.user_id, O.total, O.date_order " +
+      "FROM ORDERS AS O, USER AS U " +
+      "WHERE O.ref_user = U.user_id AND O.status=? " +
+        "GROUP BY O.order_id, U.user_id " +
+        "ORDER BY U.user_id, O.date_order DESC ";
     db.all(sql, ["pending"], (err, rows) => {
       if (err) reject(err);
       else if (rows === undefined || rows.length === 0) {
         reject(null);
       } else {
-        rows = rows.filter((e) => e.orderCost > e.wallet_balance);
-        const orders = rows.map((e) => ({
-          order_id: e.order_id,
-          ref_product: e.ref_product,
-          ref_user: e.ref_user,
-          date_order: e.date_order,
-          quantity: e.quantity,
-          status: e.status,
-          wallet_balance: e.wallet_balance,
-          price: e.price,
-          orderCost: e.orderCost,
-        }));
+
+        const orders = mappingOrdersWallets(rows);
+        resolve(orders);
+      }
+    });
+  });
+};
+
+
+exports.getAllOrdersAndWallets = function () {
+  return new Promise((resolve, reject) => {
+    const sql =
+        "SELECT O.order_id, " +
+        "U.wallet_balance, U.user_id, O.total, O.date_order " +
+        "FROM ORDERS AS O, USER AS U " +
+        "WHERE O.ref_user = U.user_id AND O.status==? " +
+        "GROUP BY O.order_id, U.user_id " +
+        "ORDER BY U.user_id, O.date_order DESC ";
+    db.all(sql, ["pending_cancellation"], (err, rows) => {
+      if (err) reject(err);
+
+      else if (rows === undefined || rows.length === 0) {
+        reject(null);
+      } else {
+        const orders = mappingOrdersWallets(rows);
         resolve(orders);
       }
     });
@@ -605,6 +631,16 @@ exports.setDeliveredOrder = function (orderID) {
   return new Promise((resolve, reject) => {
     const sql = "UPDATE ORDERS set status = ? where ORDERS.order_id = ?";
     db.all(sql, ["delivered", orderID], (err, res) => {
+      if (err) reject(err);
+      else resolve(true);
+    });
+  });
+};
+
+exports.setApprovedOrder = function (orderID) {
+  return new Promise((resolve, reject) => {
+    const sql = "UPDATE ORDERS set status = ? where ORDERS.order_id = ?";
+    db.all(sql, ["approved", orderID], (err, res) => {
       if (err) reject(err);
       else resolve(true);
     });
@@ -698,7 +734,7 @@ exports.deleteAllPendingCancellation = function (id) {
 };
 */
 
-exports.setPendingCancellationdOrder = function (orderID) {
+exports.setPendingCancellationOrder = function (orderID) {
   return new Promise((resolve, reject) => {
     const sql = "UPDATE ORDERS set status = ? where ORDERS.order_id = ?";
     db.all(sql, ["pending_cancellation", orderID], (err, res) => {
@@ -712,6 +748,16 @@ exports.setUnretrievedOrder = function (orderID) {
   return new Promise((resolve, reject) => {
     const sql = "UPDATE ORDERS set status = ? where ORDERS.order_id = ?";
     db.all(sql, ["unretrieved", orderID], (err, res) => {
+      if (err) reject(err);
+      else resolve(true);
+    });
+  });
+};
+
+exports.deletePendingCancellationOrder = function (orderID) {
+  return new Promise((resolve, reject) => {
+    const sql = "DELETE FROM ORDERS WHERE status = ? AND order_id = ?";
+    db.all(sql, ["pending_cancellation", orderID], (err, res) => {
       if (err) reject(err);
       else resolve(true);
     });
