@@ -100,14 +100,14 @@ export const Shop = ({ ...props }) => {
         </Form>
       </div>
       <div className="flex flex-grow justify-between">
-        <div className="flex-none md:block hidden">
+        <div className="flex-none md:block hidden mr-10">
           <Sidebar
             basketProducts={basketProducts}
             setBasketProducts={setBasketProducts}
           />
         </div>
         <div className="flex-grow">
-          <div className="w-full flex-column items-center lg:flex lg:flex-row md:justify-start md:pl-8 items-center lg:items-end">
+          <div className="w-full flex-column lg:flex lg:flex-row md:justify-start md:pl-8 items-center lg:items-end">
             <div className="flex justify-center">
               <span className="text-4xl font-bold">
                 {category ? category.split('-').join(' ') : 'All Products'}
@@ -123,7 +123,7 @@ export const Shop = ({ ...props }) => {
             </div>
           </div>
           {!loading && !loadingProd && mappedProduct ? (
-            <div className="row md:ml-4 mt-4 gap-4 justify-center lg:justify-start">
+            <div className="row md:ml-4 mt-4 gap-14 justify-center lg:justify-start">
               {mappedProduct}
             </div>
           ) : (
