@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from 'react';
 import dayjs from 'dayjs';
-
+import API from '../API';
 export const TimeContext = createContext();
 
 const TimeContextProvider = ({ ...props }) => {
@@ -30,6 +30,23 @@ const TimeContextProvider = ({ ...props }) => {
       setAddingProductsDays(true);
     } else {
       setAddingProductsDays(false);
+    }
+
+    let checkUnretrieved = async () => {
+      let orders = await API.getAllOrders();
+      console.log('stampo gli orders ===>', orders);
+      orders.forEach(order => {
+        if (
+          order.status === 'pending' ||
+          order.status === 'pending_cancellation'
+        ) {
+          API.setUnretrievedOrder(order.order_id);
+        }
+      });
+    };
+    //Friday 9 am set unretrieved orders
+    if (today === 5 && hour === 21) {
+      checkUnretrieved();
     }
   }, [dateState]);
 
