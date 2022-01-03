@@ -9,69 +9,57 @@ import ModalConfirmation from '../../components/content/Orders/ModalConfirmation
 import TimeContextProvider from '../../context/TimeContext';
 import UserContextProvider from '../../context/UserContext';
 
-
 jest.mock('axios');
 
-describe("Modal Confirmation", () => {
+describe('Modal Confirmation', () => {
+  test('render ModalConfirmation Submit', async () => {
+    const promise = Promise.resolve({ data: true });
+    axios.get.mockImplementationOnce(() => promise);
+    let api = jest
+      .spyOn(API, 'setDeliveredOrder')
+      .mockImplementationOnce(id => Promise.resolve(true));
 
-    test("render ModalConfirmation Submit", async () => {
-        const promise = Promise.resolve({ data: true });
-        axios.get.mockImplementationOnce(() => promise);
-        let api = jest.spyOn(API, 'setDeliveredOrder')
-            .mockImplementationOnce((id) =>
-                Promise.resolve(true));
+    render(
+      <Router>
+        <TimeContextProvider>
+          <UserContextProvider>
+            <ModalConfirmation show={true} order_id={2} />
+          </UserContextProvider>
+        </TimeContextProvider>
+      </Router>
+    );
 
-        render(
-            <Router>
-                <UserContextProvider>
-                    <TimeContextProvider>
-                        <ModalConfirmation
-                            show={true}
-                            order_id={2}
-                        />
-                    </TimeContextProvider>
-                </UserContextProvider>
-            </Router>
-        );
+    await act(() => promise);
+    expect(screen.getByText(/Change the status/i)).toBeInTheDocument();
 
-        await act(() => promise);
-        expect(
-            screen.getByText(/Change the status/i)
-        ).toBeInTheDocument();
+    await userEvent.click(screen.getByLabelText(/change-status-2/i));
+  });
 
-        await userEvent.click(screen.getByLabelText(/change-status-2/i))
+  test('render ModalConfirmation Cancel', async () => {
+    const promise = Promise.resolve({ data: true });
+    axios.get.mockImplementationOnce(() => promise);
+    let api = jest
+      .spyOn(API, 'setDeliveredOrder')
+      .mockImplementationOnce(id => Promise.resolve(true));
 
-    })
+    render(
+      <Router>
+        <TimeContextProvider>
+          <UserContextProvider>
+            <ModalConfirmation
+              show={true}
+              order_id={2}
+              setShow={() => ''}
+              setDirty={() => ''}
+            />
+          </UserContextProvider>
+        </TimeContextProvider>
+      </Router>
+    );
 
-    test("render ModalConfirmation Cancel", async () => {
-        const promise = Promise.resolve({ data: true });
-        axios.get.mockImplementationOnce(() => promise);
-        let api = jest.spyOn(API, 'setDeliveredOrder')
-            .mockImplementationOnce((id) =>
-                Promise.resolve(true));
+    await act(() => promise);
+    expect(screen.getByText(/Change the status/i)).toBeInTheDocument();
 
-        render(
-            <Router>
-                <UserContextProvider>
-                    <TimeContextProvider>
-                        <ModalConfirmation
-                            show={true}
-                            order_id={2}
-                            setShow={() => ""}
-                            setDirty={() => ""}
-                        />
-                    </TimeContextProvider>
-                </UserContextProvider>
-            </Router>
-        );
-
-        await act(() => promise);
-        expect(
-            screen.getByText(/Change the status/i)
-        ).toBeInTheDocument();
-
-        await userEvent.click(screen.getByLabelText(/form-cancel/i))
-
-    })
-
+    await userEvent.click(screen.getByLabelText(/form-cancel/i));
+  });
 });

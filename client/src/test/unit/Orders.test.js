@@ -9,23 +9,20 @@ import Orders from '../../components/content/Orders/Orders';
 import TimeContextProvider from '../../context/TimeContext';
 import UserContextProvider from '../../context/UserContext';
 
-describe("Order", () => {
+describe('Order', () => {
+  test('render Order', () => {
+    const id = render(
+      <Router>
+        <TimeContextProvider>
+          <UserContextProvider>
+            <Orders />
+          </UserContextProvider>
+        </TimeContextProvider>
+      </Router>
+    );
 
-    test("render Order", () => {
-        const id =
-            render(
-                <Router>
-                    <UserContextProvider>
-                        <TimeContextProvider>
-                            <Orders />
-                        </TimeContextProvider>
-                    </UserContextProvider>
-                </Router>
-            );
-
-        expect(
-            screen.getByText(/Please wait, we're loading your orders.../i)
-        ).toBeInTheDocument();
-    })
-
+    expect(
+      screen.getByText(/Please wait, we're loading your orders.../i)
+    ).toBeInTheDocument();
+  });
 });

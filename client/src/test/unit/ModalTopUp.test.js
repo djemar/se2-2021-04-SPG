@@ -49,16 +49,16 @@ describe('ModalTopUp', () => {
 
     render(
       <Router>
-        <UserContextProvider>
-          <TimeContextProvider>
+        <TimeContextProvider>
+          <UserContextProvider>
             <ModalTopUp
               show={true}
               user_id={1}
               setDirty={() => true}
               setShow={() => true}
             />
-          </TimeContextProvider>
-        </UserContextProvider>
+          </UserContextProvider>
+        </TimeContextProvider>
       </Router>
     );
 

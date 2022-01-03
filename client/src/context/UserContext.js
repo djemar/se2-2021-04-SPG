@@ -1,8 +1,7 @@
-import { createContext, useEffect, useState } from 'react';
-import API from '../API';
-import { useContext } from 'react';
-import { TimeContext } from './TimeContext';
 import dayjs from 'dayjs';
+import { createContext, useContext, useEffect, useState } from 'react';
+import API from '../API';
+import { TimeContext } from './TimeContext';
 
 export const UserContext = createContext();
 

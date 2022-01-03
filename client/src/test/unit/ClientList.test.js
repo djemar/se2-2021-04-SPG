@@ -44,11 +44,11 @@ describe('Clients', () => {
 
     render(
       <Router>
-        <UserContextProvider>
-          <TimeContextProvider>
+        <TimeContextProvider>
+          <UserContextProvider>
             <Clients />
-          </TimeContextProvider>
-        </UserContextProvider>
+          </UserContextProvider>
+        </TimeContextProvider>
       </Router>
     );
 
@@ -88,8 +88,8 @@ describe('Clients', () => {
 
     render(
       <Router>
-        <UserContextProvider>
-          <TimeContextProvider>
+        <TimeContextProvider>
+          <UserContextProvider>
             <ClientRow
               key={user.user_id}
               index={0}
@@ -102,8 +102,8 @@ describe('Clients', () => {
               isClient={user.Type === 'Client'}
               setDirty={() => true}
             />
-          </TimeContextProvider>
-        </UserContextProvider>
+          </UserContextProvider>
+        </TimeContextProvider>
       </Router>
     );
 
