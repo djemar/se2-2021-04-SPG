@@ -39,7 +39,7 @@ const categories = [
   { id: 'c3', name: 'Meat & cured meat', product: [products[0], products[1]] },
   { id: 'c4', name: 'Bread & sweets', product: [products[1]] },
   { id: 'c5', name: 'Other foods', product: [products[1]] },
-  { id: 'c6', name: 'Drink', product: [products[1]] },
+  { id: 'c6', name: 'Drinks', product: [products[1]] },
   { id: 'c7', name: 'Gastronomy', product: [products[1]] },
 ];
 
