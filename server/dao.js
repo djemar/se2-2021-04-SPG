@@ -692,3 +692,13 @@ exports.setPendingCancellationdOrder = function (orderID) {
     });
   });
 };
+
+exports.setUnretrievedOrder = function (orderID) {
+  return new Promise((resolve, reject) => {
+    const sql = "UPDATE ORDERS set status = ? where ORDERS.order_id = ?";
+    db.all(sql, ["unretrieved", orderID], (err, res) => {
+      if (err) reject(err);
+      else resolve(true);
+    });
+  });
+};
