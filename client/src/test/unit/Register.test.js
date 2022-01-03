@@ -21,7 +21,7 @@ afterEach(() => {
 });
 
 describe('Register', () => {
-  test('renders Register component', async () => {
+  test('register as client', async () => {
     const products = [
       {
         product_id: 0,
@@ -64,17 +64,146 @@ describe('Register', () => {
 
     await act(() => promise);
     // screen.debug();
-    expect(screen.getByText(/Register as a new Client/i)).toBeInTheDocument();
-    userEvent.type(screen.getByLabelText(/reg-name/i), 'ss');
-    userEvent.type(screen.getByLabelText(/reg-surname/i, 'ss'));
-    userEvent.type(screen.getByLabelText(/reg-email/i), 'ss');
-    userEvent.type(screen.getByLabelText(/reg-phone/i), 323);
-    userEvent.type(screen.getByLabelText(/reg-country/i), 'sds');
-    userEvent.type(screen.getByLabelText(/reg-city/i), 'rere');
-    userEvent.type(screen.getByLabelText(/reg-zip-code/i), 211);
-    userEvent.type(screen.getByLabelText('reg-psw'), 'psw');
-    userEvent.type(screen.getByLabelText(/reg-psw-confirmation/i), 'psw');
-    userEvent.click(screen.getByLabelText(/btn-create/i));
-    userEvent.click(screen.getByLabelText(/btn-back-to-registration/i));
+    await expect(screen.getByText(/Register as/i)).toBeInTheDocument();
+    await userEvent.type(screen.getByLabelText(/reg-name/i), 'ss');
+    await userEvent.type(screen.getByLabelText(/reg-surname/i, 'ss'));
+    await userEvent.type(screen.getByLabelText(/reg-email/i), 'ss@sss.it');
+    await userEvent.type(screen.getByLabelText(/reg-phone/i), '3232');
+    await userEvent.type(screen.getByLabelText(/reg-address/i), 'via Roma');
+    await userEvent.type(screen.getByLabelText(/reg-country/i), 'sds');
+    await userEvent.type(screen.getByLabelText(/reg-city/i), 'rere');
+    await userEvent.type(screen.getByLabelText(/reg-zip-code/i), '211');
+    await userEvent.type(screen.getByLabelText('reg-psw'), 'psw');
+    await userEvent.type(screen.getByLabelText(/reg-psw-confirmation/i), 'psw');
+    await userEvent.click(screen.getByLabelText(/btn-create/i));
+    await expect(
+      screen.getByText(/User successfully created with ID:/i)
+    ).toBeInTheDocument();
+    await userEvent.click(screen.getByLabelText(/btn-back-to-register/i));
+    await expect(screen.getByText(/Register as/i)).toBeInTheDocument();
   });
+
+  test('register as farmer', async () => {
+    const products = [
+      {
+        product_id: 0,
+        name: 'product0',
+        description: 'Lorem Ipsum',
+        availability: '10',
+        price: '5',
+        unit_of_measure: '1 kg',
+      },
+      {
+        product_id: 1,
+        name: 'product1',
+        description: 'Quousque tandem abutere',
+        availability: '15',
+        price: '6',
+        unit_of_measure: '1 kg',
+      },
+    ];
+    const promise = Promise.resolve({ data: products });
+    axios.get.mockImplementationOnce(() => promise);
+    const user = { user_id: 1 };
+    const mockSetState = jest.fn();
+
+    jest.mock('react', () => ({
+      useState: initial => [initial, mockSetState],
+    }));
+    let api = jest
+      .spyOn(API, 'addUser')
+      .mockImplementationOnce(() => Promise.resolve(user));
+
+    render(
+      <Router>
+        <TimeContextProvider>
+          <UserContextProvider>
+            <Register />
+          </UserContextProvider>
+        </TimeContextProvider>
+      </Router>
+    );
+
+    await act(() => promise);
+    // screen.debug();
+    await expect(screen.getByText(/Register as/i)).toBeInTheDocument();
+    await userEvent.click(screen.getByLabelText(/register-as-farmer/i));
+    await userEvent.type(screen.getByLabelText(/reg-name/i), 'ss');
+    await userEvent.type(screen.getByLabelText(/reg-surname/i, 'ss'));
+    await userEvent.type(screen.getByLabelText(/reg-email/i), 'ss2@rrsss.it');
+    await userEvent.type(screen.getByLabelText(/reg-phone/i), '3232');
+    await userEvent.type(
+      screen.getByLabelText(/reg-farmer-companyName/i),
+      'companyyyyy'
+    );
+    await userEvent.type(screen.getByLabelText(/reg-address/i), 'via Roma');
+    await userEvent.type(screen.getByLabelText(/reg-country/i), 'sds');
+    await userEvent.type(screen.getByLabelText(/reg-city/i), 'rere');
+    await userEvent.type(screen.getByLabelText(/reg-zip-code/i), '211');
+    await userEvent.type(screen.getByLabelText('reg-psw'), 'psw');
+    await userEvent.type(screen.getByLabelText(/reg-psw-confirmation/i), 'psw');
+    await userEvent.click(screen.getByLabelText(/btn-create/i));
+    expect(
+      screen.getByLabelText(/user-successfully-created/i)
+    ).toBeInTheDocument();
+    await userEvent.click(screen.getByLabelText(/btn-go-to-login/i));
+  });
+
+  /*test('Checking email error', async () => {
+    const products = [
+      {
+        product_id: 0,
+        name: 'product0',
+        description: 'Lorem Ipsum',
+        availability: '10',
+        price: '5',
+        unit_of_measure: '1 kg',
+      },
+      {
+        product_id: 1,
+        name: 'product1',
+        description: 'Quousque tandem abutere',
+        availability: '15',
+        price: '6',
+        unit_of_measure: '1 kg',
+      },
+    ];
+    const promise = Promise.resolve({ data: products });
+    axios.get.mockImplementationOnce(() => promise);
+    const user = { user_id: 1 };
+    const mockSetState = jest.fn();
+
+    jest.mock('react', () => ({
+      useState: initial => [initial, mockSetState],
+    }));
+    let api = jest
+      .spyOn(API, 'addUser')
+      .mockImplementationOnce(() => Promise.resolve(user));
+
+    render(
+      <Router>
+        <TimeContextProvider>
+          <UserContextProvider>
+            <Register />
+          </UserContextProvider>
+        </TimeContextProvider>
+      </Router>
+    );
+
+    await act(() => promise);
+    // screen.debug();
+    await userEvent.type(screen.getByLabelText(/reg-name/i), 'ss');
+    await userEvent.type(screen.getByLabelText(/reg-surname/i, 'ss'));
+    await userEvent.type(screen.getByLabelText(/reg-email/i), 'ss@sss.u');
+    await userEvent.type(screen.getByLabelText(/reg-phone/i), '3232');
+    await userEvent.type(screen.getByLabelText(/reg-address/i), 'via Roma');
+    await userEvent.type(screen.getByLabelText(/reg-country/i), 'sds');
+    await userEvent.type(screen.getByLabelText(/reg-city/i), 'rere');
+    await userEvent.type(screen.getByLabelText(/reg-zip-code/i), '211');
+    await userEvent.type(screen.getByLabelText('reg-psw'), 'psw');
+    await userEvent.type(screen.getByLabelText(/reg-psw-confirmation/i), 'psw');
+    await userEvent.click(screen.getByLabelText(/btn-create/i));
+    screen.debug();
+    expect(screen.getByLabelText(/alert-wrong-email/i)).toBeInTheDocument();
+  });*/
 });
