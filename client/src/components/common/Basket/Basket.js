@@ -1,5 +1,16 @@
 import { useContext, useEffect, useState } from 'react';
-import { Alert, FormControl, InputGroup, Offcanvas } from 'react-bootstrap';
+import {
+  Alert,
+  FormControl,
+  InputGroup,
+  Offcanvas,
+  Col,
+  Button as ButtonBS,
+  Form,
+  Modal,
+  Row,
+  Card,
+} from 'react-bootstrap';
 import API from '../../../API';
 import '../../../App.css';
 import { TimeContext } from '../../../context/TimeContext';
@@ -10,22 +21,37 @@ import './basket.css';
 import BasketItem from './BasketItem/BasketItem';
 import { UserContext } from '../../../context/UserContext';
 import dayjs from 'dayjs';
+import DeliveryModal from './DeliveryModal';
 
 export const Basket = ({ ...props }) => {
   const { basketProducts, setBasketProducts, show, onHide, user, isLogged } =
     props;
   const { setDirty } = useContext(UserContext);
   const [clientId, setClientId] = useState('');
-  const [somma, setSomma] = useState(0);
+  const [sum, setSum] = useState(0);
   const [showOrderAlert, setShowOrderAlert] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const { orderEnabled } = useContext(TimeContext);
   const { dateState } = useContext(TimeContext);
+  const [mShow, setMShow] = useState(false);
+
+  const [computeConfirmationModal, setComputeConfirmationModal] =
+    useState(false);
+  const [wantDelivery, setWantDelivery] = useState(true);
+  const [deliveryDate, setDeliveryDate] = useState();
+
+  const [deliveryTime, setDeliveryTime] = useState();
+
+  const [deliveryAddress, setDeliveryAddress] = useState();
+  const [deliveryCountry, setDeliveryCountry] = useState();
+  const [deliveryCity, setDeliveryCity] = useState();
+  const [deliveryZipCode, setDeliveryZipCode] = useState();
 
   useEffect(() => {
     if (user !== undefined && user !== null) {
       if (isLogged && user.userType === 'Client') setClientId(user.id);
     }
+    setComputeConfirmationModal(false);
   }, [isLogged, user]);
 
   useEffect(() => {
@@ -34,21 +60,47 @@ export const Basket = ({ ...props }) => {
       if (x.orderQuantity === undefined) sum = sum + x.price * x.quantity;
       else sum = sum + x.price * x.orderQuantity;
     });
-    setSomma(sum);
+    setSum(sum);
   }, [basketProducts]);
 
   const handleInputClientId = value => {
     setClientId(value);
   };
+  const handleMClose = () => {
+    setMShow(false);
+    setComputeConfirmationModal(false);
+  };
 
+  const handleMShow = () => {
+    setMShow(true);
+    setComputeConfirmationModal(true);
+  };
   const handleAddOrder = async () => {
     const date = dayjs(dateState).format('DD/MM/YYYY');
-    const result = await API.addOrder(clientId, basketProducts, date, somma);
+    let result;
+    if (wantDelivery) {
+      console.log(deliveryTime);
+      result = await API.addScheduledOrder(
+        clientId,
+        basketProducts,
+        date,
+        sum,
+        deliveryAddress,
+        deliveryCountry,
+        deliveryCity,
+        deliveryZipCode,
+        deliveryDate,
+        deliveryTime
+      );
+    } else {
+      result = await API.addOrder(clientId, basketProducts, date, sum);
+    }
     if (result) {
       // clear basket
       setBasketProducts([]);
       setDirty(true);
       setShowOrderAlert(true);
+      setMShow(false);
       setTimeout(() => {
         setShowOrderAlert(false);
       }, 4000);
@@ -110,7 +162,7 @@ export const Basket = ({ ...props }) => {
           <div className="d-flex justify-between mx-10 my-5 text-dark font-medium">
             <div className="totLabel text-xl">Total</div>
             <div className="priceTotLabel text-xl text-secondary">
-              {somma + ' €'}
+              {sum + ' €'}
             </div>
           </div>
           <Alert
@@ -145,7 +197,7 @@ export const Basket = ({ ...props }) => {
               text={'Confirm Order'}
               type={'success'}
               ariaLabel="btn-confirm-order"
-              onClick={handleAddOrder}
+              onClick={handleMShow}
               disabled={
                 clientId === '' || basketProducts.length === 0 || !orderEnabled
               }
@@ -153,12 +205,35 @@ export const Basket = ({ ...props }) => {
           </div>
         </div>
       </Offcanvas>
+
       <ConfirmModal
         show={modalShow}
         title={'Clear Your Basket'}
         body={'Do you really want to clear your basket?'}
         onHide={() => setModalShow(false)}
         onConfirm={clearBasket}
+      />
+      <DeliveryModal
+        user={user}
+        sum={sum}
+        mShow={mShow}
+        computeConfirmationModal={computeConfirmationModal}
+        handleMClose={handleMClose}
+        handleAddOrder={handleAddOrder}
+        wantDelivery={wantDelivery}
+        setWantDelivery={setWantDelivery}
+        setDeliveryDate={setDeliveryDate}
+        deliveryDate={deliveryDate}
+        setDeliveryTime={setDeliveryTime}
+        deliveryTime={deliveryTime}
+        setDeliveryAddress={setDeliveryAddress}
+        deliveryAddress={deliveryAddress}
+        setDeliveryCountry={setDeliveryCountry}
+        deliveryCountry={deliveryCountry}
+        setDeliveryCity={setDeliveryCity}
+        deliveryCity={deliveryCity}
+        setDeliveryZipCode={setDeliveryZipCode}
+        deliveryZipCode={deliveryZipCode}
       />
     </>
   );
