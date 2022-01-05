@@ -354,6 +354,71 @@ describe("API Order", () => {
     expect(res).toBeTruthy();
   });
 
+  test("orderAndScheduleMissingData", async () => {
+    const body = {
+      "ref_user": 7,
+      "productList": [
+        {
+          "ref_product": 91,
+          "quantity": 1
+        },
+        {
+          "ref_product": 93,
+          "quantity": 3
+        }
+      ],
+      "total": 22,
+      "address": "via",
+      "country": "ita",
+      "city": "turin",
+      "zip_code": 10138,
+      "schedule_date": "22",
+      "schedule_time": "22:22"
+    };
+    let productsIdList = body.productList;
+    var id_array = [], quantity_array = [];
+    productsIdList.forEach((obj) => {
+      id_array.push(obj.ref_product);
+      quantity_array.push(obj.quantity);
+    });
+    const res = await dao.insertOrderAndSchedule(body, id_array, quantity_array).catch((val) => val);
+    res.forEach((tmp) => {
+      expect(tmp).toBeFalsy()
+    })
+  });
+
+  test("orderAndScheduleSuccess", async () => {
+    const body = {
+      "ref_user": 7,
+      "productList": [
+        {
+          "ref_product": 91,
+          "quantity": 1
+        },
+        {
+          "ref_product": 93,
+          "quantity": 3
+        }
+      ],
+      "date_order": "222",
+      "total": 22,
+      "address": "via",
+      "country": "ita",
+      "city": "turin",
+      "zip_code": 10138,
+      "schedule_date": "22",
+      "schedule_time": "22:22"
+    };
+    let productsIdList = body.productList;
+    var id_array = [], quantity_array = [];
+    productsIdList.forEach((obj) => {
+      id_array.push(obj.ref_product);
+      quantity_array.push(obj.quantity);
+    });
+    const res = await dao.insertOrderAndSchedule(body, id_array, quantity_array);
+    expect(res).toBeTruthy();
+  });
+
   test("Get all orders", async () => {
     const o = await dao.getAllOrders();
     console.log("Found", o[0])

@@ -115,7 +115,7 @@ describe('Get orders API', () => {
 
         expect(response.status).toBe(200)
         expect(response.body).toBeTruthy()
-        expect(response.body[0]).toHaveProperty('status','unretrieved');
+        expect(response.body[0]).toHaveProperty('status', 'unretrieved');
     });
 
     test('Get orders for a client, expected success', async () => {
@@ -417,6 +417,58 @@ describe('Insert Order API', () => {
             "date_order": "222"
         };
         const response = await request.post('/api/order').send(order);
+        expect(response.status).toBe(400);
+    })
+
+    test('Insert Correct Order and Schedule', async () => {
+        const order = {
+            "ref_user": 8,
+            "productList": [
+                {
+                    "ref_product": 91,
+                    "quantity": 1
+                },
+                {
+                    "ref_product": 93,
+                    "quantity": 3
+                }
+            ],
+            "date_order": "222",
+            "total": 22,
+            "address": "via",
+            "country": "ita",
+            "city": "turin",
+            "zip_code": 10138,
+            "schedule_date": "22",
+            "schedule_time": "22:22"
+        };
+        const response = await request.post('/api/insert-scheduled-order').send(order);
+        expect(response.status).toBe(200);
+        expect(response.body).toBeTruthy();
+    })
+
+    test('Insert Wrong Order and Schedule', async () => {
+        const order = {
+            "ref_user": 8,
+            "productList": [
+                {
+                    "ref_product": 91,
+                    "quantity": 1
+                },
+                {
+                    "ref_product": 93,
+                    "quantity": 3
+                }
+            ],
+            "total": 22,
+            "address": "via",
+            "country": "ita",
+            "city": "turin",
+            "zip_code": 10138,
+            "schedule_date": "22",
+            "schedule_time": "22:22"
+        };
+        const response = await request.post('/api/insert-scheduled-order').send(order);
         expect(response.status).toBe(400);
     })
 });

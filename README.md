@@ -273,11 +273,32 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
     - request parameters : none
     - request body content : json containing the orderID
     - response body content : //
+- POST `/api/insert-scheduled-order`
+  - Insert order in the DB with the schedule.
+  - request parameters and request body content:
+    - order: { 
+      - "order_id": order's id,
+      - "ref_user": user's id,
+      - "productList": array of:
+        [{ 
+        "ref_product": product's id,
+        "quantity": product's quantity 
+        }],
+      - "date_order": order's date
+      - "total": total amount 
+      - "address": address for the delivery
+      - "country": country for the delivery
+      - "city": city for the delivery
+      - "zip_code": city's zip_code
+      - "schedule_date": date scheduled for the delivery
+      - "schedule_time": time scheduled for the delivery
+      }
+  - response body content : none
 
   ## Server Database
   - Table `USER` - it contains id, name, surname, email, password, Type, balance, address, phone, country, city, zip code and company name for a farmer.
   - Table `PRODUCT` - it contains id, name, description, category, farmer's id, price, availability,unit of measure, path for images, start date and end date
-  - Table `ORDERS` - it contains id, product's id, user's id, date, quantity and status.
+  - Table `ORDERS` - it contains id, product's id, user's id, date, quantity, status, address, country, city, zip_code, schedule_date, schedule_time.
   ## Built with
   - [React](https://github.com/facebook/react) 
   - [React-Bootstrap](https://react-bootstrap.github.io/)
