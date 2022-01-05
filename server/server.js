@@ -492,6 +492,17 @@ app.get("/api/orders", async (req, res) => {
     .catch((err) => res.status(503).json(dbErrorObj));
 });
 
+// GET /orders/unretrieved
+// Request body: //
+// Response body: json containing all the unretrieved orders of all the clients
+app.get("/api/orders/unretrieved", async (req, res) => {
+    await dao
+        .getAllOrdersUnretrieved()
+        .then((orders) => res.json(orders))
+        .catch((err) => res.status(503).json(dbErrorObj));
+});
+
+
 // GET /client-orders/:clientID
 // Request parameters: clientID
 // Request body: //
