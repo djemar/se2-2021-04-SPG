@@ -6,6 +6,7 @@ import {
   Card,
   Col,
   Form,
+  InputGroup,
   Modal,
   Row,
 } from 'react-bootstrap';
@@ -19,6 +20,7 @@ import { Spinner } from '../../misc';
 import Page from '../../misc/Page';
 import ProductCard from '../ProductCard/ProductCard';
 import './myshop.css';
+import MyShopImages from './MyShopImages.js';
 
 const product = {
   product_id: -1,
@@ -51,6 +53,7 @@ export const MyShop = ({ ...props }) => {
   const { setDirty, loadingProd } = useContext(UserContext);
   const [start_date, setStart] = useState('');
   const [end_date, setEnd] = useState('');
+  const [showImages, setShowImages] = useState(false);
 
   const [prod, setProd] = useState('');
 
@@ -219,8 +222,17 @@ export const MyShop = ({ ...props }) => {
     else setAddedProduct(tmpProd);
   };
 
+  const setUrlFromArchive = url => {
+    handleChange(url, NEWVALUE.IMAGE, 1);
+  };
+
   return (
     <>
+      <MyShopImages
+        show={showImages}
+        setShow={setShowImages}
+        setUrl={setUrlFromArchive}
+      />
       <Modal
         dialogClassName="modal-40w"
         size="lg"
@@ -494,7 +506,7 @@ export const MyShop = ({ ...props }) => {
                                 aria-label="form-description"
                                 placeholder={addedProduct.description}
                                 value={
-                                  addedProduct.description !=
+                                  addedProduct.description !==
                                   product.description
                                     ? addedProduct.description
                                     : ''
