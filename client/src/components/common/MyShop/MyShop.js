@@ -346,46 +346,51 @@ export const MyShop = ({ ...props }) => {
       <Page title="My Shop">
         {addingProductsDays ? (
           <>
-            <div className="flex flex-grow justify-between pt-4">
-              <div className="col-8">
-                <Card>
+            <div className="flex flex-column lg:flex-row flex-grow justify-between p-4 lg:items-start items-center">
+              <div className="w-full flex flex-column items-center lg:col-8">
+                <Card className="w-full">
                   <Card.Body className="items-center">
                     <Form>
-                      <div className="d-flex items-center justify-between">
-                        <div className="d-flex items-center">
+                      <div className="flex flex-column md:flex-row items-center justify-between">
+                        <span className="text-center">
                           Select a product from your inventory
-                          <Select
-                            className="basic-single w-80 mx-10"
-                            classNamePrefix="select"
-                            placeholder="Type to search..."
-                            onChange={v => {
-                              v ? setAddedProduct(v) : setAddedProduct(product);
-                            }}
-                            isClearable={true}
-                            isSearchable={true}
-                            name="inventory"
-                            getOptionValue={option => option.product_id}
-                            getOptionLabel={option => `${option.name}`}
-                            options={products.filter(
-                              p => p.ref_farmer === user.id
-                            )}
-                          />
+                        </span>
+                        <Select
+                          className="basic-single w-56 sm:w-80 md:mx-5 my-2"
+                          classNamePrefix="select"
+                          placeholder="Type to search..."
+                          onChange={v => {
+                            v ? setAddedProduct(v) : setAddedProduct(product);
+                          }}
+                          isClearable={true}
+                          isSearchable={true}
+                          name="inventory"
+                          getOptionValue={option => option.product_id}
+                          getOptionLabel={option => `${option.name}`}
+                          options={products.filter(
+                            p => p.ref_farmer === user.id
+                          )}
+                        />
+                        <span className="text-center">
                           or add a new product below.
-                        </div>
+                        </span>
                       </div>
                     </Form>
                   </Card.Body>
                 </Card>
-                <Card className="mt-5">
+                <Card className="mt-4 w-full">
                   <Card.Title className="px-5 pt-5 font-medium uppercase font-ibmplex">
                     Insert product details
                   </Card.Title>
-                  <Card.Body className="items-center p-8">
+                  <Card.Body className="items-center p-4">
                     <Form>
-                      <Row>
+                      <div className="flex flex-column md:flex-row">
                         <Col>
                           <Row className="mb-3">
-                            <Form.Group as={Col} controlId="formGridName">
+                            <Form.Group
+                              className="sm:w-1/2"
+                              controlId="formGridName"
+                            >
                               <Form.Label className="font-medium font-ibmplex text-sm">
                                 Product Name
                               </Form.Label>
@@ -394,7 +399,7 @@ export const MyShop = ({ ...props }) => {
                                 aria-label="form-name"
                                 placeholder={addedProduct.name}
                                 value={
-                                  addedProduct.name != product.name
+                                  addedProduct.name !== product.name
                                     ? addedProduct.name
                                     : ''
                                 }
@@ -404,7 +409,10 @@ export const MyShop = ({ ...props }) => {
                               />
                             </Form.Group>
 
-                            <Form.Group as={Col} controlId="formGridPrice">
+                            <Form.Group
+                              className="sm:w-1/2"
+                              controlId="formGridPrice"
+                            >
                               <Form.Label className="font-medium font-ibmplex text-sm">
                                 Price €
                               </Form.Label>
@@ -426,7 +434,10 @@ export const MyShop = ({ ...props }) => {
                             </Form.Group>
                           </Row>
                           <Row className="mb-3">
-                            <Form.Group as={Col} controlId="formGridPieces">
+                            <Form.Group
+                              className="sm:w-1/2"
+                              controlId="formGridPieces"
+                            >
                               <Form.Label className="font-medium font-ibmplex text-sm">
                                 Available pieces
                               </Form.Label>
@@ -444,7 +455,10 @@ export const MyShop = ({ ...props }) => {
                               />
                             </Form.Group>
 
-                            <Form.Group as={Col} controlId="formGridQuantity">
+                            <Form.Group
+                              className="sm:w-1/2"
+                              controlId="formGridQuantity"
+                            >
                               <Form.Label className="font-medium font-ibmplex text-sm">
                                 Quantity per-piece
                               </Form.Label>
@@ -466,52 +480,73 @@ export const MyShop = ({ ...props }) => {
                           </Row>
                         </Col>
                         <Col>
-                          <Form.Group as={Col} controlId="formGridDescription">
-                            <Form.Label className="font-medium font-ibmplex text-sm">
-                              Description
-                            </Form.Label>
-                            <Form.Control
-                              as="textarea"
-                              type="text"
-                              aria-label="form-description"
-                              placeholder={addedProduct.description}
-                              value={
-                                addedProduct.description != product.description
-                                  ? addedProduct.description
-                                  : ''
-                              }
-                              onChange={e =>
-                                handleChange(
-                                  e.target.value,
-                                  NEWVALUE.DESCRIPTION,
-                                  1
-                                )
-                              }
-                            />
-                          </Form.Group>
+                          <Row className="mb-3">
+                            <Form.Group
+                              as={Col}
+                              controlId="formGridDescription"
+                            >
+                              <Form.Label className="font-medium font-ibmplex text-sm">
+                                Description
+                              </Form.Label>
+                              <Form.Control
+                                as="textarea"
+                                type="text"
+                                aria-label="form-description"
+                                placeholder={addedProduct.description}
+                                value={
+                                  addedProduct.description !=
+                                  product.description
+                                    ? addedProduct.description
+                                    : ''
+                                }
+                                onChange={e =>
+                                  handleChange(
+                                    e.target.value,
+                                    NEWVALUE.DESCRIPTION,
+                                    1
+                                  )
+                                }
+                              />
+                            </Form.Group>
+                          </Row>
                         </Col>
-                      </Row>
-
-                      <Row className="mb-3">
-                        <Form.Group as={Col} controlId="formGridImg">
-                          <Form.Label className="font-medium font-ibmplex text-sm">
-                            Image URL
-                          </Form.Label>
-                          <Form.Control
-                            type="text"
-                            aria-label="form-img"
-                            value={addedProduct.image_path}
-                            onChange={e =>
-                              handleChange(e.target.value, NEWVALUE.IMAGE, 1)
-                            }
-                          />
-                        </Form.Group>
-                      </Row>
+                      </div>
+                      <div className="flex flex-column md:flex-row">
+                        <Col>
+                          <Row className="mb-3">
+                            <Form.Group as={Col} controlId="formGridImg">
+                              <Form.Label className="font-medium font-ibmplex text-sm">
+                                Image URL
+                              </Form.Label>
+                              <Form.Control
+                                type="text"
+                                aria-label="form-img"
+                                value={addedProduct.image_path}
+                                onChange={e =>
+                                  handleChange(
+                                    e.target.value,
+                                    NEWVALUE.IMAGE,
+                                    1
+                                  )
+                                }
+                              />
+                            </Form.Group>
+                          </Row>
+                        </Col>
+                      </div>
                     </Form>
                   </Card.Body>
                 </Card>
+                <ButtonBS
+                  className="d-flex items-center mt-4 shadow-lg bg-secondary"
+                  onClick={() => insertProduct()}
+                >
+                  <IoAdd className="text-white mr-3" />
+                  Add to My Shop
+                </ButtonBS>
               </div>
-              <div className="col d-flex flex-column justify-content-center items-center">
+              <div className="col-4 flex lg:w-full flex-column justify-content-center items-center lg:pr-0 pt-4 lg:pt-0">
+                <span className="font-medium h5">Preview</span>
                 <ProductCard
                   key={addedProduct.product_id}
                   pid={addedProduct.product_id}
@@ -528,13 +563,6 @@ export const MyShop = ({ ...props }) => {
                   // setBasketProducts={()}
                   //setAnimateBasket={()}
                 />
-                <ButtonBS
-                  className="d-flex items-center my-10 shadow-lg bg-secondary"
-                  onClick={() => insertProduct()}
-                >
-                  <IoAdd className="text-white mr-3" />
-                  Add to My Shop
-                </ButtonBS>
               </div>
             </div>
           </>
@@ -551,15 +579,15 @@ export const MyShop = ({ ...props }) => {
           </div>
         )}
       </Page>
-      <span className="mx-10 mt-10 text-4xl font-bold">Week Preview</span>
-      <span className="text-2xl ml-10">
+      <span className="mt-10 ml-4 text-4xl font-bold">Week Preview</span>
+      <span className="text-2xl ml-4">
         {myProduct &&
           `${myProduct.length || 0} Products available until ${dayjs(
             getTimeframe().endDate
           ).format('DD/MM/YYYY')}`}
       </span>
       <div className="col">
-        <div className="flex flex-none justify-start px-8 items-end">
+        <div className="flex flex-none justify-start items-end">
           {myProduct ? (
             <Row>{myProduct}</Row>
           ) : (
