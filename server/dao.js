@@ -717,3 +717,52 @@ exports.setUnretrievedOrder = function (orderID) {
     });
   });
 };
+
+//new insertOrder for order with schedule infos
+exports.insertOrderAndSchedule = async function (order, id_array, quantity_array) {
+  //Need to iterate over different products in list
+  var i = 0;
+  const promiseList = [];
+  const tmp = await retrieveNextId();
+  //console.log("Ecco l'id ritornato dalla query", tmp)
+  order.order_id = tmp;
+  for (const id of id_array) {
+    promiseList.push(createInsertOrderAndSchedulePromise(order, id, quantity_array[i++]));
+  }
+  return Promise.all(promiseList)
+    .then()
+    .catch((err) => console.log(err));
+};
+
+function createInsertOrderAndSchedulePromise(order, id, quantity) {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "INSERT INTO ORDERS (order_id, ref_product, ref_user, date_order, quantity, status,total,address,country,city,zip_code,schedule_date,schedule_time) VALUES (?, ?, ?,?,?,?,?,?,?,?,?,?,?)";
+    db.run(
+      sql,
+      [
+        order.order_id,
+        id,
+        order.ref_user,
+        order.date_order,
+        quantity,
+        "pending",
+        order.total,
+        order.address,
+        order.country,
+        order.city,
+        order.zip_code,
+        order.schedule_date,
+        order.schedule_time
+      ],
+      function (err) {
+        if (err) {
+          resolve(false);
+        } else {
+          resolve(true);
+        }
+      }
+    );
+  });
+}
+
