@@ -530,25 +530,30 @@ export const MyShop = ({ ...props }) => {
                               <Form.Label className="font-medium font-ibmplex text-sm">
                                 Image URL
                               </Form.Label>
-                              <div className="flex flex-column sm:flex-row">
-                                <Form.Control
-                                  type="text"
-                                  aria-label="form-img"
-                                  value={addedProduct.image_path}
-                                  onChange={e =>
-                                    handleChange(
-                                      e.target.value,
-                                      NEWVALUE.IMAGE,
-                                      1
-                                    )
-                                  }
-                                />
-                                <ButtonBS
-                                  className="bg-primary mt-4 sm:mt-0 sm:ml-4"
-                                  onClick={() => setShowImages(true)}
-                                >
-                                  Choose from Archive
-                                </ButtonBS>
+                              <div className="flex flex-column sm:flex-row items-center">
+                                <div className="flex-grow w-full">
+                                  <Form.Control
+                                    className="w-full"
+                                    type="text"
+                                    aria-label="form-img"
+                                    value={addedProduct.image_path}
+                                    onChange={e =>
+                                      handleChange(
+                                        e.target.value,
+                                        NEWVALUE.IMAGE,
+                                        1
+                                      )
+                                    }
+                                  />
+                                </div>
+                                <div className="flex-none w-30">
+                                  <ButtonBS
+                                    className="bg-primary mt-4 sm:mt-0 sm:ml-4"
+                                    onClick={() => setShowImages(true)}
+                                  >
+                                    Choose from Archive
+                                  </ButtonBS>
+                                </div>
                               </div>
                             </Form.Group>
                           </Row>
@@ -576,7 +581,7 @@ export const MyShop = ({ ...props }) => {
                   description={addedProduct.description}
                   category={addedProduct.category}
                   unit={addedProduct.unit_of_measure}
-                  img={addedProduct.image_path}
+                  img={addedProduct.image_path || './img/uploads/no_image.png'}
                   availability={addedProduct.availability}
                   basketProducts={[]}
                   preview={true}
