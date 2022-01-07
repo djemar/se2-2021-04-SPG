@@ -530,18 +530,26 @@ export const MyShop = ({ ...props }) => {
                               <Form.Label className="font-medium font-ibmplex text-sm">
                                 Image URL
                               </Form.Label>
-                              <Form.Control
-                                type="text"
-                                aria-label="form-img"
-                                value={addedProduct.image_path}
-                                onChange={e =>
-                                  handleChange(
-                                    e.target.value,
-                                    NEWVALUE.IMAGE,
-                                    1
-                                  )
-                                }
-                              />
+                              <div className="flex flex-column sm:flex-row">
+                                <Form.Control
+                                  type="text"
+                                  aria-label="form-img"
+                                  value={addedProduct.image_path}
+                                  onChange={e =>
+                                    handleChange(
+                                      e.target.value,
+                                      NEWVALUE.IMAGE,
+                                      1
+                                    )
+                                  }
+                                />
+                                <ButtonBS
+                                  className="bg-primary mt-4 sm:mt-0 sm:ml-4"
+                                  onClick={() => setShowImages(true)}
+                                >
+                                  Choose from Archive
+                                </ButtonBS>
+                              </div>
                             </Form.Group>
                           </Row>
                         </Col>
