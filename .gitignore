@@ -20,3 +20,5 @@ server/package-lock.json
 client/package-lock.json
 client/index.html
 client/junit.xml
+
+bot/node_modules/
