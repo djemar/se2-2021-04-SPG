@@ -494,18 +494,6 @@ async function setUnretrievedOrder(orderID) {
   }
 }
 
-async function addScheduledOrder(ref_user, productList, date_order, total, address, country, city, zip_code, schedule_date, schedule_time) {
-  let url = BASEURL + '/insert-scheduled-order';
-  let order = { ref_user, productList, date_order, total, address, country, city, zip_code, schedule_date, schedule_time };
-
-  try {
-    await axios.post(url, order);
-    return true;
-  } catch (error) {
-    console.log(error);
-  }
-}
-
 // Functions exported by this API:
 const API = {
   getAllProducts,
@@ -535,6 +523,5 @@ const API = {
   editProduct,
   insertProduct,
   setUnretrievedOrder,
-  addScheduledOrder,
 };
 export default API;

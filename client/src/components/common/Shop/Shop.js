@@ -77,7 +77,7 @@ export const Shop = ({ ...props }) => {
   ));
 
   return (
-    <div className="flex flex-column justify-start px-5 mt-4">
+    <div className="flex flex-column justify-start">
       <div className="flex flex-none md:justify-start pb-4 justify-center">
         <Breadcrumbs />
       </div>

@@ -22,7 +22,7 @@ export const Main = ({ ...props }) => {
   } = props;
 
   return (
-    <div className="row">
+    <div className="row px-5">
       <Switch>
         <Route path="/login">
           {user ? <Redirect to="/" /> : <Login login={login} />}

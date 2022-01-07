@@ -3,7 +3,6 @@ import {
   faHome,
   faPowerOff,
   faReceipt,
-  faRobot,
   faShoppingBasket,
   faStore,
   faUser,
@@ -50,7 +49,7 @@ export const Navbar = ({ ...props }) => {
         bg="success"
         expand="lg"
         fixed="top"
-        className="sticky navbar-light bg-white topbar static-top shadow flex justify-between py-0 px-0"
+        className="sticky navbar-light bg-white topbar mb-4 static-top shadow flex justify-between py-0 px-0"
         variant="dark"
       >
         <div
@@ -198,7 +197,7 @@ export const Navbar = ({ ...props }) => {
               SolidarityBay
             </Link>
           </NavbarBootstrap.Brand>
-          <div className="m-0 p-0 lg:flex align-items-center text-lg hidden">
+          <div className="m-0 p-0 lg:flex align-items-center  hidden">
             <NavLink
               activeClassName="text-secondary"
               className="navbar-item-spg"
@@ -254,70 +253,65 @@ export const Navbar = ({ ...props }) => {
               </>
             )}
           </div>
-          <div className="flex">
-            {!user && !loading ? (
-              <div className="hidden lg:flex items-center mr-4">
-                <Button
-                  type="warning"
-                  ariaLabel="btn-register"
-                  text={'Register'}
-                  url={'/register'}
-                />
-                <div className="topbar-divider"></div>
-                <Button
-                  ariaLabel="btn-login"
-                  type="outline-secondary"
-                  text={'Login'}
-                  url={'/login'}
-                />
-              </div>
-            ) : (
-              <NavDropdown
-                align={'left'}
-                id="dropdown-menu-align-left"
-                aria-label="navdropdown"
-                className="nav-item dropdown no-arrow sm:mr-4"
-                title={
-                  <>
-                    <span className="mr-2 text-gray-500 small d-none d-sm-block uppercase">
-                      <strong>
-                        {user && user.type === ('Client' || 'Employee')
-                          ? user.name
-                          : farmer
-                          ? farmer.company_name
-                          : ''}
-                      </strong>
-                    </span>
-                    <img
-                      alt=""
-                      className="img-profile rounded-circle"
-                      src={img}
-                    />
-                  </>
-                }
-              >
-                {user.userType === 'Client' && (
-                  <NavDropdown.Item className="text-dark">
-                    <NavLink className="text-dark no-underline" to={`/user`}>
-                      <FontAwesomeIcon icon={faUser} className={'mr-2 mb-0'} />
-                      Account
-                    </NavLink>
-                  </NavDropdown.Item>
-                )}
-                <NavDropdown.Item
-                  aria-label="navdropdown-item"
-                  className="text-danger"
-                  onClick={() => logout()}
-                >
-                  <FontAwesomeIcon icon={faPowerOff} className={'mr-2 mb-0'} />
-                  Log Out
+          {!user && !loading ? (
+            <div className="hidden lg:flex items-center mr-4">
+              <Button
+                type="warning"
+                ariaLabel="btn-register"
+                text={'Register'}
+                url={'/register'}
+              />
+              <div className="topbar-divider"></div>
+              <Button
+                ariaLabel="btn-login"
+                type="outline-secondary"
+                text={'Login'}
+                url={'/login'}
+              />
+            </div>
+          ) : (
+            <NavDropdown
+              align={'left'}
+              id="dropdown-menu-align-left"
+              aria-label="navdropdown"
+              className="nav-item dropdown no-arrow sm:mr-4"
+              title={
+                <>
+                  <span className="mr-2 text-gray-500 small d-none d-sm-block uppercase">
+                    <strong>
+                      {user && user.type === ('Client' || 'Employee')
+                        ? user.name
+                        : farmer
+                        ? farmer.company_name
+                        : ''}
+                    </strong>
+                  </span>
+                  <img
+                    alt=""
+                    className="img-profile rounded-circle"
+                    src={img}
+                  />
+                </>
+              }
+            >
+              {user.userType === 'Client' && (
+                <NavDropdown.Item className="text-dark">
+                  <NavLink className="text-dark no-underline" to={`/user`}>
+                    <FontAwesomeIcon icon={faUser} className={'mr-2 mb-0'} />
+                    Account
+                  </NavLink>
                 </NavDropdown.Item>
-              </NavDropdown>
-            )}
-            <BSButton type="button" className="mr-4 nav-item my-4">
-              <FontAwesomeIcon icon={faRobot} />
-            </BSButton>
-          </div>
+              )}
+              <NavDropdown.Item
+                aria-label="navdropdown-item"
+                className="text-danger"
+                onClick={() => logout()}
+              >
+                <FontAwesomeIcon icon={faPowerOff} className={'mr-2 mb-0'} />
+                Log Out
+              </NavDropdown.Item>
+            </NavDropdown>
+          )}
         </div>
         <BSButton
           id="btn-basket"
