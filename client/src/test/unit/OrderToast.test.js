@@ -32,6 +32,6 @@ describe('Breadcumbs toast order', () => {
       </Router>
     );
 
-    expect(screen.getByText(/Order now!/i)).toBeInTheDocument();
+      expect(screen.getByText(/Home/i)).toBeInTheDocument();
   });
 });

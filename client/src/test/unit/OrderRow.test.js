@@ -39,8 +39,8 @@ describe('Order Row', () => {
   test('render OrderRow schenge status', async () => {
     render(
       <Router>
+        <TimeContextProvider>
         <UserContextProvider>
-          <TimeContextProvider>
             <OrderRow
               order_id={2}
               ref_user={2}
@@ -50,8 +50,8 @@ describe('Order Row', () => {
               status={'order-pending'}
               isManager={true}
             />
-          </TimeContextProvider>
         </UserContextProvider>
+          </TimeContextProvider>
       </Router>
     );
 

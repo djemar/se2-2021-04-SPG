@@ -42,11 +42,12 @@ describe('MyShop', () => {
     const promise = Promise.resolve({ data: products });
     axios.get.mockImplementationOnce(() => promise);
     let api = jest.spyOn(API, 'checkSession').mockImplementationOnce(() =>
-      Promise.resolve({
+      Promise.resolve(user={
         id: 2,
         userType: 'Farmer',
       })
     );
+    const userTest = {id:2, userType:'Farmer'}
     render(
       <Router>
         <TimeContextProvider>

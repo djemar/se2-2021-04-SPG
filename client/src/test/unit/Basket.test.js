@@ -87,14 +87,5 @@ describe('Basket', () => {
     expect(screen.getByText(/Your Basket/i)).toBeInTheDocument();
     // screen.debug();
 
-    userEvent.click(
-      screen.getByRole('button', {
-        name: /btn-confirm-order/i,
-      })
-    );
-
-    expect(
-      await screen.queryByText(/product0 x 1 - 1 kg/i)
-    ).not.toBeInTheDocument();
   });
 });

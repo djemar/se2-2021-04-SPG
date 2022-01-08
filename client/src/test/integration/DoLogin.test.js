@@ -54,7 +54,7 @@ describe('Login', () => {
       <Router>
         <TimeContextProvider>
           <UserContextProvider>
-            <Login />
+            <Login login={() => true}></Login>
           </UserContextProvider>
         </TimeContextProvider>
       </Router>
@@ -63,8 +63,10 @@ describe('Login', () => {
     await act(() => promise);
     // screen.debug();
     expect(screen.getByText(/Login/i)).toBeInTheDocument();
-    await userEvent.type(screen.getByLabelText(/login-email/i), '23@mj.nba');
-    await userEvent.type(screen.getByLabelText(/login-password/i), '23');
-    userEvent.click(screen.getByLabelText(/btn-login/i));
+    await userEvent.type(screen.getByLabelText(/login-email/i), 'employee@spg.com');
+    await userEvent.type(screen.getByLabelText(/login-password/i), 'employee');
+    userEvent.click(screen.getByText(/Sign in/i));
+
+    screen.debug()
   });
 });

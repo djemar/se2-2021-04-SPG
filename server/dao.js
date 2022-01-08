@@ -813,5 +813,3 @@ exports.insertOrderAndSchedule = async function (order, id_array, quantity_array
 };
 
 
-  });
-};

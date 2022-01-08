@@ -48,6 +48,7 @@ export function Login({ ...props }) {
                 id="inputEmail"
                 type="email"
                 placeholder="Email address"
+                aria-label="login-email"
                 autoFocus={true}
                 required
                 value={email}
@@ -61,6 +62,7 @@ export function Login({ ...props }) {
                 id="inputPassword"
                 type="password"
                 placeholder="Password"
+                aria-label="login-password"
                 required
                 value={password}
                 onChange={event => setPassword(event.target.value)}
