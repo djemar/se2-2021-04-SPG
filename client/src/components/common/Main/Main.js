@@ -8,6 +8,7 @@ import { Login } from '../Login';
 import MyShop from '../MyShop/MyShop';
 import Register from '../Register/Register.js';
 import Shop from '../Shop/Shop';
+import Reports from '../../content/ManagerPage/Reports';
 import HomePage from '../HomePage/HomePage';
 
 export const Main = ({ ...props }) => {
@@ -84,6 +85,13 @@ export const Main = ({ ...props }) => {
             show={show}
             setShow={setShow}
           />
+        </Route>
+        <Route path="/reports/">
+          {(user && user.userType === 'Manager') || true ? (
+            <Reports categories={categories} />
+          ) : (
+            <Redirect to="/" />
+          )}
         </Route>
         <Route path="/homepage">
           <HomePage categories={categories} />

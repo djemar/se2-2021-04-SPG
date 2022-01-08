@@ -8,6 +8,7 @@ import {
   faStore,
   faUser,
   faUsers,
+  faChartLine,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useContext, useState } from 'react';
@@ -250,6 +251,18 @@ export const Navbar = ({ ...props }) => {
                 >
                   <FontAwesomeIcon icon={faStore} className={'mr-2 mb-0'} />
                   My Shop
+                </NavLink>
+              </>
+            )}
+            {user && user.userType === 'Manager' && (
+              <>
+                <NavLink
+                  activeClassName="text-secondary"
+                  className="navbar-item-spg"
+                  to="/reports"
+                >
+                  <FontAwesomeIcon icon={faChartLine} className={'mr-2 mb-0'} />
+                  Reports
                 </NavLink>
               </>
             )}
