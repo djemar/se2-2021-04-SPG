@@ -7,7 +7,7 @@ export class Bot {
     if (!user) {
       user = new User(id, name, surname, username);
       this.users.push(user);
-      console.log("User created: ", id);
+      console.log("[TELEGRAM] User created: ", id);
     }
     return true;
   };
@@ -17,7 +17,7 @@ export class Bot {
       if (!user.isSubscribed()) {
         user.subscribe();
         console.log(
-          "User: " + user.getId() + " " + user.getName() + " - Subscribed!"
+          "[TELEGRAM] User: " + user.getId() + " " + user.getName() + " - Subscribed!"
         );
       }
     }
@@ -28,7 +28,7 @@ export class Bot {
       if (user.isSubscribed()) {
         user.unsubscribe();
         console.log(
-          "User: " + user.getId() + " " + user.getName() + " - Unsubscribed!"
+          "[TELEGRAM] User: " + user.getId() + " " + user.getName() + " - Unsubscribed!"
         );
       }
     }

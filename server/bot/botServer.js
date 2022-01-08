@@ -1,17 +1,19 @@
-import { secret_token } from "./secretToken.js";
+// Environment PKG
+import { env } from "process";
+import dotenv from "dotenv";
 
-///const TelegramBot = require('node-telegram-bot-api');
+// Dependencies
 import TelegramBot from "node-telegram-bot-api";
-
 import { core, mapProductToMsg, mapProductToMsg_2 } from "./botCore.js";
 
-//import { ParseMode } from "node-telegram-bot-api";
+// Configure Environment
+dotenv.config();
 
 // The value below is the Telegram token received from @BotFather
-const token = secret_token;
+const TOKEN = env.BOT_SECRET_TOKEN;
 
 // Create a bot that uses 'polling' to fetch new updates
-const bot = new TelegramBot(token, { polling: true });
+const bot = new TelegramBot(TOKEN);
 
 // SESSION FLAG
 
@@ -24,6 +26,11 @@ const welcome_msg =
 
 const menu_msg =
   "Select an option from the following or find out our /slash_commands";
+
+const about_msg =
+  "Our social solidarity shop is a core principle of collective action and is founded on shared values and beliefs among different groups in our society. \
+We promote practices that sustain the alternative food networks in the country, such as: solidarity and critical consumption, organic and km-0 productions as ways to promote environment protection, \
+respect of labour regulation and fair economic relations";
 
 // SLASH COMMANDS
 
@@ -61,7 +68,7 @@ const subscription_commands = [
   },
   {
     text: unsubscribe_text,
-    callback_data: "subscribe",
+    callback_data: "unsubscribe",
   },
 ];
 
@@ -99,11 +106,7 @@ const tests_commands = [
   },
 ];
 
-const menu_keyboard = [
-  subscription_commands,
-  misc_commands,
-  tests_commands,
-];
+const menu_keyboard = [subscription_commands, misc_commands, tests_commands];
 
 const keyboard = [
   [subscribe_text, unsubscribe_text],
@@ -207,13 +210,13 @@ bot.on("message", (msg) => {
       }
       break;
     case website_text.toLowerCase():
-      bot.sendMessage(id, "Here it is!\n" + "https://spg04.herokuapp.com/");
+      utils.website(id);
       break;
     case about_text.toLowerCase():
-      bot.sendMessage(id, "I don't know who i am :(");
+      utils.about(id);
       break;
     case help_text.toLowerCase():
-      bot.sendMessage(id, "Pray :)");
+      utils.help(id);
       break;
     case menu_text.toLowerCase():
       bot.sendMessage(id, "<b>MENU</b>\n\n" + menu_msg, menu_opts);
@@ -276,18 +279,18 @@ bot.onText(/\/unsubscribe/, (msg) => {
 // Receiving "/about"
 bot.onText(/\/about/, (msg) => {
   const chatId = msg.chat.id;
-  bot.sendMessage(chatId, "I don't know who i am :(");
+  utils.about(chatId);
 });
 
 // Receiving "/help"
 bot.onText(/\/help/, (msg) => {
   const chatId = msg.chat.id;
-  bot.sendMessage(chatId, "Pray :)");
+  utils.help(chatId);
 });
 // Receiving "/website"
 bot.onText(/\/website/, (msg) => {
   const chatId = msg.chat.id;
-  bot.sendMessage(chatId, "Here it is!\n" + "https://spg04.herokuapp.com/");
+  utils.website(chatId);
 });
 
 // Handle callback queries
@@ -340,13 +343,13 @@ bot.on("callback_query", function onCallbackQuery(callbackQuery) {
       }
       break;
     case "website":
-      bot.sendMessage(id, "Here it is!\n" + "https://spg04.herokuapp.com/");
+      utils.website(id);
       break;
     case "about":
-      bot.sendMessage(id, "I don't know who i am :(");
+      utils.about(id);
       break;
     case "help":
-      bot.sendMessage(id, "Pray :)");
+      utils.help(id);
       break;
     case "test_1":
       if (!SESSION_STARTED) {
@@ -391,17 +394,56 @@ bot.on("callback_query", function onCallbackQuery(callbackQuery) {
   }
 });
 
+const utils = {
+  website: (id) => {
+    bot.sendMessage(
+      id,
+      "<b>SPG04</b> - Website 💻\n\nHere it is!\nhttps://spg04.herokuapp.com/",
+      {
+        parse_mode: "HTML",
+      }
+    );
+  },
+  about: (id) => {
+    bot.sendMessage(id, "<b>SPG04</b> - About Us 👨🏽‍🌾\n\n" + about_msg, {
+      parse_mode: "HTML",
+    });
+  },
+  help: (id) => {
+    bot.sendMessage(id, "<b>SPG04</b> - Help 🆘\n\n" + "Help message", {
+      parse_mode: "HTML",
+    });
+  },
+};
+
+export const APIbot = {
+  start: () => {
+    bot.startPolling();
+  },
+  sendNotificationToAll: (text) => {
+    const usersId = core.usersId();
+    usersId.forEach((id) =>
+      bot.sendMessage(parseInt(id), text, { parse_mode: "HTML" })
+    );
+  },
+  sendWeeklyUpdate: (products) => {
+    const usersId = core.getSubscribedUsersId();
+    const media = products.map((p) => mapProductToMsg(p));
+    usersId.forEach((id) => bot.sendMediaGroup(parseInt(id), media));
+  },
+};
+
 // DEBUG
 bot.on("polling_error", (error) => {
-  console.log(error.code); // => 'EFATAL'
+  console.log(error); // => 'EFATAL'
 });
 
 const test1 = (id) => {
-  console.log("User: " + core.getUserInfo(id) + " - Clicked on Test 1!");
+  console.log("[TELEGRAM] User: " + core.getUserInfo(id) + " - Clicked on Test 1!");
 };
 
 const test2 = (id) => {
-  console.log("User: " + core.getUserInfo(id) + " - Clicked on Test 2!");
+  console.log("[TELEGRAM] User: " + core.getUserInfo(id) + " - Clicked on Test 2!");
 };
 
 const products = [

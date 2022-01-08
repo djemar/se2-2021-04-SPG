@@ -1,17 +1,11 @@
 "use strict";
 
-const User = require("./user");
+import { User } from "./user.js";
+import bcrypt from "bcrypt";
+import moment from "moment";
+import sqlite3 from "sqlite3";
 
-const bcrypt = require("bcrypt");
-const moment = require("moment");
-
-// Data Access Object
-// DAO module for accessing courses and exams
-
-// Password are made with bcrypt
-// https://www.browserling.com/tools/bcrypt
-const sqlite = require("sqlite3");
-const db = new sqlite.Database("SPG.sqlite", (err) => {
+const db = new sqlite3.Database("SPG.sqlite", (err) => {
   if (err) throw err;
 });
 
@@ -78,7 +72,7 @@ function mappingUsers(rows) {
 
 /************** Products **************/
 
-exports.getProducts = () => {
+const getProducts = () => {
   return new Promise((resolve, reject) => {
     const sql = "SELECT * FROM product";
 
@@ -95,7 +89,7 @@ exports.getProducts = () => {
   });
 };
 
-exports.getProductsByCategory = (category) => {
+const getProductsByCategory = (category) => {
   return new Promise((resolve, reject) => {
     const sql = "SELECT * FROM product WHERE category = ?";
 
@@ -112,7 +106,7 @@ exports.getProductsByCategory = (category) => {
   });
 };
 
-exports.getProductsByDate = (date) => {
+const getProductsByDate = (date) => {
   return new Promise((resolve, reject) => {
     if (typeof date !== "string")
       reject("Strings are expected for all date parameters");
@@ -132,7 +126,7 @@ exports.getProductsByDate = (date) => {
   });
 };
 
-exports.getProductsFromDate = (date) => {
+const getProductsFromDate = (date) => {
   return new Promise((resolve, reject) => {
     if (typeof date !== "string")
       reject("Strings are expected for all date parameters");
@@ -152,7 +146,7 @@ exports.getProductsFromDate = (date) => {
   });
 };
 
-exports.getProductsToDate = (date) => {
+const getProductsToDate = (date) => {
   return new Promise((resolve, reject) => {
     if (typeof date !== "string")
       reject("Strings are expected for all date parameters");
@@ -172,7 +166,7 @@ exports.getProductsToDate = (date) => {
   });
 };
 
-exports.getProductsBetweenDates = (startDate, endDate) => {
+const getProductsBetweenDates = (startDate, endDate) => {
   return new Promise((resolve, reject) => {
     if (typeof startDate !== "string" || typeof endDate !== "string")
       reject("Strings are expected for all date parameters");
@@ -192,7 +186,7 @@ exports.getProductsBetweenDates = (startDate, endDate) => {
   });
 };
 
-exports.getAllProductsByCategoryAndDates = (category, startDate, endDate) => {
+const getAllProductsByCategoryAndDates = (category, startDate, endDate) => {
   return new Promise((resolve, reject) => {
     if (
       typeof category !== "string" ||
@@ -225,7 +219,7 @@ exports.getAllProductsByCategoryAndDates = (category, startDate, endDate) => {
 /************** Users **************/
 
 // Insert a new client:
-exports.insertUser = function (user) {
+const insertUser = function (user) {
   return new Promise((resolve, reject) => {
     const balance = user.Type === "Client" ? 0.0 : null;
     const sql =
@@ -277,7 +271,7 @@ exports.insertUser = function (user) {
   });
 };
 
-exports.insertProduct = function (product) {
+const insertProduct = function (product) {
   return new Promise((resolve, reject) => {
     if (
       typeof product.name !== "string" ||
@@ -340,7 +334,7 @@ exports.insertProduct = function (product) {
   });
 };
 
-exports.updateProduct = function (product) {
+const updateProduct = function (product) {
   return new Promise((resolve, reject) => {
     if (
       typeof product.product_id !== "number" ||
@@ -407,7 +401,7 @@ exports.updateProduct = function (product) {
   });
 };
 
-exports.removeProduct = function (productID) {
+const removeProduct = function (productID) {
   return new Promise((resolve, reject) => {
     if (typeof productID !== "number") reject("An integer is expected");
     else {
@@ -426,7 +420,7 @@ exports.removeProduct = function (productID) {
 };
 
 // Remove a client:
-exports.removeUser = function (userID) {
+const removeUser = function (userID) {
   return new Promise((resolve, reject) => {
     if (typeof userID !== "number") reject("An integer is expected");
     else {
@@ -445,7 +439,7 @@ exports.removeUser = function (userID) {
 };
 
 // Get all the users:
-exports.getAllUsers = function () {
+const getAllUsers = function () {
   return new Promise((resolve, reject) => {
     const sql = "SELECT * from USER";
     db.all(sql, [], (err, us) => {
@@ -484,7 +478,7 @@ async function retrieveNextId() {
   });
 }
 
-exports.insertOrder = async function (order, id_array, quantity_array) {
+const insertOrder = async function (order, id_array, quantity_array) {
   //Need to iterate over different products in list
   var i = 0;
   const promiseList = [];
@@ -512,7 +506,7 @@ function createInsertOrderPromise(order, id, quantity) {
         order.date_order,
         quantity,
         "pending",
-        order.total
+        order.total,
       ],
       function (err) {
         if (err) {
@@ -525,7 +519,7 @@ function createInsertOrderPromise(order, id, quantity) {
   });
 }
 
-exports.deleteOrder = function (id) {
+const deleteOrder = function (id) {
   return new Promise((resolve, reject) => {
     const sql = "DELETE from ORDERS where order_id = ?";
     db.run(sql, [id], (err) => {
@@ -537,7 +531,7 @@ exports.deleteOrder = function (id) {
   });
 };
 
-exports.getAllOrders = function () {
+const getAllOrders = function () {
   return new Promise((resolve, reject) => {
     const sql = "SELECT * from ORDERS";
     db.all(sql, [], (err, rows) => {
@@ -552,7 +546,7 @@ exports.getAllOrders = function () {
   });
 };
 
-exports.getAllOrdersUnretrieved = function () {
+const getAllOrdersUnretrieved = function () {
   return new Promise((resolve, reject) => {
     const sql = "SELECT * from ORDERS WHERE status = 'unretrieved'";
     db.all(sql, [], (err, rows) => {
@@ -567,7 +561,7 @@ exports.getAllOrdersUnretrieved = function () {
   });
 };
 
-exports.getOrdersAndWallets = function () {
+const getOrdersAndWallets = function () {
   return new Promise((resolve, reject) => {
     const sql =
       "SELECT O.order_id, " +
@@ -612,7 +606,7 @@ exports.getAllOrdersAndWallets = function () {
   });
 };
 
-exports.getOrdersByClientId = function (clientID) {
+const getOrdersByClientId = function (clientID) {
   return new Promise((resolve, reject) => {
     const sql = "SELECT * from ORDERS where ref_user = ?";
     db.all(sql, [clientID], (err, ord) => {
@@ -627,7 +621,7 @@ exports.getOrdersByClientId = function (clientID) {
   });
 };
 
-exports.setDeliveredOrder = function (orderID) {
+const setDeliveredOrder = function (orderID) {
   return new Promise((resolve, reject) => {
     const sql = "UPDATE ORDERS set status = ? where ORDERS.order_id = ?";
     db.all(sql, ["delivered", orderID], (err, res) => {
@@ -637,7 +631,7 @@ exports.setDeliveredOrder = function (orderID) {
   });
 };
 
-exports.setApprovedOrder = function (orderID) {
+const setApprovedOrder = function (orderID) {
   return new Promise((resolve, reject) => {
     const sql = "UPDATE ORDERS set status = ? where ORDERS.order_id = ?";
     db.all(sql, ["approved", orderID], (err, res) => {
@@ -647,7 +641,7 @@ exports.setApprovedOrder = function (orderID) {
   });
 };
 
-exports.updateClientWallet = function (clientID, recharge) {
+const updateClientWallet = function (clientID, recharge) {
   return new Promise((resolve, reject) => {
     if (recharge < 0.0) {
       reject("Negative amount");
@@ -665,7 +659,7 @@ exports.updateClientWallet = function (clientID, recharge) {
 };
 
 // LOGIN
-exports.getUser = (email, password) => {
+const getUser = (email, password) => {
   return new Promise((resolve, reject) => {
     const sql = "SELECT * FROM user WHERE email = ?";
     db.get(sql, [email], (err, row) => {
@@ -698,7 +692,7 @@ exports.getUser = (email, password) => {
   });
 };
 
-exports.getUserById = (id) => {
+const getUserById = (id) => {
   return new Promise((resolve, reject) => {
     const sql = "SELECT * FROM user WHERE user_id = ?";
     db.get(sql, [id], (err, row) => {
@@ -721,7 +715,7 @@ exports.getUserById = (id) => {
 };
 
 /*
-exports.deleteAllPendingCancellation = function (id) {
+const deleteAllPendingCancellation = function (id) {
   return new Promise((resolve, reject) => {
     const sql = "DELETE from ORDERS where status = ?";
     db.run(sql, ["pending_cancellation"], (err) => {
@@ -734,7 +728,7 @@ exports.deleteAllPendingCancellation = function (id) {
 };
 */
 
-exports.setPendingCancellationOrder = function (orderID) {
+const setPendingCancellationdOrder = function (orderID) {
   return new Promise((resolve, reject) => {
     const sql = "UPDATE ORDERS set status = ? where ORDERS.order_id = ?";
     db.all(sql, ["pending_cancellation", orderID], (err, res) => {
@@ -744,7 +738,7 @@ exports.setPendingCancellationOrder = function (orderID) {
   });
 };
 
-exports.setUnretrievedOrder = function (orderID) {
+const setUnretrievedOrder = function (orderID) {
   return new Promise((resolve, reject) => {
     const sql = "UPDATE ORDERS set status = ? where ORDERS.order_id = ?";
     db.all(sql, ["unretrieved", orderID], (err, res) => {
@@ -765,7 +759,11 @@ exports.deletePendingCancellationOrder = function (orderID) {
 };
 
 //new insertOrder for order with schedule infos
-exports.insertOrderAndSchedule = async function (order, id_array, quantity_array) {
+const insertOrderAndSchedule = async function (
+  order,
+  id_array,
+  quantity_array
+) {
   //Need to iterate over different products in list
   var i = 0;
   const promiseList = [];
@@ -773,7 +771,9 @@ exports.insertOrderAndSchedule = async function (order, id_array, quantity_array
   //console.log("Ecco l'id ritornato dalla query", tmp)
   order.order_id = tmp;
   for (const id of id_array) {
-    promiseList.push(createInsertOrderAndSchedulePromise(order, id, quantity_array[i++]));
+    promiseList.push(
+      createInsertOrderAndSchedulePromise(order, id, quantity_array[i++])
+    );
   }
   return Promise.all(promiseList)
     .then()
@@ -799,7 +799,7 @@ function createInsertOrderAndSchedulePromise(order, id, quantity) {
         order.city,
         order.zip_code,
         order.schedule_date,
-        order.schedule_time
+        order.schedule_time,
       ],
       function (err) {
         if (err) {
@@ -812,3 +812,32 @@ function createInsertOrderAndSchedulePromise(order, id, quantity) {
   });
 }
 
+export const dao = {
+  getUser,
+  getUserById,
+  removeUser,
+  getAllUsers,
+  getAllOrders,
+  getAllOrdersUnretrieved,
+  getOrdersAndWallets,
+  getOrdersByClientId,
+  getProducts,
+  getProductsByCategory,
+  getProductsBetweenDates,
+  getProductsByDate,
+  getProductsFromDate,
+  getProductsToDate,
+  getAllProductsByCategoryAndDates,
+  insertUser,
+  insertOrder,
+  deleteOrder,
+  insertProduct,
+  updateProduct,
+  removeProduct,
+  insertOrderAndSchedule,
+  setDeliveredOrder,
+  updateClientWallet,
+  setPendingCancellationdOrder,
+  setUnretrievedOrder,
+  setApprovedOrder
+};

@@ -53,6 +53,33 @@ async function checkSession() {
   }
 }
 
+/************** TELEGRAM **************/
+async function sendWeeklyNotification(startDate, endDate) {
+  /* const response = await getProductsBetweenDates(startDate, endDate);
+  const products = await response.json();
+  console.log(products);
+  if (response.ok) {
+    APIbot.sendWeeklyUpdate(products);
+  } else {
+    throw products;
+  } */
+
+  let url = BASEURL + `/telegram/weekly`;
+  if (endDate < startDate) {
+    console.log('endDate cannot come before than startDate.');
+    return { error: 'endDate cannot come before than startDate' };
+  }
+  try {
+    const res = await axios.post(url, {
+      startDate: startDate,
+      endDate: endDate,
+    });
+    return await res.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 /************** Products **************/
 
 async function getAllProducts() {

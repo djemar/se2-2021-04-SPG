@@ -1,22 +1,11 @@
-const express = require("express");
-const morgan = require("morgan"); // logging middleware
-const jwt = require("express-jwt");
-const jsonwebtoken = require("jsonwebtoken");
-const cookieParser = require("cookie-parser");
-const {
-  body,
-  param,
-  check,
-  validationResult,
-  sanitizeBody,
-  sanitizeParam,
-} = require("express-validator"); // validation library
-const dao = require("./dao.js");
-const bcrypt = require("bcrypt");
-
-const passport = require("passport"); // auth middleware
-const LocalStrategy = require("passport-local").Strategy; // username and password for login
-const session = require("express-session"); // enable sessions
+import express from "express";
+import morgan from "morgan"; // logging middleware
+import { body, param, check, validationResult } from "express-validator";
+import { dao } from "./dao.js";
+import passport from "passport"; // auth middleware
+import { Strategy as LocalStrategy } from "passport-local"; // username and password for login
+import session from "express-session";// enable sessions
+import { APIbot } from "./bot/botServer.js";
 
 const app = express();
 const port = 3001;
@@ -138,6 +127,48 @@ app.get("/api/login/current", (req, res) => {
     res.status(200).json(req.user);
   } else res.status(401).json({ error: "Unauthenticated user!" });
 });
+
+/************** TELEGRAM **************/
+
+app.post(
+  "/api/telegram/weekly",
+  body("startDate")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isString()
+    .bail(),
+  body("endDate")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isString()
+    .bail(),
+  async (req, res) => {
+    const result = validationResult(req);
+    if (!result.isEmpty())
+      res.status(400).json({
+        info: "The server cannot process the request",
+        error: result.array()[0].msg,
+        valueReceived: result.array()[0].value,
+      });
+    else {
+      try {
+        const response = await dao.getProductsBetweenDates(
+          req.body.startDate,
+          req.body.endDate
+        );
+        const products = await response.json();
+        console.log(products);
+        APIbot.sendWeeklyUpdate(products);
+      } catch {
+        (err) => res.status(503).json(dbErrorObj);
+      }
+    }
+  }
+);
 
 /************** Products **************/
 
@@ -501,7 +532,6 @@ app.get("/api/orders/unretrieved", async (req, res) => {
     .then((orders) => res.json(orders))
     .catch((err) => res.status(503).json(dbErrorObj));
 });
-
 
 // GET /client-orders/:clientID
 // Request parameters: clientID
@@ -1031,7 +1061,12 @@ app.post(
 // Example of Request's Body: {"ref_user": 7,"productList": [{"ref_product":91,"quantity":1},{"ref_product": 93,"quantity": 3}], "date_order": "222","total":22,"address":"via","country":"ita","city":"turin","zip_code":10138,"schedule_date":"22","schedule_time":"22:22"}
 app.post(
   "/api/insert-scheduled-order",
-  body("ref_user").exists({ checkNull: true }).bail().notEmpty().bail().isNumeric(),
+  body("ref_user")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isNumeric(),
   body("date_order").exists({ checkNull: true }).bail().notEmpty().bail(),
   body("productList").exists({ checkNull: true }).bail().notEmpty().bail(),
   body("total").exists({ checkNull: true }).bail().notEmpty().bail(),
@@ -1065,8 +1100,10 @@ app.post(
   }
 );
 
+APIbot.start();
+
 app.listen(port, () =>
   console.log(`Server app listening at http://localhost:${port}`)
 );
 
-module.exports = app;
+//module.exports = app;

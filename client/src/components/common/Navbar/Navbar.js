@@ -140,19 +140,6 @@ export const Navbar = ({ ...props }) => {
                     <span className="w-5/6">My Shop</span>
                   </NavLink>
                 </NavDropdown.Item>
-                {/* <NavDropdown.Item className="text-dark">
-                  <NavLink
-                    activeClassName="text-secondary"
-                    className="text-dark no-underline"
-                    to="/myOrders"
-                  >
-                    <FontAwesomeIcon
-                      icon={faReceipt}
-                      className={'mr-2 mb-0 w-1/6'}
-                    />
-                    <span className="w-5/6">My Orders</span>
-                  </NavLink>
-                </NavDropdown.Item> */}
               </>
             )}
 
@@ -327,7 +314,13 @@ export const Navbar = ({ ...props }) => {
                 </NavDropdown.Item>
               </NavDropdown>
             )}
-            <BSButton type="button" className="mr-4 nav-item my-4">
+            <BSButton
+              type="button"
+              className="mr-4 nav-item my-4"
+              onClick={() =>
+                window.open('http://t.me/SPG04_softeng2_bot', '_blank')
+              }
+            >
               <FontAwesomeIcon icon={faRobot} />
             </BSButton>
           </div>
