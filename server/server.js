@@ -887,7 +887,7 @@ app.post(
       });
     } else {
       await dao
-        .setPendingCancellationdOrder(req.body.order_id)
+        .setPendingCancellationOrder(req.body.order_id)
         .then((result) => res.json(result))
         .catch((err) => res.status(503).json(dbErrorObj));
     }
@@ -929,15 +929,76 @@ app.get("/api/set-all-pending-cancellation-order/", async (req, res) => {
   await dao
     .getOrdersAndWallets()
     .then((results) => {
-      // for each result, we now have to call
-      // setPendingCancellationdOrder for each order
-
-      for (const result of results) {
-        dao.setPendingCancellationdOrder(result.order_id);
-      }
+      // we now have to check the sum of all the orders for a specific user_id
+        let userCurr;
+        let userPrev;
+        let sum=0;
+        let userBalance;
+        // Iterate all the orders
+        // when the user_id changes, set query to 1 and do the query for the orders for that user
+          for (const result of results) {
+              if (sum == 0){
+                  // At the start, set userPrev to the starting user
+                  userPrev = result.user_id;
+              }
+              userCurr = result.user_id;
+              if (userCurr != userPrev){
+                  userPrev = userCurr;
+                  sum = 0;
+              }
+              userBalance = result.wallet_balance;
+              sum = sum + result.total;
+              if (sum > userBalance){
+                  dao.setPendingCancellationOrder(result.order_id);
+              }
+              else{
+                  dao.setApprovedOrder(result.order_id)
+              }
+          }
     })
-    .then(() => res.json(true))
+    .then((orders) => res.json(orders))
     .catch((err) => res.status(503).json(dbErrorObj));
+});
+
+app.get("/api/delete-all-pending-cancellation-order/", async (req, res) => {
+    // First, retrieve all the orders which are pending and
+    // retrieve also the order cost as the SUM of quantity*price.
+    // Then, filter the array and maintain only orders where
+    // wallet_balance > orderCost.
+    // for simplicty, in an order cost is > wallet_balance,
+    // set as pending cancellation
+    await dao.getAllOrdersAndWallets()
+        .then((results) => {
+            // we now have to check the sum of all the orders for a specific user_id
+            console.log(results)
+            let userCurr;
+            let userPrev;
+            let sum=0;
+            let userBalance;
+            // Iterate all the orders
+            // when the user_id changes, set query to 1 and do the query for the orders for that user
+            for (const result of results) {
+                if (sum == 0){
+                    // At the start, set userPrev to the starting user
+                    userPrev = result.user_id;
+                }
+                userCurr = result.user_id;
+                if (userCurr != userPrev){
+                    userPrev = userCurr;
+                    sum = 0;
+                }
+                userBalance = result.wallet_balance;
+                sum = sum + result.total;
+                if (sum > userBalance){
+                    dao.deletePendingCancellationOrder(result.order_id);
+                }
+                else{
+                    dao.setApprovedOrder(result.order_id)
+                }
+            }
+        })
+        .then((orders) => res.json(orders))
+        .catch((err) => res.status(503).json(dbErrorObj));
 });
 
 // POST /set-unretrieved-order

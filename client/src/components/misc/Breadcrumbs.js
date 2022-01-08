@@ -30,6 +30,10 @@ export const Breadcrumbs = ({ ...props }) => {
       API.setAllPendingCancellationOrder();
     };
 
+    const deletePendingCancellation = async () => {
+      API.deleteAllPendingOrder();
+    };
+
     /* const deletePending = async () => {
       //console.log("it's monday evening");
       API.deleteAllPendingOrder();
@@ -41,6 +45,14 @@ export const Breadcrumbs = ({ ...props }) => {
       dayjs(dateState).get('minute') === 0
     ) {
       pendingCancellation().then(() => {
+        //console.log('success');
+      });
+    } else if (
+      dayjs(dateState).get('day') === 1 &&
+      dayjs(dateState).get('hour') === 21 &&
+      dayjs(dateState).get('minute') === 0
+    ) {
+      deletePendingCancellation().then(() => {
         //console.log('success');
       });
     }
