@@ -6,6 +6,7 @@ import {
   Card,
   Col,
   Form,
+  InputGroup,
   Modal,
   Row,
 } from 'react-bootstrap';
@@ -19,6 +20,7 @@ import { Spinner } from '../../misc';
 import Page from '../../misc/Page';
 import ProductCard from '../ProductCard/ProductCard';
 import './myshop.css';
+import MyShopImages from './MyShopImages.js';
 
 const product = {
   product_id: -1,
@@ -51,6 +53,7 @@ export const MyShop = ({ ...props }) => {
   const { setDirty, loadingProd } = useContext(UserContext);
   const [start_date, setStart] = useState('');
   const [end_date, setEnd] = useState('');
+  const [showImages, setShowImages] = useState(false);
 
   const [prod, setProd] = useState('');
 
@@ -219,8 +222,17 @@ export const MyShop = ({ ...props }) => {
     else setAddedProduct(tmpProd);
   };
 
+  const setUrlFromArchive = url => {
+    handleChange(url, NEWVALUE.IMAGE, 1);
+  };
+
   return (
     <>
+      <MyShopImages
+        show={showImages}
+        setShow={setShowImages}
+        setUrl={setUrlFromArchive}
+      />
       <Modal
         dialogClassName="modal-40w"
         size="lg"
@@ -494,7 +506,7 @@ export const MyShop = ({ ...props }) => {
                                 aria-label="form-description"
                                 placeholder={addedProduct.description}
                                 value={
-                                  addedProduct.description !=
+                                  addedProduct.description !==
                                   product.description
                                     ? addedProduct.description
                                     : ''
@@ -518,18 +530,31 @@ export const MyShop = ({ ...props }) => {
                               <Form.Label className="font-medium font-ibmplex text-sm">
                                 Image URL
                               </Form.Label>
-                              <Form.Control
-                                type="text"
-                                aria-label="form-img"
-                                value={addedProduct.image_path}
-                                onChange={e =>
-                                  handleChange(
-                                    e.target.value,
-                                    NEWVALUE.IMAGE,
-                                    1
-                                  )
-                                }
-                              />
+                              <div className="flex flex-column sm:flex-row items-center">
+                                <div className="flex-grow w-full">
+                                  <Form.Control
+                                    className="w-full"
+                                    type="text"
+                                    aria-label="form-img"
+                                    value={addedProduct.image_path}
+                                    onChange={e =>
+                                      handleChange(
+                                        e.target.value,
+                                        NEWVALUE.IMAGE,
+                                        1
+                                      )
+                                    }
+                                  />
+                                </div>
+                                <div className="flex-none w-30">
+                                  <ButtonBS
+                                    className="bg-primary mt-4 sm:mt-0 sm:ml-4"
+                                    onClick={() => setShowImages(true)}
+                                  >
+                                    Choose from Archive
+                                  </ButtonBS>
+                                </div>
+                              </div>
                             </Form.Group>
                           </Row>
                         </Col>
@@ -556,7 +581,7 @@ export const MyShop = ({ ...props }) => {
                   description={addedProduct.description}
                   category={addedProduct.category}
                   unit={addedProduct.unit_of_measure}
-                  img={addedProduct.image_path}
+                  img={addedProduct.image_path || './img/uploads/no_image.png'}
                   availability={addedProduct.availability}
                   basketProducts={[]}
                   preview={true}

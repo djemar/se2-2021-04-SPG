@@ -134,7 +134,6 @@ export const HomePage = ({ ...props }) => {
           </Link>
         </div>
       </Row>
-
       {/* HomePage - About us section */}
       <div className="aboutus mt-5">
         <div

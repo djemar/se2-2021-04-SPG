@@ -494,9 +494,31 @@ async function setUnretrievedOrder(orderID) {
   }
 }
 
-async function addScheduledOrder(ref_user, productList, date_order, total, address, country, city, zip_code, schedule_date, schedule_time) {
+async function addScheduledOrder(
+  ref_user,
+  productList,
+  date_order,
+  total,
+  address,
+  country,
+  city,
+  zip_code,
+  schedule_date,
+  schedule_time
+) {
   let url = BASEURL + '/insert-scheduled-order';
-  let order = { ref_user, productList, date_order, total, address, country, city, zip_code, schedule_date, schedule_time };
+  let order = {
+    ref_user,
+    productList,
+    date_order,
+    total,
+    address,
+    country,
+    city,
+    zip_code,
+    schedule_date,
+    schedule_time,
+  };
 
   try {
     await axios.post(url, order);

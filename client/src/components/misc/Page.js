@@ -3,7 +3,7 @@ import Breadcrumbs from './Breadcrumbs';
 import '../content/Clients/Clients.css';
 
 export const Page = ({ ...props }) => {
-  const { children, title, subtitle } = props;
+  const { children, title, subtitle, transparent } = props;
 
   return (
     <div className="flex flex-column justify-start px-5 mt-4">
@@ -24,9 +24,13 @@ export const Page = ({ ...props }) => {
       </div>
       <div className="flex flex-grow justify-between">
         <div className="flex w-100 h-100">
-          <Card className="spg-box shadow py-0">
-            <Card.Body className="w-100 h-100 p-0">{children}</Card.Body>
-          </Card>
+          {!transparent ? (
+            <Card className="spg-box shadow py-0">
+              <Card.Body className="w-100 h-100 p-0">{children}</Card.Body>
+            </Card>
+          ) : (
+            <div className="w-100 h-100 p-0">{children}</div>
+          )}
         </div>
       </div>
     </div>
