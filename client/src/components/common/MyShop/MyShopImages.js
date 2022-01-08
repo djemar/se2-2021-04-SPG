@@ -20,25 +20,23 @@ export const MyShopImages = ({ ...props }) => {
 
   const imagesList = imageList
     .filter(img => img.title.toLowerCase().includes(search))
-    .map(img => (
-      <>
-        <tr className="">
-          <td className="text-center align-middle w-14" align="center">
-            <Image className="w-10 h-10" fluid rounded src={img.url} />
-          </td>
-          <td className="text-left align-middle">{img.title}</td>
-          <td className="text-center align-middle">
-            <Button
-              className="buttons-order-details mx-1"
-              size="sm"
-              aria-label="button-details"
-              onClick={() => select(img.url)}
-            >
-              <span>Select</span>
-            </Button>
-          </td>
-        </tr>
-      </>
+    .map((img, index) => (
+      <tr className="" key={index}>
+        <td className="text-center align-middle w-14" align="center">
+          <Image className="w-10 h-10" fluid rounded src={img.url} />
+        </td>
+        <td className="text-left align-middle">{img.title}</td>
+        <td className="text-center align-middle">
+          <Button
+            className="buttons-order-details mx-1"
+            size="sm"
+            aria-label={`button-details-${img.title}`}
+            onClick={() => select(img.url)}
+          >
+            <span>Select</span>
+          </Button>
+        </td>
+      </tr>
     ));
 
   return (
