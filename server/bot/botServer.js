@@ -106,7 +106,7 @@ const tests_commands = [
   },
 ];
 
-const menu_keyboard = [subscription_commands, misc_commands, tests_commands];
+const menu_keyboard = [subscription_commands, misc_commands];
 
 const keyboard = [
   [subscribe_text, unsubscribe_text],
@@ -367,7 +367,7 @@ bot.on("callback_query", function onCallbackQuery(callbackQuery) {
       products.forEach((p) =>
         bot.sendPhoto(
           msg.chat.id,
-          "http://via.placeholder.com:80/150/09f/fff.jpg",
+          "https://via.placeholder.com:80/150/09f/fff.jpg",
           mapProductToMsg_2(p)
         )
       );
@@ -426,10 +426,29 @@ export const APIbot = {
       bot.sendMessage(parseInt(id), text, { parse_mode: "HTML" })
     );
   },
-  sendWeeklyUpdate: (products) => {
+  sendWeeklyUpdate: async (products) => {
+    console.log("Weekly Update: Start");
     const usersId = core.getSubscribedUsersId();
-    const media = products.map((p) => mapProductToMsg(p));
-    usersId.forEach((id) => bot.sendMediaGroup(parseInt(id), media));
+    let media = products.map((p) => mapProductToMsg(p));
+    let turn = Math.trunc(media.length / 10);
+    const turn_rest = media.length % 10;
+    if (turn_rest > 0) turn++;
+
+    return new Promise((resolve, reject) => {
+      for (let i = 0; i < turn; i++) {
+        const tmpMedia = [...media].slice(0, 10);
+        media = media.slice(10);
+        for (let j = 0; j < usersId.length; j++) {
+          bot
+            .sendMediaGroup(parseInt(usersId[j]), tmpMedia)
+            .then(new Promise((r) => setTimeout(r, 3000)).then())
+            .catch((err) => {
+              reject(err);
+            });
+        }
+      }
+      resolve(true);
+    });
   },
 };
 
@@ -439,11 +458,15 @@ bot.on("polling_error", (error) => {
 });
 
 const test1 = (id) => {
-  console.log("[TELEGRAM] User: " + core.getUserInfo(id) + " - Clicked on Test 1!");
+  console.log(
+    "[TELEGRAM] User: " + core.getUserInfo(id) + " - Clicked on Test 1!"
+  );
 };
 
 const test2 = (id) => {
-  console.log("[TELEGRAM] User: " + core.getUserInfo(id) + " - Clicked on Test 2!");
+  console.log(
+    "[TELEGRAM] User: " + core.getUserInfo(id) + " - Clicked on Test 2!"
+  );
 };
 
 const products = [

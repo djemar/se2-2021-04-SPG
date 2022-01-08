@@ -316,9 +316,10 @@ export const Navbar = ({ ...props }) => {
             )}
             <BSButton
               type="button"
+              aria-label="btn-bot"
               className="mr-4 nav-item my-4"
               onClick={() =>
-                window.open('http://t.me/SPG04_softeng2_bot', '_blank')
+                window.open('https://t.me/SPG04_softeng2_bot', '_blank')
               }
             >
               <FontAwesomeIcon icon={faRobot} />

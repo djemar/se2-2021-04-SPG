@@ -4,10 +4,10 @@ import { body, param, check, validationResult } from "express-validator";
 import { dao } from "./dao.js";
 import passport from "passport"; // auth middleware
 import { Strategy as LocalStrategy } from "passport-local"; // username and password for login
-import session from "express-session";// enable sessions
+import session from "express-session"; // enable sessions
 import { APIbot } from "./bot/botServer.js";
 
-const app = express();
+export const app = express();
 const port = 3001;
 
 // Disable x-powered-by to not disclose technologies used on a website
@@ -156,15 +156,20 @@ app.post(
       });
     else {
       try {
-        const response = await dao.getProductsBetweenDates(
+        const products = await dao.getProductsBetweenDates(
           req.body.startDate,
           req.body.endDate
         );
-        const products = await response.json();
-        console.log(products);
-        APIbot.sendWeeklyUpdate(products);
-      } catch {
-        (err) => res.status(503).json(dbErrorObj);
+        APIbot.sendWeeklyUpdate(products)
+          .then((result) => {
+            console.log(result);
+            return res.status(200).json({ result: "done" });
+          })
+          .catch((err) => res.status(503).json(err));
+      } catch (err) {
+        console.log(err);
+        res.status(503).json(err);
+        throw err;
       }
     }
   }
@@ -179,7 +184,7 @@ app.get("/api/products", async (req, res) => {
   await dao
     .getProducts()
     .then((products) => res.json(products))
-    .catch((err) => res.status(503).json(dbErrorObj));
+    .catch((err) => res.status(503).json(err));
 });
 
 // POST /products
@@ -960,75 +965,74 @@ app.get("/api/set-all-pending-cancellation-order/", async (req, res) => {
     .getOrdersAndWallets()
     .then((results) => {
       // we now have to check the sum of all the orders for a specific user_id
-        let userCurr;
-        let userPrev;
-        let sum=0;
-        let userBalance;
-        // Iterate all the orders
-        // when the user_id changes, set query to 1 and do the query for the orders for that user
-          for (const result of results) {
-              if (sum == 0){
-                  // At the start, set userPrev to the starting user
-                  userPrev = result.user_id;
-              }
-              userCurr = result.user_id;
-              if (userCurr != userPrev){
-                  userPrev = userCurr;
-                  sum = 0;
-              }
-              userBalance = result.wallet_balance;
-              sum = sum + result.total;
-              if (sum > userBalance){
-                  dao.setPendingCancellationOrder(result.order_id);
-              }
-              else{
-                  dao.setApprovedOrder(result.order_id)
-              }
-          }
+      let userCurr;
+      let userPrev;
+      let sum = 0;
+      let userBalance;
+      // Iterate all the orders
+      // when the user_id changes, set query to 1 and do the query for the orders for that user
+      for (const result of results) {
+        if (sum == 0) {
+          // At the start, set userPrev to the starting user
+          userPrev = result.user_id;
+        }
+        userCurr = result.user_id;
+        if (userCurr != userPrev) {
+          userPrev = userCurr;
+          sum = 0;
+        }
+        userBalance = result.wallet_balance;
+        sum = sum + result.total;
+        if (sum > userBalance) {
+          dao.setPendingCancellationOrder(result.order_id);
+        } else {
+          dao.setApprovedOrder(result.order_id);
+        }
+      }
     })
     .then((orders) => res.json(orders))
     .catch((err) => res.status(503).json(dbErrorObj));
 });
 
 app.get("/api/delete-all-pending-cancellation-order/", async (req, res) => {
-    // First, retrieve all the orders which are pending and
-    // retrieve also the order cost as the SUM of quantity*price.
-    // Then, filter the array and maintain only orders where
-    // wallet_balance > orderCost.
-    // for simplicty, in an order cost is > wallet_balance,
-    // set as pending cancellation
-    await dao.getAllOrdersAndWallets()
-        .then((results) => {
-            // we now have to check the sum of all the orders for a specific user_id
-            console.log(results)
-            let userCurr;
-            let userPrev;
-            let sum=0;
-            let userBalance;
-            // Iterate all the orders
-            // when the user_id changes, set query to 1 and do the query for the orders for that user
-            for (const result of results) {
-                if (sum == 0){
-                    // At the start, set userPrev to the starting user
-                    userPrev = result.user_id;
-                }
-                userCurr = result.user_id;
-                if (userCurr != userPrev){
-                    userPrev = userCurr;
-                    sum = 0;
-                }
-                userBalance = result.wallet_balance;
-                sum = sum + result.total;
-                if (sum > userBalance){
-                    dao.deletePendingCancellationOrder(result.order_id);
-                }
-                else{
-                    dao.setApprovedOrder(result.order_id)
-                }
-            }
-        })
-        .then((orders) => res.json(orders))
-        .catch((err) => res.status(503).json(dbErrorObj));
+  // First, retrieve all the orders which are pending and
+  // retrieve also the order cost as the SUM of quantity*price.
+  // Then, filter the array and maintain only orders where
+  // wallet_balance > orderCost.
+  // for simplicty, in an order cost is > wallet_balance,
+  // set as pending cancellation
+  await dao
+    .getAllOrdersAndWallets()
+    .then((results) => {
+      // we now have to check the sum of all the orders for a specific user_id
+      console.log(results);
+      let userCurr;
+      let userPrev;
+      let sum = 0;
+      let userBalance;
+      // Iterate all the orders
+      // when the user_id changes, set query to 1 and do the query for the orders for that user
+      for (const result of results) {
+        if (sum == 0) {
+          // At the start, set userPrev to the starting user
+          userPrev = result.user_id;
+        }
+        userCurr = result.user_id;
+        if (userCurr != userPrev) {
+          userPrev = userCurr;
+          sum = 0;
+        }
+        userBalance = result.wallet_balance;
+        sum = sum + result.total;
+        if (sum > userBalance) {
+          dao.deletePendingCancellationOrder(result.order_id);
+        } else {
+          dao.setApprovedOrder(result.order_id);
+        }
+      }
+    })
+    .then((orders) => res.json(orders))
+    .catch((err) => res.status(503).json(dbErrorObj));
 });
 
 // POST /set-unretrieved-order

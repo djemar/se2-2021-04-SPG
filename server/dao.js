@@ -39,15 +39,13 @@ function mappingOrders(rows) {
 }
 
 function mappingOrdersWallets(rows) {
-
-  return rows.map((e) => (
-      {
-        order_id: e.order_id,
-        user_id: e.user_id,
-        date_order: e.date_order,
-        wallet_balance: e.wallet_balance,
-        total: e.total
-      }));
+  return rows.map((e) => ({
+    order_id: e.order_id,
+    user_id: e.user_id,
+    date_order: e.date_order,
+    wallet_balance: e.wallet_balance,
+    total: e.total,
+  }));
 }
 
 function mappingUsers(rows) {
@@ -568,14 +566,13 @@ const getOrdersAndWallets = function () {
       "U.wallet_balance, U.user_id, O.total, O.date_order " +
       "FROM ORDERS AS O, USER AS U " +
       "WHERE O.ref_user = U.user_id AND O.status=? " +
-        "GROUP BY O.order_id, U.user_id " +
-        "ORDER BY U.user_id, O.date_order DESC ";
+      "GROUP BY O.order_id, U.user_id " +
+      "ORDER BY U.user_id, O.date_order DESC ";
     db.all(sql, ["pending"], (err, rows) => {
       if (err) reject(err);
       else if (rows === undefined || rows.length === 0) {
         reject(null);
       } else {
-
         const orders = mappingOrdersWallets(rows);
         resolve(orders);
       }
@@ -583,19 +580,17 @@ const getOrdersAndWallets = function () {
   });
 };
 
-
-exports.getAllOrdersAndWallets = function () {
+const getAllOrdersAndWallets = function () {
   return new Promise((resolve, reject) => {
     const sql =
-        "SELECT O.order_id, " +
-        "U.wallet_balance, U.user_id, O.total, O.date_order " +
-        "FROM ORDERS AS O, USER AS U " +
-        "WHERE O.ref_user = U.user_id AND O.status==? " +
-        "GROUP BY O.order_id, U.user_id " +
-        "ORDER BY U.user_id, O.date_order DESC ";
+      "SELECT O.order_id, " +
+      "U.wallet_balance, U.user_id, O.total, O.date_order " +
+      "FROM ORDERS AS O, USER AS U " +
+      "WHERE O.ref_user = U.user_id AND O.status==? " +
+      "GROUP BY O.order_id, U.user_id " +
+      "ORDER BY U.user_id, O.date_order DESC ";
     db.all(sql, ["pending_cancellation"], (err, rows) => {
       if (err) reject(err);
-
       else if (rows === undefined || rows.length === 0) {
         reject(null);
       } else {
@@ -728,7 +723,7 @@ const deleteAllPendingCancellation = function (id) {
 };
 */
 
-const setPendingCancellationdOrder = function (orderID) {
+const setPendingCancellationOrder = function (orderID) {
   return new Promise((resolve, reject) => {
     const sql = "UPDATE ORDERS set status = ? where ORDERS.order_id = ?";
     db.all(sql, ["pending_cancellation", orderID], (err, res) => {
@@ -748,7 +743,7 @@ const setUnretrievedOrder = function (orderID) {
   });
 };
 
-exports.deletePendingCancellationOrder = function (orderID) {
+const deletePendingCancellationOrder = function (orderID) {
   return new Promise((resolve, reject) => {
     const sql = "DELETE FROM ORDERS WHERE status = ? AND order_id = ?";
     db.all(sql, ["pending_cancellation", orderID], (err, res) => {
@@ -819,6 +814,7 @@ export const dao = {
   getAllUsers,
   getAllOrders,
   getAllOrdersUnretrieved,
+  getAllOrdersAndWallets,
   getOrdersAndWallets,
   getOrdersByClientId,
   getProducts,
@@ -837,7 +833,8 @@ export const dao = {
   insertOrderAndSchedule,
   setDeliveredOrder,
   updateClientWallet,
-  setPendingCancellationdOrder,
+  setPendingCancellationOrder,
+  deletePendingCancellationOrder,
   setUnretrievedOrder,
-  setApprovedOrder
+  setApprovedOrder,
 };

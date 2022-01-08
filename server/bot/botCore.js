@@ -37,7 +37,7 @@ export const core = {
 
 export const mapProductToMsg = (product) => {
   const type = "photo";
-  const media = "http://via.placeholder.com:80/150/09f/fff.jpg";
+  const media = product.image_path;
   //"http://localhost:3000/" + String(product.image_path).substring(2);
   const caption =
     "<b>🥫 " +
