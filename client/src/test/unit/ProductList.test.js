@@ -27,7 +27,7 @@ describe('Order Row', () => {
       </Router>
     );
 
-    expect(screen.getByText(/Product ID/i)).toBeInTheDocument();
+    expect(screen.getByText(/Prod ID/i)).toBeInTheDocument();
 
     //userEvent.click(screen.getByLabelText(/button-details/i))
   });

@@ -26,6 +26,7 @@ export const Clients = ({ ...props }) => {
             surname={user.surname}
             email={user.email}
             type={user.Type}
+            phone={user.phone}
             wallet_balance={user.wallet_balance}
             isClient={user.Type === 'Client'}
             setDirty={setDirty}
@@ -67,6 +68,7 @@ export const Clients = ({ ...props }) => {
               <th>Id</th>
               <th>Name</th>
               <th>Surname</th>
+              <th className="hidden md:table-cell">Telephone</th>
               <th className="hidden md:table-cell">Email</th>
               <th className="hidden sm:table-cell">Wallet</th>
             </tr>

@@ -14,21 +14,21 @@ import UserContextProvider from '../../context/UserContext';
 describe('Order Row', () => {
   test('render OrderRow Row details', async () => {
     render(
-      <Router>
-        <TimeContextProvider>
-          <UserContextProvider>
-            <OrderRow
-              order_id={2}
-              ref_user={2}
-              date_order={2}
-              products_and_qnt={2}
-              tot_price={2}
-              status={'order-pending'}
-              isManager={true}
-            />
-          </UserContextProvider>
-        </TimeContextProvider>
-      </Router>
+        <Router>
+          <TimeContextProvider>
+            <UserContextProvider>
+              <OrderRow
+                  order_id={2}
+                  ref_user={2}
+                  date_order={2}
+                  products_and_qnt={2}
+                  tot_price={2}
+                  status={'order-pending'}
+                  isManager={true}
+              />
+            </UserContextProvider>
+          </TimeContextProvider>
+        </Router>
     );
 
     expect(screen.getByText(/see details/i)).toBeInTheDocument();
@@ -38,21 +38,21 @@ describe('Order Row', () => {
 
   test('render OrderRow schenge status', async () => {
     render(
-      <Router>
-        <UserContextProvider>
+        <Router>
           <TimeContextProvider>
-            <OrderRow
-              order_id={2}
-              ref_user={2}
-              date_order={2}
-              products_and_qnt={2}
-              tot_price={2}
-              status={'order-pending'}
-              isManager={true}
-            />
+            <UserContextProvider>
+              <OrderRow
+                  order_id={2}
+                  ref_user={2}
+                  date_order={2}
+                  products_and_qnt={2}
+                  tot_price={2}
+                  status={'order-pending'}
+                  isManager={true}
+              />
+            </UserContextProvider>
           </TimeContextProvider>
-        </UserContextProvider>
-      </Router>
+        </Router>
     );
 
     userEvent.click(screen.getByLabelText(/button-change-status/i));

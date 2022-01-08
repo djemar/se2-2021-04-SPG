@@ -454,7 +454,7 @@ export const APIbot = {
 
 // DEBUG
 bot.on("polling_error", (error) => {
-  console.log(error); // => 'EFATAL'
+  console.log(error.code); // => 'EFATAL'
 });
 
 const test1 = (id) => {

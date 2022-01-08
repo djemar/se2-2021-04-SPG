@@ -23,7 +23,9 @@ export const Shop = ({ ...props }) => {
     if (category) {
       const cleanCategory = category.replaceAll('-', ' ');
       setFilteredProducts(
-        dateProducts.filter(p => p.category === cleanCategory)
+        dateProducts
+          ? dateProducts.filter(p => p.category === cleanCategory)
+          : []
       );
     } else setFilteredProducts(dateProducts);
   }, [category, dateProducts]);
@@ -77,7 +79,7 @@ export const Shop = ({ ...props }) => {
   ));
 
   return (
-    <div className="flex flex-column justify-start px-5 mt-4">
+    <div className="flex flex-column justify-start px-10 mt-4">
       <div className="flex flex-none md:justify-start pb-4 justify-center">
         <Breadcrumbs />
       </div>

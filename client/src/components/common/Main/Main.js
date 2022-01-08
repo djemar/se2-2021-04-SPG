@@ -93,12 +93,9 @@ export const Main = ({ ...props }) => {
             <Redirect to="/" />
           )}
         </Route>
-        <Route path="/homepage">
-          <HomePage categories={categories} />
-        </Route>
 
         <Route strict path="/">
-          <Redirect to="/homepage" />
+          <HomePage categories={categories} />
         </Route>
       </Switch>
     </div>

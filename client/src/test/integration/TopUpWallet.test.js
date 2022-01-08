@@ -3,86 +3,79 @@ import { render, screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../../App';
 import axios from 'axios';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { ClientRow } from '../../components/content/Clients';
+import Clients from '../../components/content/Clients/Clients';
+import TimeContextProvider from '../../context/TimeContext';
+import UserContextProvider from '../../context/UserContext';
 
 jest.mock('axios');
 
 describe('Top Up wallet', () => {
   beforeEach(() => jest.resetAllMocks());
   test('Top Up 10 Euros', async () => {
-    const clients = [
+    const products = [
       {
-        user_id: 1,
-        name: 'Mario',
-        surname: 'Rossi',
-        company: null,
-        email: 'mario.rossi@polito.it',
-        hash: 'hasshhhhhh',
-        Type: 'Client',
-        address: 'via Roma 1',
-        phone: '3355555555',
-        country: 'Italy',
-        city: 'Turin',
-        zip_code: 10129,
+        product_id: 0,
+        name: 'product0',
+        description: 'Lorem Ipsum',
+        availability: '10',
+        price: '5',
+        unit_of_measure: '1 kg',
       },
       {
-        user_id: 2,
-        name: 'Maria',
-        surname: 'Rossi',
-        company: null,
-        email: 'maria.rossi@polito.it',
-        hash: 'hasshhhhhhhhhh',
-        Type: 'Client',
-        address: 'via Roma 3',
-        phone: '3385555555',
-        country: 'Italy',
-        city: 'Turin',
-        zip_code: 10129,
+        product_id: 1,
+        name: 'product1',
+        description: 'Quousque tandem abutere',
+        availability: '15',
+        price: '6',
+        unit_of_measure: '1 kg',
       },
     ];
-    const promise = Promise.resolve({ data: clients });
+    const user = {
+      user_id: 1,
+      name: 'test',
+      surname: 'user',
+      email: 'test@test.com',
+      Type: 'Client',
+      wallet_balance: 10,
+    };
+    const promise = Promise.resolve({ data: products });
     axios.get.mockImplementationOnce(() => promise);
-    render(<App />);
 
-    // Employee login:
-    await userEvent.click(
-      screen.getByRole('button', {
-        name: /btn-login/i,
-      })
-    );
-    await userEvent.type(
-      screen.getByLabelText(/inputEmail/i),
-      'employee@spg.com'
-    );
-    await userEvent.type(screen.getByLabelText(/inputPassword/i), 'employee');
-    await userEvent.click(
-      screen.getByRole('button', {
-        name: /btn-sign-in/i,
-      })
-    );
-
-    // Go to 'Clients' page
-    await userEvent.click(
-      screen.getByRole('link', {
-        name: /nav-clients/i,
-      })
+    render(
+        <Router>
+          <TimeContextProvider>
+            <UserContextProvider>
+              <ClientRow
+                  key={user.user_id}
+                  index={0}
+                  user_id={user.user_id}
+                  name={user.name}
+                  surname={user.surname}
+                  email={user.email}
+                  type={user.Type}
+                  wallet_balance={user.wallet_balance}
+                  isClient={user.Type === 'Client'}
+                  setDirty={() => true}
+              />
+            </UserContextProvider>
+          </TimeContextProvider>
+        </Router>
     );
 
-    // Load clients:
     await act(() => promise);
 
     await userEvent.click(
-      screen.getByRole('button', {
-        name: /clientbtn-1/i,
-      })
+        screen.getByText("Top-Up")
     );
 
     //screen.debug();
 
     await userEvent.click(
-      screen.getByRole('button', {
-        name: /submit-1/i,
-      })
+        screen.getByRole('button', {
+          name: /submit-1/i,
+        })
     );
-    expect(screen.getByText(/€ 10/i)).toBeInTheDocument();
   });
 });

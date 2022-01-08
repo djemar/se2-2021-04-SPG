@@ -42,6 +42,10 @@ a.text-primary:focus {
   color: var(--secondary) !important;
 }
 
+.text-telegram {
+  color: rgb(37 99 235) !important;
+}
+
 a.text-secondary:hover,
 a.text-secondary:focus {
   color: var(--secondary-hover) !important;
