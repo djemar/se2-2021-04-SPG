@@ -418,6 +418,7 @@ describe("API Order", () => {
     const res = await dao.insertOrderAndSchedule(body, id_array, quantity_array);
     expect(res).toBeTruthy();
   });
+
   test("Get all orders", async () => {
     const o = await dao.getAllOrders();
     console.log("Found", o[0])
@@ -522,10 +523,6 @@ describe("API Order", () => {
     const o = ord2.filter(order => order.order_id === ord2[ord.length - 1].order_id);
     expect(o[0]).toHaveProperty('status', 'approved');
   });
-
-
-
-
 
 
   test("deletePendingCancellationOrderSuccess", async () => {

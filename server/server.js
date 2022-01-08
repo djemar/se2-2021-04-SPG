@@ -444,7 +444,7 @@ app.get("/api/users", async (req, res) => {
 /************** Orders **************/
 
 // POST /order
-// Request body: object describing an Order (order_id,ref_user,productList[{ref_product,quantity}],date_order,status(optional))
+// Request body: object describing an Order (order_id,ref_user,productList[{ref_product,quantity}],date_order,total)
 // Response body: empty
 // Example of Request's Body: {"order_id": 1,"ref_user": 1,"productList": [{"ref_product":1,"quantity":1},{"ref_product": 3,"quantity": 3},{"ref_product": 5,"quantity": 1}], "date_order": "222"}
 app.post(
@@ -496,10 +496,10 @@ app.get("/api/orders", async (req, res) => {
 // Request body: //
 // Response body: json containing all the unretrieved orders of all the clients
 app.get("/api/orders/unretrieved", async (req, res) => {
-    await dao
-        .getAllOrdersUnretrieved()
-        .then((orders) => res.json(orders))
-        .catch((err) => res.status(503).json(dbErrorObj));
+  await dao
+    .getAllOrdersUnretrieved()
+    .then((orders) => res.json(orders))
+    .catch((err) => res.status(503).json(dbErrorObj));
 });
 
 
@@ -1022,6 +1022,46 @@ app.post(
         .then((result) => res.json(result))
         .catch((err) => res.status(503).json(dbErrorObj));
     }
+  }
+);
+
+// POST /insert-scheduled-order
+// Request body: object describing an Order (order_id,ref_user,productList[{ref_product,quantity}],date_order,total,address,country,city,zip_code,schedule_date,schedule_time)
+// Response body: empty
+// Example of Request's Body: {"ref_user": 7,"productList": [{"ref_product":91,"quantity":1},{"ref_product": 93,"quantity": 3}], "date_order": "222","total":22,"address":"via","country":"ita","city":"turin","zip_code":10138,"schedule_date":"22","schedule_time":"22:22"}
+app.post(
+  "/api/insert-scheduled-order",
+  body("ref_user").exists({ checkNull: true }).bail().notEmpty().bail().isNumeric(),
+  body("date_order").exists({ checkNull: true }).bail().notEmpty().bail(),
+  body("productList").exists({ checkNull: true }).bail().notEmpty().bail(),
+  body("total").exists({ checkNull: true }).bail().notEmpty().bail(),
+  body("address").exists({ checkNull: true }).bail().notEmpty().bail(),
+  body("country").exists({ checkNull: true }).bail().notEmpty().bail(),
+  body("city").exists({ checkNull: true }).bail().notEmpty().bail(),
+  body("zip_code").exists({ checkNull: true }).bail().notEmpty().bail(),
+  body("schedule_date").exists({ checkNull: true }).bail().notEmpty().bail(),
+  body("schedule_time").exists({ checkNull: true }).bail().notEmpty().bail(),
+  async (req, res) => {
+    const validation = validationResult(req);
+    if (!validation.isEmpty()) {
+      res.status(400).json({
+        info: "The server cannot process the request",
+        error: validation.array()[0].msg,
+        valueReceived: validation.array()[0].value,
+      });
+    }
+    const order = req.body;
+    let productsIdList = order.productList;
+    var id_array = [],
+      quantity_array = [];
+    productsIdList.forEach((obj) => {
+      id_array.push(obj.pid);
+      quantity_array.push(obj.quantity);
+    });
+    await dao
+      .insertOrderAndSchedule(order, id_array, quantity_array)
+      .then((result) => res.end())
+      .catch((err) => res.status(503).json(dbErrorObj));
   }
 );
 

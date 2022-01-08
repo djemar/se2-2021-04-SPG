@@ -754,6 +754,32 @@ exports.setUnretrievedOrder = function (orderID) {
   });
 };
 
+exports.deletePendingCancellationOrder = function (orderID) {
+  return new Promise((resolve, reject) => {
+    const sql = "DELETE FROM ORDERS WHERE status = ? AND order_id = ?";
+    db.all(sql, ["pending_cancellation", orderID], (err, res) => {
+      if (err) reject(err);
+      else resolve(true);
+    });
+  });
+};
+
+//new insertOrder for order with schedule infos
+exports.insertOrderAndSchedule = async function (order, id_array, quantity_array) {
+  //Need to iterate over different products in list
+  var i = 0;
+  const promiseList = [];
+  const tmp = await retrieveNextId();
+  //console.log("Ecco l'id ritornato dalla query", tmp)
+  order.order_id = tmp;
+  for (const id of id_array) {
+    promiseList.push(createInsertOrderAndSchedulePromise(order, id, quantity_array[i++]));
+  }
+  return Promise.all(promiseList)
+    .then()
+    .catch((err) => console.log(err));
+};
+
 function createInsertOrderAndSchedulePromise(order, id, quantity) {
   return new Promise((resolve, reject) => {
     const sql =
@@ -785,31 +811,4 @@ function createInsertOrderAndSchedulePromise(order, id, quantity) {
     );
   });
 }
-
-exports.deletePendingCancellationOrder = function (orderID) {
-  return new Promise((resolve, reject) => {
-    const sql = "DELETE FROM ORDERS WHERE status = ? AND order_id = ?";
-    db.all(sql, ["pending_cancellation", orderID], (err, res) => {
-      if (err) reject(err);
-      else resolve(true);
-    });
-  });
-};
-
-//new insertOrder for order with schedule infos
-exports.insertOrderAndSchedule = async function (order, id_array, quantity_array) {
-  //Need to iterate over different products in list
-  var i = 0;
-  const promiseList = [];
-  const tmp = await retrieveNextId();
-  //console.log("Ecco l'id ritornato dalla query", tmp)
-  order.order_id = tmp;
-  for (const id of id_array) {
-    promiseList.push(createInsertOrderAndSchedulePromise(order, id, quantity_array[i++]));
-  }
-  return Promise.all(promiseList)
-    .then()
-    .catch((err) => console.log(err));
-};
-
 
