@@ -6,7 +6,7 @@ export const Page = ({ ...props }) => {
   const { children, title, subtitle } = props;
 
   return (
-    <div className="flex flex-column justify-start">
+    <div className="flex flex-column justify-start px-5 mt-4">
       <div className="flex flex-none md:justify-start pb-4 md:p-0 justify-center">
         <Breadcrumbs />
       </div>
