@@ -89,7 +89,18 @@ export const ProductCard = ({ ...props }) => {
 
   function editClick() {
     handleShow();
-    setProd(props);
+    setProd({
+      pid: pid,
+      fid: fid,
+      name: name,
+      description: description,
+      category: category,
+      quantity: orderQuantity,
+      availability: availableQuantity,
+      price: price,
+      unit_of_measure: unit,
+      image_path: img,
+    });
   }
 
   //<span class="position-absolute top-5 badge rounded-pill d-flex text-dark bg-light align-items-center">

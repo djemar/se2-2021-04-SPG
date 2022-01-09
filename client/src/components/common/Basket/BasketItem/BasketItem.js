@@ -14,7 +14,7 @@ const BasketItem = ({ ...props }) => {
   const [qnt, setQnt] = useState(quantity);
   const [users, setUsers] = useState([]);
   const [dirty, setDirty] = useState(true);
-  const [farmerName, setFarmerName] = useState('');
+  const [companyName, setCompanyName] = useState('');
   const handleRemoveItem = (pid, fid) => {
     let newBasket = [...basketProducts];
     newBasket = newBasket.filter(
@@ -48,7 +48,7 @@ const BasketItem = ({ ...props }) => {
     }
 
     users.forEach(x => {
-      if (x.user_id === product.fid) setFarmerName(x.name);
+      if (x.user_id === product.fid) setCompanyName(x.company_name);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dirty]);
@@ -60,6 +60,7 @@ const BasketItem = ({ ...props }) => {
             <div className="d-flex items-baseline">
               <BsTrashFill
                 className="trash-btn mr-5 text-lg"
+                aria-label="btn-remove-basket-item"
                 onClick={() => handleRemoveItem(product.pid, product.fid)}
               />
               <span className="basket-item-title font-medium mr-4">{name}</span>
@@ -73,7 +74,7 @@ const BasketItem = ({ ...props }) => {
           </Card.Title>
           <Card.Text className="d-flex justify-between mt-5 items-center">
             <div className="ml-9 d-flex items-center">
-              <IoStorefrontOutline className="mr-2 text-lg" /> {farmerName}
+              <IoStorefrontOutline className="mr-2 text-lg" /> {companyName}
             </div>
             <QuantitySelector
               orderQuantity={qnt}

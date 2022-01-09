@@ -21,6 +21,8 @@ import Page from '../../misc/Page';
 import ProductCard from '../ProductCard/ProductCard';
 import './myshop.css';
 import MyShopImages from './MyShopImages.js';
+import ConfirmModal from '../../misc/ConfirmModal';
+import { categories } from '../../fakedata';
 
 const product = {
   product_id: -1,
@@ -29,9 +31,9 @@ const product = {
   name: 'Name',
   price: 0,
   description: 'Description',
-  category: 'Category',
+  category: 'Choose category',
   unit_of_measure: 'Unit',
-  img: 'Img',
+  image_path: 'Img',
   availability: 0,
 };
 
@@ -39,6 +41,7 @@ const NEWVALUE = {
   NAME: 0,
   PRICE: 1,
   DESCRIPTION: 2,
+  CATEGORY: 3,
   AVAILABILITY: 4,
   UNIT: 5,
   IMAGE: 6,
@@ -54,14 +57,15 @@ export const MyShop = ({ ...props }) => {
   const [start_date, setStart] = useState('');
   const [end_date, setEnd] = useState('');
   const [showImages, setShowImages] = useState(false);
-
-  const [prod, setProd] = useState('');
+  const [modalConfirm, setModalConfirm] = useState(false);
+  const [prod, setProd] = useState({});
+  const [compiled, setCompiled] = useState(false);
 
   const insertProduct = () => {
     API.insertProduct(
       addedProduct.name,
       addedProduct.description,
-      'Dairy',
+      addedProduct.category,
       user.id,
       addedProduct.price + 0,
       addedProduct.availability,
@@ -70,6 +74,7 @@ export const MyShop = ({ ...props }) => {
       start_date,
       end_date
     ).then(setDirty(true));
+    setModalConfirm(false);
   };
 
   //useEffect(() => {}, [loadingProd]);
@@ -83,8 +88,8 @@ export const MyShop = ({ ...props }) => {
       prod.fid,
       prod.price,
       prod.availability,
-      prod.unit,
-      prod.img,
+      prod.unit_of_measure,
+      prod.image_path,
       start_date,
       end_date
     ).then(setDirty(true));
@@ -212,6 +217,9 @@ export const MyShop = ({ ...props }) => {
       case NEWVALUE.UNIT:
         tmpProd.unit_of_measure = value;
         break;
+      case NEWVALUE.CATEGORY:
+        tmpProd.category = value;
+        break;
       case NEWVALUE.IMAGE:
         tmpProd.image_path = value;
         break;
@@ -220,12 +228,27 @@ export const MyShop = ({ ...props }) => {
     }
     if (flag === 0) setProd(tmpProd);
     else setAddedProduct(tmpProd);
+    if (
+      tmpProd.name === '' ||
+      tmpProd.name === 'Name' ||
+      tmpProd.price <= 0 ||
+      tmpProd.description === '' ||
+      tmpProd.description === 'Description' ||
+      tmpProd.availability <= 0 ||
+      tmpProd.unit == '' ||
+      tmpProd.unit == 'Unit' ||
+      tmpProd.category === '' ||
+      tmpProd.category === 'Choose category' ||
+      tmpProd.image_path === '' ||
+      tmpProd.image_path === 'Img'
+    )
+      setCompiled(false);
+    else setCompiled(true);
   };
 
   const setUrlFromArchive = url => {
     handleChange(url, NEWVALUE.IMAGE, 1);
   };
-
   return (
     <>
       <MyShopImages
@@ -297,7 +320,7 @@ export const MyShop = ({ ...props }) => {
                     </Form.Label>
                     <Form.Control
                       type="text"
-                      value={prod.unit}
+                      value={prod.unit_of_measure}
                       onChange={e =>
                         handleChange(e.target.value, NEWVALUE.UNIT, 0)
                       }
@@ -329,13 +352,31 @@ export const MyShop = ({ ...props }) => {
                 </Form.Label>
                 <Form.Control
                   type="text"
-                  value={prod.img}
+                  value={prod.image_path}
                   onChange={e =>
                     handleChange(e.target.value, NEWVALUE.IMAGE, 0)
                   }
                 />
               </Form.Group>
             </Row>
+            <Form.Group as={Col} controlId="formGridCategory">
+              <Form.Label className="font-medium font-ibmplex text-sm">
+                Category
+              </Form.Label>
+              <Form.Select
+                required
+                value={prod.category}
+                aria-label="form-category"
+                onChange={ev =>
+                  handleChange(ev.target.value, NEWVALUE.CATEGORY, 0)
+                }
+              >
+                <option value="">Please choose an option</option>
+                {categories.slice(1).map(c => (
+                  <option value={c.name}>{c.name}</option>
+                ))}
+              </Form.Select>
+            </Form.Group>
 
             {/*                 <ButtonBS variant="primary" type="submit">
                   Submit
@@ -343,7 +384,10 @@ export const MyShop = ({ ...props }) => {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <ButtonBS variant="outline-danger mr-5" onClick={handleClose}>
+          <ButtonBS
+            variant="outline-danger mr-5"
+            onClick={() => setShow(false)}
+          >
             Close
           </ButtonBS>
           <ButtonBS
@@ -373,6 +417,7 @@ export const MyShop = ({ ...props }) => {
                           placeholder="Type to search..."
                           onChange={v => {
                             v ? setAddedProduct(v) : setAddedProduct(product);
+                            setCompiled(true);
                           }}
                           isClearable={true}
                           isSearchable={true}
@@ -409,6 +454,7 @@ export const MyShop = ({ ...props }) => {
                               <Form.Control
                                 type="text"
                                 aria-label="form-name"
+                                required
                                 placeholder={addedProduct.name}
                                 value={
                                   addedProduct.name !== product.name
@@ -432,6 +478,7 @@ export const MyShop = ({ ...props }) => {
                                 type="number"
                                 aria-label="form-price"
                                 pattern="[0-9]"
+                                required
                                 min={0}
                                 step={0.05}
                                 value={addedProduct.price}
@@ -456,6 +503,7 @@ export const MyShop = ({ ...props }) => {
                               <Form.Control
                                 type="number"
                                 aria-label="form-pieces"
+                                required
                                 value={addedProduct.availability}
                                 onChange={e =>
                                   handleChange(
@@ -477,6 +525,7 @@ export const MyShop = ({ ...props }) => {
                               <Form.Control
                                 type="text"
                                 aria-label="form-quantity"
+                                required
                                 placeholder={addedProduct.unit_of_measure}
                                 value={
                                   addedProduct.unit_of_measure !=
@@ -493,6 +542,36 @@ export const MyShop = ({ ...props }) => {
                         </Col>
                         <Col>
                           <Row className="mb-3">
+                            <Form.Group as={Col} controlId="formGridCategory">
+                              <Form.Label className="font-medium font-ibmplex text-sm">
+                                Category
+                              </Form.Label>
+                              <Form.Select
+                                required
+                                value={
+                                  addedProduct.category !== product.category
+                                    ? addedProduct.category
+                                    : ''
+                                }
+                                aria-label="form-category"
+                                onChange={ev =>
+                                  handleChange(
+                                    ev.target.value,
+                                    NEWVALUE.CATEGORY,
+                                    1
+                                  )
+                                }
+                              >
+                                <option value="">
+                                  Please choose an option
+                                </option>
+                                {categories.slice(1).map(c => (
+                                  <option value={c.name}>{c.name}</option>
+                                ))}
+                              </Form.Select>
+                            </Form.Group>
+                          </Row>
+                          <Row className="mb-3">
                             <Form.Group
                               as={Col}
                               controlId="formGridDescription"
@@ -504,6 +583,7 @@ export const MyShop = ({ ...props }) => {
                                 as="textarea"
                                 type="text"
                                 aria-label="form-description"
+                                required
                                 placeholder={addedProduct.description}
                                 value={
                                   addedProduct.description !==
@@ -536,6 +616,7 @@ export const MyShop = ({ ...props }) => {
                                     className="w-full"
                                     type="text"
                                     aria-label="form-img"
+                                    required
                                     value={addedProduct.image_path}
                                     onChange={e =>
                                       handleChange(
@@ -564,11 +645,19 @@ export const MyShop = ({ ...props }) => {
                 </Card>
                 <ButtonBS
                   className="d-flex items-center mt-4 shadow-lg bg-secondary"
-                  onClick={() => insertProduct()}
+                  onClick={() => setModalConfirm(true)}
+                  disabled={!compiled}
                 >
                   <IoAdd className="text-white mr-3" />
                   Add to My Shop
                 </ButtonBS>
+                <ConfirmModal
+                  show={modalConfirm}
+                  title={'Confirm'}
+                  body={'Do you want to add it in your shop?'}
+                  onHide={() => setModalConfirm(false)}
+                  onConfirm={() => insertProduct()}
+                />
               </div>
               <div className="col-4 flex lg:w-full flex-column justify-content-center items-center lg:pr-0 pt-4 lg:pt-0">
                 <span className="font-medium h5">Preview</span>
