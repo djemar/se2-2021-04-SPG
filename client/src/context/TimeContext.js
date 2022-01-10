@@ -48,7 +48,52 @@ const TimeContextProvider = ({ ...props }) => {
     if (today === 5 && hour === 21) {
       checkUnretrieved();
     }
+    if (today === 6 && hour === 9) {
+      const dates = getTimeframe();
+      const result = API.sendWeeklyNotification(dates.startDate, dates.endDate);
+      if (result) {
+        console.log(result);
+      }
+    }
   }, [dateState]);
+
+  function getTimeframe() {
+    let today = dayjs(dateState).get('day');
+    // db format: YYYY-MM-DD
+    // Saturday = 6, sunday = 0
+    // today will be equal to saturday, and end date sunday
+    let startDate;
+
+    switch (today) {
+      case 1:
+        startDate = dayjs(dateState).add(5, 'day').format('YYYY-MM-DD');
+        break;
+      case 2:
+        startDate = dayjs(dateState).add(4, 'day').format('YYYY-MM-DD');
+        break;
+      case 3:
+        startDate = dayjs(dateState).add(3, 'day').format('YYYY-MM-DD');
+        break;
+      case 4:
+        startDate = dayjs(dateState).add(2, 'day').format('YYYY-MM-DD');
+        break;
+      case 5:
+        startDate = dayjs(dateState).add(1, 'day').format('YYYY-MM-DD');
+        break;
+      case 6:
+        startDate = dayjs(dateState).format('YYYY-MM-DD');
+        break;
+      case 0:
+        startDate = dayjs(dateState).add(6, 'day').format('YYYY-MM-DD');
+        break;
+      default:
+        break;
+    }
+
+    let endDate = dayjs(startDate).add(1, 'day').format('YYYY-MM-DD');
+    const dates = { startDate, endDate };
+    return dates;
+  }
 
   return (
     <TimeContext.Provider

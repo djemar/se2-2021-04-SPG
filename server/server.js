@@ -1,24 +1,13 @@
-const express = require("express");
-const morgan = require("morgan"); // logging middleware
-const jwt = require("express-jwt");
-const jsonwebtoken = require("jsonwebtoken");
-const cookieParser = require("cookie-parser");
-const {
-  body,
-  param,
-  check,
-  validationResult,
-  sanitizeBody,
-  sanitizeParam,
-} = require("express-validator"); // validation library
-const dao = require("./dao.js");
-const bcrypt = require("bcrypt");
+import express from "express";
+import morgan from "morgan"; // logging middleware
+import { body, param, check, validationResult } from "express-validator";
+import { dao } from "./dao.js";
+import passport from "passport"; // auth middleware
+import { Strategy as LocalStrategy } from "passport-local"; // username and password for login
+import session from "express-session"; // enable sessions
+import { APIbot } from "./bot/botServer.js";
 
-const passport = require("passport"); // auth middleware
-const LocalStrategy = require("passport-local").Strategy; // username and password for login
-const session = require("express-session"); // enable sessions
-
-const app = express();
+export const app = express();
 const port = 3001;
 
 // Disable x-powered-by to not disclose technologies used on a website
@@ -139,6 +128,53 @@ app.get("/api/login/current", (req, res) => {
   } else res.status(401).json({ error: "Unauthenticated user!" });
 });
 
+/************** TELEGRAM **************/
+
+app.post(
+  "/api/telegram/weekly",
+  body("startDate")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isString()
+    .bail(),
+  body("endDate")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isString()
+    .bail(),
+  async (req, res) => {
+    const result = validationResult(req);
+    if (!result.isEmpty())
+      res.status(400).json({
+        info: "The server cannot process the request",
+        error: result.array()[0].msg,
+        valueReceived: result.array()[0].value,
+      });
+    else {
+      try {
+        const products = await dao.getProductsBetweenDates(
+          req.body.startDate,
+          req.body.endDate
+        );
+        APIbot.sendWeeklyUpdate(products)
+          .then((result) => {
+            console.log(result);
+            return res.status(200).json({ result: "done" });
+          })
+          .catch((err) => res.status(503).json(err));
+      } catch (err) {
+        console.log(err);
+        res.status(503).json(err);
+        throw err;
+      }
+    }
+  }
+);
+
 /************** Products **************/
 
 // GET /products
@@ -148,7 +184,7 @@ app.get("/api/products", async (req, res) => {
   await dao
     .getProducts()
     .then((products) => res.json(products))
-    .catch((err) => res.status(503).json(dbErrorObj));
+    .catch((err) => res.status(503).json(err));
 });
 
 // POST /products
@@ -501,7 +537,6 @@ app.get("/api/orders/unretrieved", async (req, res) => {
     .then((orders) => res.json(orders))
     .catch((err) => res.status(503).json(dbErrorObj));
 });
-
 
 // GET /client-orders/:clientID
 // Request parameters: clientID
@@ -930,75 +965,74 @@ app.get("/api/set-all-pending-cancellation-order/", async (req, res) => {
     .getOrdersAndWallets()
     .then((results) => {
       // we now have to check the sum of all the orders for a specific user_id
-        let userCurr;
-        let userPrev;
-        let sum=0;
-        let userBalance;
-        // Iterate all the orders
-        // when the user_id changes, set query to 1 and do the query for the orders for that user
-          for (const result of results) {
-              if (sum == 0){
-                  // At the start, set userPrev to the starting user
-                  userPrev = result.user_id;
-              }
-              userCurr = result.user_id;
-              if (userCurr != userPrev){
-                  userPrev = userCurr;
-                  sum = 0;
-              }
-              userBalance = result.wallet_balance;
-              sum = sum + result.total;
-              if (sum > userBalance){
-                  dao.setPendingCancellationOrder(result.order_id);
-              }
-              else{
-                  dao.setApprovedOrder(result.order_id)
-              }
-          }
+      let userCurr;
+      let userPrev;
+      let sum = 0;
+      let userBalance;
+      // Iterate all the orders
+      // when the user_id changes, set query to 1 and do the query for the orders for that user
+      for (const result of results) {
+        if (sum == 0) {
+          // At the start, set userPrev to the starting user
+          userPrev = result.user_id;
+        }
+        userCurr = result.user_id;
+        if (userCurr != userPrev) {
+          userPrev = userCurr;
+          sum = 0;
+        }
+        userBalance = result.wallet_balance;
+        sum = sum + result.total;
+        if (sum > userBalance) {
+          dao.setPendingCancellationOrder(result.order_id);
+        } else {
+          dao.setApprovedOrder(result.order_id);
+        }
+      }
     })
     .then((orders) => res.json(orders))
     .catch((err) => res.status(503).json(dbErrorObj));
 });
 
 app.get("/api/delete-all-pending-cancellation-order/", async (req, res) => {
-    // First, retrieve all the orders which are pending and
-    // retrieve also the order cost as the SUM of quantity*price.
-    // Then, filter the array and maintain only orders where
-    // wallet_balance > orderCost.
-    // for simplicty, in an order cost is > wallet_balance,
-    // set as pending cancellation
-    await dao.getAllOrdersAndWallets()
-        .then((results) => {
-            // we now have to check the sum of all the orders for a specific user_id
-            console.log(results)
-            let userCurr;
-            let userPrev;
-            let sum=0;
-            let userBalance;
-            // Iterate all the orders
-            // when the user_id changes, set query to 1 and do the query for the orders for that user
-            for (const result of results) {
-                if (sum == 0){
-                    // At the start, set userPrev to the starting user
-                    userPrev = result.user_id;
-                }
-                userCurr = result.user_id;
-                if (userCurr != userPrev){
-                    userPrev = userCurr;
-                    sum = 0;
-                }
-                userBalance = result.wallet_balance;
-                sum = sum + result.total;
-                if (sum > userBalance){
-                    dao.deletePendingCancellationOrder(result.order_id);
-                }
-                else{
-                    dao.setApprovedOrder(result.order_id)
-                }
-            }
-        })
-        .then((orders) => res.json(orders))
-        .catch((err) => res.status(503).json(dbErrorObj));
+  // First, retrieve all the orders which are pending and
+  // retrieve also the order cost as the SUM of quantity*price.
+  // Then, filter the array and maintain only orders where
+  // wallet_balance > orderCost.
+  // for simplicty, in an order cost is > wallet_balance,
+  // set as pending cancellation
+  await dao
+    .getAllOrdersAndWallets()
+    .then((results) => {
+      // we now have to check the sum of all the orders for a specific user_id
+      console.log(results);
+      let userCurr;
+      let userPrev;
+      let sum = 0;
+      let userBalance;
+      // Iterate all the orders
+      // when the user_id changes, set query to 1 and do the query for the orders for that user
+      for (const result of results) {
+        if (sum == 0) {
+          // At the start, set userPrev to the starting user
+          userPrev = result.user_id;
+        }
+        userCurr = result.user_id;
+        if (userCurr != userPrev) {
+          userPrev = userCurr;
+          sum = 0;
+        }
+        userBalance = result.wallet_balance;
+        sum = sum + result.total;
+        if (sum > userBalance) {
+          dao.deletePendingCancellationOrder(result.order_id);
+        } else {
+          dao.setApprovedOrder(result.order_id);
+        }
+      }
+    })
+    .then((orders) => res.json(orders))
+    .catch((err) => res.status(503).json(dbErrorObj));
 });
 
 // POST /set-unretrieved-order
@@ -1031,7 +1065,12 @@ app.post(
 // Example of Request's Body: {"ref_user": 7,"productList": [{"ref_product":91,"quantity":1},{"ref_product": 93,"quantity": 3}], "date_order": "222","total":22,"address":"via","country":"ita","city":"turin","zip_code":10138,"schedule_date":"22","schedule_time":"22:22"}
 app.post(
   "/api/insert-scheduled-order",
-  body("ref_user").exists({ checkNull: true }).bail().notEmpty().bail().isNumeric(),
+  body("ref_user")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isNumeric(),
   body("date_order").exists({ checkNull: true }).bail().notEmpty().bail(),
   body("productList").exists({ checkNull: true }).bail().notEmpty().bail(),
   body("total").exists({ checkNull: true }).bail().notEmpty().bail(),
@@ -1065,8 +1104,10 @@ app.post(
   }
 );
 
+APIbot.start();
+
 app.listen(port, () =>
   console.log(`Server app listening at http://localhost:${port}`)
 );
 
-module.exports = app;
+//module.exports = app;

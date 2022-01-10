@@ -60,6 +60,7 @@ describe('Navbar', () => {
     expect(screen.getByText(/Your Basket/i)).toBeInTheDocument();
 
     await userEvent.click(screen.getByLabelText(/navdropdown/i));
+    await userEvent.click(screen.getByLabelText(/btn-bot/i));
     //await userEvent.click(screen.getByLabelText(/navdropdown-item/i));
   });
 });
