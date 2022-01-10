@@ -7,7 +7,14 @@ import { Strategy as LocalStrategy } from "passport-local"; // username and pass
 import session from "express-session"; // enable sessions
 import { APIbot } from "./bot/botServer.js";
 
-const { body, param, check, validationResult, sanitizeBody, sanitizeParam } = require("express-validator"); // validation library
+const {
+  body,
+  param,
+  check,
+  validationResult,
+  sanitizeBody,
+  sanitizeParam,
+} = require("express-validator"); // validation library
 
 const path = require("path");
 export const app = express();
@@ -79,7 +86,8 @@ passport.deserializeUser((id, done) => {
 app.use(
   session({
     // by default, Passport uses a MemoryStore to keep track of the sessions
-    secret: "a secret sentence not to share with anybody and anywhere, used to sign the session ID cookie",
+    secret:
+      "a secret sentence not to share with anybody and anywhere, used to sign the session ID cookie",
     resave: false,
     saveUninitialized: false,
   })
@@ -96,24 +104,28 @@ const isLoggedIn = (req, res, next) => {
 
 /************** Login **************/
 
-app.post("/api/login", [check("email").isEmail(), check("password").isString()], function (req, res, next) {
-  passport.authenticate("local", (err, user, info) => {
-    if (err) return next(err);
-
-    if (!user) {
-      // display wrong login messages
-      return res.status(401).json(info);
-    }
-    // success, perform the login
-    req.login(user, (err) => {
+app.post(
+  "/api/login",
+  [check("email").isEmail(), check("password").isString()],
+  function (req, res, next) {
+    passport.authenticate("local", (err, user, info) => {
       if (err) return next(err);
-      // req.user contains the authenticated user, we send all the user info back
-      // this is coming from userDao.getUser()
-      console.log(req.user);
-      return res.json(req.user);
-    });
-  })(req, res, next);
-});
+
+      if (!user) {
+        // display wrong login messages
+        return res.status(401).json(info);
+      }
+      // success, perform the login
+      req.login(user, (err) => {
+        if (err) return next(err);
+        // req.user contains the authenticated user, we send all the user info back
+        // this is coming from userDao.getUser()
+        console.log(req.user);
+        return res.json(req.user);
+      });
+    })(req, res, next);
+  }
+);
 
 // DELETE /login/current
 // logout
@@ -317,7 +329,12 @@ app.post(
     .isString()
     .bail()
     .custom((value) => {
-      return !(value !== "Client" && value !== "Farmer" && value !== "Employee" && value !== "Manager");
+      return !(
+        value !== "Client" &&
+        value !== "Farmer" &&
+        value !== "Employee" &&
+        value !== "Manager"
+      );
     })
     .bail(),
   body("address").exists({ checkNull: true }).bail().notEmpty().bail().isString().bail(),
@@ -472,7 +489,13 @@ app.post(
 app.post(
   "/api/recharge-wallet/",
   body("clientID").exists({ checkNull: true }).bail().notEmpty().bail(),
-  body("recharge").exists({ checkNull: true }).bail().notEmpty().bail().isNumeric({ min: 0.0 }).bail(),
+  body("recharge")
+    .exists({ checkNull: true })
+    .bail()
+    .notEmpty()
+    .bail()
+    .isNumeric({ min: 0.0 })
+    .bail(),
   async (req, res) => {
     const validation = validationResult(req);
     if (!validation.isEmpty()) {
@@ -777,7 +800,7 @@ app.post(
   }
 );
 
-//APIbot.start();
+APIbot.start();
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(CLIENT_BUILD_PATH, "index.html"));
