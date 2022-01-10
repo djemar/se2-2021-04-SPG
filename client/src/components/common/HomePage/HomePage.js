@@ -71,7 +71,7 @@ export const HomePage = ({ ...props }) => {
 
       <Row className="m-5 flex ">
         {/*d-flex overflow-x-scroll*/}
-        <div className="mid-title">
+        <div className="mid-title text-dark">
           <h2 aria-label="our-products">
             <strong>Our Products</strong>
           </h2>
@@ -155,7 +155,7 @@ export const HomePage = ({ ...props }) => {
             backgroundSize: 'cover',
           }}
         >
-          <div className="last-title mt-5">
+          <div className="last-title mt-5 text-dark">
             <h2 aria-label="contact-us">
               <strong>Contact Us</strong>
             </h2>

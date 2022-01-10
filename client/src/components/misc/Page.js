@@ -13,7 +13,7 @@ export const Page = ({ ...props }) => {
       <div className="w-full flex flex-none justify-start pl-4 items-end pb-4">
         {title && (
           <div className="flex justify-center">
-            <span className="text-4xl font-bold">{title}</span>
+            <span className="text-4xl font-bold text-dark">{title}</span>
           </div>
         )}
         {subtitle && (
