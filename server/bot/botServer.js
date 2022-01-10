@@ -468,39 +468,3 @@ const test2 = (id) => {
     "[TELEGRAM] User: " + core.getUserInfo(id) + " - Clicked on Test 2!"
   );
 };
-
-const products = [
-  {
-    product_id: 1,
-    name: "Prodotto 1",
-    description: "text text text text text text text text text text",
-    category: "Categoria 1",
-    ref_farmer: "Venditore 1",
-    price: "10",
-    availability: 10,
-    unit_of_measure: "Kg",
-    image_path: "./img/uploads/apples.jpg",
-  },
-  {
-    product_id: 2,
-    name: "Prodotto 2",
-    description: "text text text text text text text text text text",
-    category: "Categoria 2",
-    ref_farmer: "Venditore 2",
-    price: "10",
-    availability: 10,
-    unit_of_measure: "Kg",
-    image_path: "./img/uploads/apples.jpg",
-  },
-  {
-    product_id: 3,
-    name: "Prodotto 3",
-    description: "text text text text text text text text text text",
-    category: "Categoria 3",
-    ref_farmer: "Venditore 3",
-    price: "10",
-    availability: 10,
-    unit_of_measure: "Kg",
-    image_path: "./img/uploads/apples.jpg",
-  },
-];

@@ -48,8 +48,10 @@ export const Basket = ({ ...props }) => {
   const [deliveryZipCode, setDeliveryZipCode] = useState();
 
   useEffect(() => {
-    if (user !== undefined && user !== null) {
+    if (user) {
       if (isLogged && user.userType === 'Client') setClientId(user.id);
+    } else {
+      setClientId('');
     }
     setComputeConfirmationModal(false);
   }, [isLogged, user]);
@@ -213,28 +215,30 @@ export const Basket = ({ ...props }) => {
         onHide={() => setModalShow(false)}
         onConfirm={clearBasket}
       />
-      <DeliveryModal
-        user={user}
-        sum={sum}
-        mShow={mShow}
-        computeConfirmationModal={computeConfirmationModal}
-        handleMClose={handleMClose}
-        handleAddOrder={handleAddOrder}
-        wantDelivery={wantDelivery}
-        setWantDelivery={setWantDelivery}
-        setDeliveryDate={setDeliveryDate}
-        deliveryDate={deliveryDate}
-        setDeliveryTime={setDeliveryTime}
-        deliveryTime={deliveryTime}
-        setDeliveryAddress={setDeliveryAddress}
-        deliveryAddress={deliveryAddress}
-        setDeliveryCountry={setDeliveryCountry}
-        deliveryCountry={deliveryCountry}
-        setDeliveryCity={setDeliveryCity}
-        deliveryCity={deliveryCity}
-        setDeliveryZipCode={setDeliveryZipCode}
-        deliveryZipCode={deliveryZipCode}
-      />
+      {user && (
+        <DeliveryModal
+          user={user}
+          sum={sum}
+          mShow={mShow}
+          computeConfirmationModal={computeConfirmationModal}
+          handleMClose={handleMClose}
+          handleAddOrder={handleAddOrder}
+          wantDelivery={wantDelivery}
+          setWantDelivery={setWantDelivery}
+          setDeliveryDate={setDeliveryDate}
+          deliveryDate={deliveryDate}
+          setDeliveryTime={setDeliveryTime}
+          deliveryTime={deliveryTime}
+          setDeliveryAddress={setDeliveryAddress}
+          deliveryAddress={deliveryAddress}
+          setDeliveryCountry={setDeliveryCountry}
+          deliveryCountry={deliveryCountry}
+          setDeliveryCity={setDeliveryCity}
+          deliveryCity={deliveryCity}
+          setDeliveryZipCode={setDeliveryZipCode}
+          deliveryZipCode={deliveryZipCode}
+        />
+      )}
     </>
   );
 };

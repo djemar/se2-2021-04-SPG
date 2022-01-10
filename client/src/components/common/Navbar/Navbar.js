@@ -52,8 +52,6 @@ export const Navbar = ({ ...props }) => {
   const handleClose = () => setShowBasket(false);
   const handleShow = () => setShowBasket(true);
 
-  console.log(user ? user : '');
-
   return (
     <>
       <NavbarBootstrap
@@ -371,7 +369,7 @@ export const Navbar = ({ ...props }) => {
                     <div className="flex justify-between">
                       <strong>Subscribe Now!</strong>
                       <span
-                        className="text-primary font-black text-right"
+                        className="text-primary font-black text-right cursor-pointer"
                         onClick={() => setShowTelegram(old => !old)}
                       >
                         X
