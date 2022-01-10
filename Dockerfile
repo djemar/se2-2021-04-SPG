@@ -15,11 +15,13 @@ COPY server/package*.json .
 RUN npm upgrade
 RUN npm install
 COPY server/server.js .
+COPY server/.env .
 COPY server/dao.js .
 COPY server/user.js .
 COPY server/SPG.sqlite .
 RUN ls
 
+ENV BOT_SECRET_TOKEN='5018717337:AAE4tIYI2bZxJazDkVxoS56A2uMQpHUG4YI'
 
 #ENV LD_PRELOAD=/usr/local/lib/faketime/libfaketime.so.1
 #ENV DONT_FAKE_MONOTONIC=1
