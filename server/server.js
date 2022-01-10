@@ -6,17 +6,13 @@ import passport from "passport"; // auth middleware
 import { Strategy as LocalStrategy } from "passport-local"; // username and password for login
 import session from "express-session"; // enable sessions
 import { APIbot } from "./bot/botServer.js";
+import path from "path";
+import { URL } from "url"; // in Browser, the URL in native accessible on window
 
-const {
-  body,
-  param,
-  check,
-  validationResult,
-  sanitizeBody,
-  sanitizeParam,
-} = require("express-validator"); // validation library
+const __filename = new URL("", import.meta.url).pathname;
+// Will contain trailing slash
+const __dirname = new URL(".", import.meta.url).pathname;
 
-const path = require("path");
 export const app = express();
 const port = process.env.PORT || 3001;
 const HOST = "0.0.0.0";
