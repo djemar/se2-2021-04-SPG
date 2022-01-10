@@ -52,8 +52,6 @@ export const Navbar = ({ ...props }) => {
   const handleClose = () => setShowBasket(false);
   const handleShow = () => setShowBasket(true);
 
-  console.log(user ? user : '');
-
   return (
     <>
       <NavbarBootstrap
