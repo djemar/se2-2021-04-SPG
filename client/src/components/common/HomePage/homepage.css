@@ -29,7 +29,7 @@
   text-shadow: 4px 4px 8px #000000;
   font-weight: bold;
   color: #fff;
-  font-size: 37px;
+  font-size: 45px;
 }
 
 .mid-title {
@@ -47,31 +47,27 @@ p:hover {
   font-weight: bold;
 }*/
 
-/*LINKS */
-/*remove underline*/
-.link:hover {
-  text-decoration: none;
-  font-weight: bold;
+.text-primary {
+  color: var(--primary);
 }
-.link {
-  text-decoration: none;
-  font-size: 17px;
-  color: rgb(0, 0, 0);
+.text-primary:hover {
+  color: var(--primary-hover);
 }
+.text-secondary {
+  color: var(--secondary);
+}
+.text-secondary:hover {
+  color: var(--secondary-hover);
+}
+
+/* .bg-secondary {
+  color: var(--secondary) !important;
+  opacity: 0.3 !important;
+} */
 
 /*SECTION 1*/
 
-/* Shopping button */
-#btn-shopping {
-  background-color: var(--secondary);
-  width: 160px;
-  height: 45px;
-  border: none;
-  border-radius: 20px;
-  font-size: 16px;
-  text-align: center;
-  opacity: '1';
-}
+
 
 #btn-shopping:hover {
   font-weight: bold;
@@ -163,14 +159,8 @@ p:hover {
 }
 
 .network {
-  font-size: 30px;
-  color: rgb(0, 0, 0);
   margin: 30px;
   padding: 5px;
-}
-
-.network:hover {
-  color: var(--secondary);
 }
 
 /*TEST*/

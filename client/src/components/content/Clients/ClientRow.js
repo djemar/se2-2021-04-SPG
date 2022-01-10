@@ -6,12 +6,28 @@ import ModalDetails from './ModalDetails';
 import ModalTopUp from './ModalTopUp';
 
 export const ClientRow = ({ ...props }) => {
-  const { isClient, user_id, name, surname, setDirty, wallet_balance, email } =
-    props;
+  const {
+    isClient,
+    user_id,
+    name,
+    surname,
+    setDirty,
+    wallet_balance,
+    email,
+    phone,
+  } = props;
   const [show, setShow] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
 
-  const user = { user_id, name, surname, wallet_balance, email, isClient };
+  const user = {
+    user_id,
+    name,
+    surname,
+    wallet_balance,
+    email,
+    isClient,
+    phone,
+  };
 
   const renderButton = isClient && (
     <Button
@@ -42,6 +58,9 @@ export const ClientRow = ({ ...props }) => {
         <td className="text-center align-middle">{user_id}</td>
         <td className="text-center align-middle">{name}</td>
         <td className="text-center align-middle">{surname}</td>
+        <td className="text-center align-middle md:table-cell hidden">
+          {phone}
+        </td>
         <td className="text-center align-middle md:table-cell hidden">
           {email}
         </td>

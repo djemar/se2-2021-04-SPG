@@ -10,6 +10,8 @@ import {
   faUsers,
   faChartLine,
 } from '@fortawesome/free-solid-svg-icons';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fab } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useContext, useState } from 'react';
 import {
@@ -17,6 +19,9 @@ import {
   Button as BSButton,
   Navbar as NavbarBootstrap,
   NavDropdown,
+  Overlay,
+  OverlayTrigger,
+  Popover,
 } from 'react-bootstrap';
 import { Link, NavLink } from 'react-router-dom';
 import { UserContext } from '../../../context/UserContext';
@@ -27,6 +32,7 @@ import { Button } from '../../misc/';
 import Basket from '../Basket/Basket';
 import './navbar.css';
 
+library.add(fab);
 export const Navbar = ({ ...props }) => {
   const {
     user,
@@ -38,12 +44,15 @@ export const Navbar = ({ ...props }) => {
     basketProducts,
   } = props;
   const [showBasket, setShowBasket] = useState(false);
+  const [showTelegram, setShowTelegram] = useState(true);
 
   const { users, loading } = useContext(UserContext);
   const farmer = user ? users.find(u => u.user_id === user.id) : '';
 
   const handleClose = () => setShowBasket(false);
   const handleShow = () => setShowBasket(true);
+
+  console.log(user ? user : '');
 
   return (
     <>
@@ -54,11 +63,7 @@ export const Navbar = ({ ...props }) => {
         className="sticky navbar-light bg-white topbar static-top shadow flex justify-between py-0 px-0"
         variant="dark"
       >
-        <div
-          className={`flex flex-grow ${
-            user ? 'justify-between' : 'justify-start lg:justify-between'
-          } items-center`}
-        >
+        <div className={`flex flex-grow justify-between items-center`}>
           <NavDropdown
             align={'left'}
             id="dropdown-menu-align-left"
@@ -72,7 +77,7 @@ export const Navbar = ({ ...props }) => {
             <NavDropdown.Item className="text-dark">
               <NavLink
                 activeClassName="text-secondary"
-                className="text-dark no-underline"
+                className="text-dark no-underline text-lg font-semibold"
                 exact
                 to="/"
               >
@@ -83,7 +88,7 @@ export const Navbar = ({ ...props }) => {
             <NavDropdown.Item className="text-dark">
               <NavLink
                 activeClassName="text-secondary"
-                className="text-dark no-underline"
+                className="text-dark no-underline text-lg font-semibold"
                 to="/shop"
               >
                 <FontAwesomeIcon
@@ -97,9 +102,8 @@ export const Navbar = ({ ...props }) => {
               <>
                 <NavDropdown.Item className="text-dark">
                   <NavLink
-                    ac
                     activeClassName="text-secondary"
-                    className="text-dark no-underline"
+                    className="text-dark no-underline text-lg font-semibold"
                     to="/clients"
                   >
                     <FontAwesomeIcon
@@ -112,7 +116,7 @@ export const Navbar = ({ ...props }) => {
                 <NavDropdown.Item className="text-dark">
                   <NavLink
                     activeClassName="text-secondary"
-                    className="text-dark no-underline"
+                    className="text-dark no-underline text-lg font-semibold"
                     to="/orders"
                   >
                     <FontAwesomeIcon
@@ -128,9 +132,8 @@ export const Navbar = ({ ...props }) => {
               <>
                 <NavDropdown.Item className="text-dark">
                   <NavLink
-                    ac
                     activeClassName="text-secondary"
-                    className="text-dark no-underline"
+                    className="text-dark no-underline text-lg font-semibold"
                     to="/myShop"
                   >
                     <FontAwesomeIcon
@@ -142,15 +145,30 @@ export const Navbar = ({ ...props }) => {
                 </NavDropdown.Item>
               </>
             )}
-
+            {user && user.userType === 'Manager' && (
+              <>
+                <NavDropdown.Item className="text-dark">
+                  <NavLink
+                    activeClassName="text-secondary"
+                    className="text-dark no-underline text-lg font-semibold"
+                    to="/reports"
+                  >
+                    <FontAwesomeIcon
+                      icon={faChartLine}
+                      className={'mr-2 mb-0 w-1/6'}
+                    />
+                    <span className="w-5/6">Reports</span>
+                  </NavLink>
+                </NavDropdown.Item>
+              </>
+            )}
             {!user && (
               <>
                 <NavDropdown.Divider />
                 <NavDropdown.Item className="text-dark">
                   <NavLink
-                    ac
                     activeClassName="text-secondary"
-                    className="text-dark no-underline"
+                    className="text-dark no-underline text-lg font-semibold"
                     to="/login"
                   >
                     <FontAwesomeIcon
@@ -163,7 +181,7 @@ export const Navbar = ({ ...props }) => {
                 <NavDropdown.Item className="text-dark">
                   <NavLink
                     activeClassName="text-secondary"
-                    className="text-dark no-underline"
+                    className="text-dark no-underline text-lg font-semibold"
                     to="/register"
                   >
                     <FontAwesomeIcon
@@ -175,6 +193,30 @@ export const Navbar = ({ ...props }) => {
                 </NavDropdown.Item>
               </>
             )}
+            <NavDropdown.Divider className={user ? `sm:hidden` : 'hidden'} />
+            <NavDropdown.Item
+              className={`${user ? `sm:hidden` : 'hidden'} text-dark sm:hidden`}
+            >
+              <div
+                className="text-telegram no-underline text-lg font-semibold"
+                onClick={() =>
+                  window.open('https://t.me/SPG04_softeng2_bot', '_blank')
+                }
+              >
+                <FontAwesomeIcon
+                  icon={['fab', 'telegram']}
+                  color="#229ED9"
+                  aria-label="btn-bot"
+                  className={'mr-2 mb-0 w-1/6'}
+                  onClick={() =>
+                    window.open('https://t.me/SPG04_softeng2_bot', '_blank')
+                  }
+                />
+                <span style={{ color: '#229ED9' }} className="w-5/6">
+                  Telegram
+                </span>
+              </div>
+            </NavDropdown.Item>
           </NavDropdown>
           <NavbarBootstrap.Brand className="m-0 lg:ml-4 ">
             <Link
@@ -191,7 +233,7 @@ export const Navbar = ({ ...props }) => {
               activeClassName="text-secondary"
               className="navbar-item-spg"
               exact
-              to="/homepage"
+              to="/"
             >
               <FontAwesomeIcon icon={faHome} className={'mr-2 mb-0'} />
               Home
@@ -254,7 +296,7 @@ export const Navbar = ({ ...props }) => {
               </>
             )}
           </div>
-          <div className="flex">
+          <div className={`flex ${user || farmer ? 'sm:pr-4' : 'pr-4'}`}>
             {!user && !loading ? (
               <div className="hidden lg:flex items-center mr-4">
                 <Button
@@ -276,12 +318,14 @@ export const Navbar = ({ ...props }) => {
                 align={'left'}
                 id="dropdown-menu-align-left"
                 aria-label="navdropdown"
-                className="nav-item dropdown no-arrow sm:mr-4"
+                className="dropdown no-arrow px-0"
                 title={
                   <>
                     <span className="mr-2 text-gray-500 small d-none d-sm-block uppercase">
                       <strong>
-                        {user && user.type === ('Client' || 'Employee')
+                        {user &&
+                        (user.userType === 'Client' ||
+                          user.userType === 'Employee')
                           ? user.name
                           : farmer
                           ? farmer.company_name
@@ -314,16 +358,46 @@ export const Navbar = ({ ...props }) => {
                 </NavDropdown.Item>
               </NavDropdown>
             )}
-            <BSButton
-              type="button"
-              aria-label="btn-bot"
-              className="mr-4 nav-item my-4"
-              onClick={() =>
-                window.open('https://t.me/SPG04_softeng2_bot', '_blank')
+
+            <OverlayTrigger
+              show={showTelegram}
+              overlay={
+                <Popover
+                  show={showTelegram}
+                  id="popover-contained"
+                  className={user ? `hidden sm:block` : ''}
+                >
+                  <Popover.Body>
+                    <div className="flex justify-between">
+                      <strong>Subscribe Now!</strong>
+                      <span
+                        className="text-primary font-black text-right"
+                        onClick={() => setShowTelegram(old => !old)}
+                      >
+                        X
+                      </span>
+                    </div>
+                    Find out our Weekly Shop.{' '}
+                  </Popover.Body>
+                </Popover>
               }
+              defaultShow={true}
+              placement="bottom"
+              containerPadding={20}
             >
-              <FontAwesomeIcon icon={faRobot} />
-            </BSButton>
+              <div className="nav-item flex items-center">
+                <FontAwesomeIcon
+                  icon={['fab', 'telegram']}
+                  //onClick={() => setShowTelegram(old => !old)}
+                  color="#229ED9"
+                  aria-label="btn-bot"
+                  className={`text-4xl ${user ? `hidden sm:block` : ''}`}
+                  onClick={() =>
+                    window.open('https://t.me/SPG04_softeng2_bot', '_blank')
+                  }
+                />
+              </div>
+            </OverlayTrigger>
           </div>
         </div>
         <BSButton

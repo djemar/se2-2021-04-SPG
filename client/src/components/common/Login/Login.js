@@ -49,6 +49,7 @@ export function Login({ ...props }) {
                 type="email"
                 placeholder="Email address"
                 autoFocus={true}
+                aria-label="login-email"
                 required
                 value={email}
                 onChange={event => setEmail(event.target.value)}
@@ -63,6 +64,7 @@ export function Login({ ...props }) {
                 placeholder="Password"
                 required
                 value={password}
+                aria-label="login-password"
                 onChange={event => setPassword(event.target.value)}
               />
             </Form.Group>

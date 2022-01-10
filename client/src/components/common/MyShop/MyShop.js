@@ -33,7 +33,7 @@ const product = {
   description: 'Description',
   category: 'Choose category',
   unit_of_measure: 'Unit',
-  image_path: 'Img',
+  image_path: '',
   availability: 0,
 };
 
@@ -49,7 +49,7 @@ const NEWVALUE = {
 
 export const MyShop = ({ ...props }) => {
   const [addedProduct, setAddedProduct] = useState(product);
-  const { products, user } = useContext(UserContext);
+  const { dateProducts, products, user } = useContext(UserContext);
   const [show, setShow] = useState(0);
   const [myProduct, setMyProduct] = useState([]);
   const { dateState, addingProductsDays } = useContext(TimeContext);
@@ -142,11 +142,12 @@ export const MyShop = ({ ...props }) => {
 
     let prodF = [];
     //console.log(products);
-    products.forEach(x => {
-      if (x.ref_farmer === user.id) {
-        prodF.push(x);
-      }
-    });
+    dateProducts &&
+      dateProducts.forEach(x => {
+        if (x.ref_farmer === user.id) {
+          prodF.push(x);
+        }
+      });
     //console.log(prodF);
     const mappedProduct =
       (prodF &&
@@ -693,22 +694,24 @@ export const MyShop = ({ ...props }) => {
           </div>
         )}
       </Page>
-      <span className="mt-10 ml-4 text-4xl font-bold">Week Preview</span>
-      <span className="text-2xl ml-4">
-        {myProduct &&
-          `${myProduct.length || 0} Products available until ${dayjs(
-            getTimeframe().endDate
-          ).format('DD/MM/YYYY')}`}
-      </span>
-      <div className="col">
-        <div className="flex flex-none justify-start items-end">
-          {myProduct ? (
-            <Row>{myProduct}</Row>
-          ) : (
-            <div className="vh-100 d-flex align-items-center">
-              <Spinner />
-            </div>
-          )}
+      <div className="row px-10">
+        <span className="mt-10 ml-4 text-4xl font-bold">Week Preview</span>
+        <span className="text-2xl ml-4">
+          {myProduct &&
+            `${myProduct.length || 0} Products available until ${dayjs(
+              getTimeframe().endDate
+            ).format('DD/MM/YYYY')}`}
+        </span>
+        <div className="col">
+          <div className="flex flex-none justify-start items-end">
+            {myProduct ? (
+              <Row>{myProduct}</Row>
+            ) : (
+              <div className="vh-100 d-flex align-items-center">
+                <Spinner />
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </>

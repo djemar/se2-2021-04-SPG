@@ -129,6 +129,8 @@ const UserContextProvider = ({ ...props }) => {
     // Saturday = 6, sunday = 0
     // today will be equal to saturday, and end date sunday
     let startDate;
+    let endDate;
+    let sunday = false;
 
     switch (today) {
       case 1:
@@ -150,13 +152,16 @@ const UserContextProvider = ({ ...props }) => {
         startDate = dayjs(dateState).format('YYYY-MM-DD');
         break;
       case 0:
-        startDate = dayjs(dateState).add(6, 'day').format('YYYY-MM-DD');
+        startDate = dayjs(dateState).subtract(1, 'day').format('YYYY-MM-DD');
+        endDate = dayjs(dateState).format('YYYY-MM-DD');
+        sunday = true;
         break;
       default:
         break;
     }
 
-    let endDate = dayjs(startDate).add(1, 'day').format('YYYY-MM-DD');
+    if (sunday === false)
+      endDate = dayjs(startDate).add(1, 'day').format('YYYY-MM-DD');
     const dates = { startDate, endDate };
     return dates;
   }

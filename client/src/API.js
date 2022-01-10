@@ -70,7 +70,6 @@ async function sendWeeklyNotification(startDate, endDate) {
     return { error: 'endDate cannot come before than startDate' };
   }
   try {
-    console.log(startDate + endDate);
     const res = await axios.post(url, {
       startDate: startDate,
       endDate: endDate,

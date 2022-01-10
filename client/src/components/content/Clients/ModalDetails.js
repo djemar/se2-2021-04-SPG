@@ -6,7 +6,7 @@ import { Modal, Table, Button } from 'react-bootstrap';
 export const ModalDetails = ({ ...props }) => {
   const [amount, setAmount] = useState(0.0);
   const { user, show, setShow } = props;
-  const { user_id, name, surname, wallet_balance, email } = user;
+  const { user_id, name, surname, wallet_balance, email, phone } = user;
 
   return (
     <>
@@ -45,6 +45,10 @@ export const ModalDetails = ({ ...props }) => {
               <tr>
                 <td className="w-1/5 font-bold">Email</td>
                 <td>{email}</td>
+              </tr>
+              <tr>
+                <td className="w-1/5 font-bold">Telephone</td>
+                <td>{phone}</td>
               </tr>
               <tr>
                 <td className="w-1/5 font-bold">Balance</td>

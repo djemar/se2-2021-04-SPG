@@ -1104,7 +1104,7 @@ app.post(
   }
 );
 
-APIbot.start();
+//APIbot.start();
 
 app.listen(port, () =>
   console.log(`Server app listening at http://localhost:${port}`)
