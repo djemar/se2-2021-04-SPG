@@ -420,6 +420,9 @@ export const APIbot = {
   start: () => {
     bot.startPolling();
   },
+  stop: () => {
+    bot.stopPolling();
+  },
   sendNotificationToAll: (text) => {
     const usersId = core.usersId();
     usersId.forEach((id) =>

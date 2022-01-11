@@ -119,6 +119,7 @@ app.post(
 app.delete("/api/login/current", isLoggedIn, (req, res) => {
   req.logout();
   res.end();
+
 });
 
 app.get("/api/login/current", (req, res) => {
@@ -129,6 +130,15 @@ app.get("/api/login/current", (req, res) => {
 });
 
 /************** TELEGRAM **************/
+app.get("/api/telegram/start", async (req, res) => {
+  await APIbot.start();
+  return res.status(200).json({result: true});
+});
+
+app.get("/api/telegram/stop", async (req, res) => {
+  await APIbot.stop();
+  return res.status(200).json({result: true});
+});
 
 app.post(
   "/api/telegram/weekly",
@@ -1104,7 +1114,7 @@ app.post(
   }
 );
 
-//APIbot.start();
+APIbot.start();
 
 app.listen(port, () =>
   console.log(`Server app listening at http://localhost:${port}`)
