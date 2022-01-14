@@ -43,7 +43,7 @@ Our Definition of Done:
   - Total hours estimated: 5h
   - Total hours spent: 3 h 25m
 - Code review
-  - Total hours estimated: 15h
+  - Total hours estimated: 5h
   - Total hours spent: 8h 20m
 - Technical Debt management:
   - Total hours estimated: 43h 30m
@@ -58,9 +58,9 @@ Our Definition of Done:
 
 - What caused your errors in estimation (if any)?
 
-  - Fixing broken tests
-  - General flow check under estimated
-  - Unexperience people sharing task
+  - Fixing broken tests (due to technical issues)
+  - Code review underestimated
+  - Unexperienced (with regard to our development stack) people sharing a task (even if supervised)
 
 - What lessons did you learn (both positive and negative) in this sprint?
 
@@ -73,7 +73,7 @@ Our Definition of Done:
 
 - Which ones you were not able to achieve? Why?
 
-  - none
+  - None
 
 - Improvement goals for the next sprint and how to achieve them (technical tasks, team coordination, etc.)
 
