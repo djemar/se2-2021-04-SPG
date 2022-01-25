@@ -6,7 +6,7 @@ Solidarity Purchasing Group project developed for the Software Engineering II co
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Run locally
- TODO: update with docker 
+[Docker](https://hub.docker.com/r/wilmore/se2-2021-04-spg) 
 
 ## React client application routes
  TODO: update with react routes
